@@ -86,6 +86,12 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
 .learn-mode .tools #add,.learn-mode .tools #reset,.learn-mode .tools #shuf{display:none}
 .modal-note{font-size:.8rem;color:var(--mute);margin:0}
 @media(max-width:700px){.wrap{padding:15px 14px}.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.controls{gap:8px}.controls .seg{flex-basis:100%}.view-switch{max-width:none}.stage{min-height:360px}.learn-list{grid-template-columns:1fr}}
+@media(max-width:700px){
+  body.learn-mode{height:auto;min-height:100%;overflow-y:auto}
+  .learn-mode .wrap{height:auto;min-height:100vh;flex:none}
+  .learn-mode #main{flex:0 0 auto!important;min-height:0!important}
+  .learn-mode .learn-list{overflow:visible;flex:none;min-height:auto;padding-bottom:12px}
+}
 @media(min-width:900px){.stage{min-height:480px}.face{padding:36px 56px}}
 </style>
 </head>
