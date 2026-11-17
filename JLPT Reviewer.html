@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JLPT Japanese Review | N5–N4</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#e8edf5;--card:#ffffff;--ink:#1a2338;--mute:#5d6a85;--line:#cfd8e8;--accent:#2f56b5;--accent-ink:#fff;--soft:#dbe4f5;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a2c;--card:#1d2840;--ink:#eaf0fb;--mute:#9aa8c6;--line:#324266;--accent:#8fb0f0;--accent-ink:#10192e;--soft:#2a3858;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a2c;--card:#1d2840;--ink:#eaf0fb;--mute:#9aa8c6;--line:#324266;--accent:#8fb0f0;--accent-ink:#10192e;--soft:#2a3858;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,"Hiragino Sans","Noto Sans JP",sans-serif;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent}
+.wrap{width:100%;max-width:460px;flex:1;display:flex;flex-direction:column;padding:14px 16px 16px;min-height:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+h1{font-size:1.05rem;font-weight:700;margin:0}
+.count{font-size:.9rem;color:var(--mute)}
+.bar{height:4px;background:var(--soft);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--soft);padding:4px;border-radius:12px;margin-bottom:12px}.seg button{font:inherit;font-weight:700;font-size:.9rem;padding:8px;border:0;border-radius:9px;background:none;color:var(--mute);cursor:pointer}.seg button.on{background:var(--card);color:var(--ink)}
+.tabs{grid-template-columns:repeat(2,1fr)}
+.stage{flex:1;min-height:0;perspective:1200px;display:flex}
+.card{position:relative;flex:1;border:0;padding:0;background:none;font:inherit;color:inherit;cursor:pointer;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.3,.7,.2,1)}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.back{transform:rotateY(180deg);gap:12px}
+.kanji{font-family:"Zen Old Mincho","Noto Serif JP","Hiragino Mincho ProN",serif;font-weight:700;font-size:clamp(7rem,38vw,11rem);line-height:1}
+.hint{position:absolute;bottom:16px;font-size:.8rem;color:var(--mute)}
+.meaning{font-size:1.7rem;font-weight:700;line-height:1.25}
+.read{width:100%;display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:baseline;text-align:left;border-top:1px solid var(--line);padding-top:18px}
+.read dt{font-size:.85rem;color:var(--mute);margin:0}
+.read dd{margin:0;font-size:1.25rem;font-family:"Zen Kaku Gothic New","Hiragino Sans",sans-serif}
+.mini{font-family:"Zen Old Mincho",serif;font-size:2rem;color:var(--mute)}
+.ex{width:100%;border-top:1px solid var(--line);padding-top:12px;text-align:left}.exw{font-family:"Zen Old Mincho","Noto Serif JP",serif;font-size:1.5rem;font-weight:700}.exr{display:flex;gap:10px;flex-wrap:wrap;font-size:.95rem;margin-top:2px}.exr span:last-child{color:var(--mute)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+button.b{font:inherit;font-weight:700;font-size:1rem;padding:15px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.b.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tools{display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap}
+.tools button{font:inherit;font-size:.85rem;color:var(--mute);background:none;border:0;padding:8px 10px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.done .kanji{font-size:5rem}
+.done p{margin:0;color:var(--mute)}
+.sheet{position:fixed;inset:0;background:rgba(10,16,30,.55);display:none;align-items:flex-end;justify-content:center;z-index:5}
+.sheet.on{display:flex}
+.panel{width:100%;max-width:460px;background:var(--card);border-radius:22px 22px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.panel h2{margin:0 0 4px;font-size:1.1rem}
+.panel label{font-size:.85rem;color:var(--mute);display:grid;gap:4px}
+.panel input{font:inherit;font-size:1rem;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.err{color:#c0392b;font-size:.85rem;min-height:1.1em}
+@media (prefers-color-scheme:dark){.err{color:#ff8f80}}
+@media (prefers-reduced-motion:reduce){.card,.bar i{transition:none}}
+body{align-items:stretch}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 28px 20px;width:100%}
+header{margin-bottom:20px}
+header .brand{display:grid;gap:2px}
+h1{font-size:1.35rem;letter-spacing:-.02em}
+.subtitle{font-size:.88rem;color:var(--mute)}
+.count{white-space:nowrap}
+.tabs{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:14px}
+.seg button{white-space:nowrap}
+.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.controls .seg{flex:1}
+.view-switch{max-width:230px;grid-template-columns:repeat(2,1fr)}
+.intro{margin:2px 0 14px}
+.intro h2{font-size:1.1rem;margin:0 0 3px}
+.intro p{font-size:.9rem;color:var(--mute);margin:0}
+.stage{min-height:390px}
+.face{gap:16px}
+.learn-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:12px;overflow:auto;align-content:start;padding:2px;flex:1;min-height:0}
+.study-item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:10px}
+.study-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.study-word{font-family:"Zen Old Mincho","Noto Serif JP",serif;font-weight:700;font-size:2.1rem;line-height:1.15}
+.study-reading{color:var(--mute);font-size:.95rem}
+.badge{font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:20px;padding:4px 9px;background:var(--soft);white-space:nowrap}
+.study-meaning{font-size:1.05rem;font-weight:700}
+.study-detail{font-size:.87rem;color:var(--mute)}
+.study-example{border-top:1px solid var(--line);padding-top:10px}
+.study-example .exw{font-size:1.12rem}
+.learn-search{font:inherit;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%;margin-bottom:12px}
+.empty{padding:38px 16px;text-align:center;color:var(--mute);background:var(--card);border:1px dashed var(--line);border-radius:16px}
+.tools{margin-top:14px}
+.learn-mode .tools #add,.learn-mode .tools #reset,.learn-mode .tools #shuf{display:none}
+.modal-note{font-size:.8rem;color:var(--mute);margin:0}
+@media(max-width:700px){.wrap{padding:15px 14px}.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.controls{gap:8px}.controls .seg{flex-basis:100%}.view-switch{max-width:none}.stage{min-height:360px}.learn-list{grid-template-columns:1fr}}
+@media(min-width:900px){.stage{min-height:480px}.face{padding:36px 56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="brand"><h1>JLPT Japanese Review</h1><span class="subtitle">A focused N5–N4 study space for kanji and everyday Japanese</span></div><span class="count" id="count"></span></header>
+  <div class="seg tabs" id="tabs" role="group" aria-label="Study topic"><button data-m="kanji">Single Kanji</button><button data-m="combo">Combination Kanji</button><button data-m="adverb">Adverbs</button><button data-m="verbs">Verbs</button><button data-m="adj">Adjectives</button></div>
+  <div class="controls">
+    <div class="seg" id="seg" role="group" aria-label="JLPT level"><button data-l="n5">N5 only</button><button data-l="n4">N4 only</button><button data-l="all">N5 + N4</button></div>
+    <div class="seg view-switch" id="viewSwitch" role="group" aria-label="Study style"><button data-view="review">Review</button><button data-view="learn">Learn</button></div>
+  </div>
+  <div class="intro"><h2 id="topicTitle"></h2><p id="topicDescription"></p></div>
+  <input class="learn-search" id="search" type="search" placeholder="Search words, readings, or meanings" aria-label="Search study list" hidden>
+  <div class="bar"><i id="bar"></i></div>
+  <div id="main" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+  <div class="tools">
+    <button id="add">Add a card</button>
+    <button id="shuf">Shuffle</button>
+    <button id="reset">Start over</button>
+  </div>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="panel">
+    <h2>Add a single kanji</h2>
+    <p class="modal-note">Custom kanji are kept in your browser and included in both levels.</p>
+    <label>Kanji<input id="fk" maxlength="2" autocomplete="off"></label>
+    <label>Meaning<input id="fm" autocomplete="off"></label>
+    <label>On’yomi (separate with commas)<input id="fo" autocomplete="off"></label>
+    <label>Kun’yomi (separate with commas)<input id="fu" autocomplete="off"></label>
+    <div class="err" id="err"></div>
+    <div class="actions" style="margin-top:0">
+      <button class="b" id="cancel">Cancel</button>
+      <button class="b main" id="save">Save card</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var BASE=[["日","day, sun","ニチ, ジツ","ひ, か"],["月","moon, month","ゲツ, ガツ","つき"],["火","fire","カ","ひ"],["水","water","スイ","みず"],["木","tree, wood","モク, ボク","き"],["金","gold, money","キン, コン","かね"],["土","earth, soil","ド, ト","つち"],["人","person","ジン, ニン","ひと"],["大","big","ダイ, タイ","おお(きい)"],["小","small","ショウ","ちい(さい), こ, お"],["山","mountain","サン","やま"],["川","river","セン","かわ"],["田","rice field","デン","た"],["口","mouth","コウ, ク","くち"],["目","eye","モク","め"],["手","hand","シュ","て"],["足","foot, leg","ソク","あし, た(りる)"],["上","above, up","ジョウ","うえ, あ(げる), のぼ(る)"],["下","below, down","カ, ゲ","した, さ(げる), くだ(る)"],["中","middle, inside","チュウ","なか"],["学","study","ガク","まな(ぶ)"],["先","previous, ahead","セン","さき"],["生","life, birth","セイ, ショウ","い(きる), う(まれる), なま"],["年","year","ネン","とし"],["休","rest","キュウ","やす(む)"],["本","book, origin","ホン","もと"],["円","yen, circle","エン","まる(い)"],["王","king","オウ","—"],["天","heaven, sky","テン","あめ, あま"],["気","spirit, air","キ, ケ","—"],["雨","rain","ウ","あめ"],["花","flower","カ","はな"],["車","car, vehicle","シャ","くるま"],["犬","dog","ケン","いぬ"],["食","eat, food","ショク","た(べる), く(う)"],["見","see","ケン","み(る)"],["行","go","コウ, ギョウ","い(く), おこな(う)"],["来","come","ライ","く(る), きた(る)"],["言","say, word","ゲン, ゴン","い(う), こと"],["白","white","ハク, ビャク","しろ(い)"],["森","forest","シン","もり"],["女","woman","ジョ, ニョ","おんな"],["男","man","ダン, ナン","おとこ"],["子","child","シ, ス","こ"],["名","name","メイ, ミョウ","な"],["一","one","イチ, イツ","ひと(つ)"],["二","two","ニ","ふた(つ)"],["三","three","サン","みっ(つ)"],["四","four","シ","よん, よ(つ)"],["五","five","ゴ","いつ(つ)"],["六","six","ロク","むっ(つ)"],["七","seven","シチ","なな(つ)"],["八","eight","ハチ","やっ(つ)"],["九","nine","キュウ, ク","ここの(つ)"],["十","ten","ジュウ","とお"],["百","hundred","ヒャク","—"],["千","thousand","セン","ち"],["万","ten thousand","マン, バン","—"],["耳","ear","ジ","みみ"],["力","power","リョク, リキ","ちから"],["父","father","フ","ちち"],["母","mother","ボ","はは"],["友","friend","ユウ","とも"],["校","school","コウ","—"],["左","left","サ","ひだり"],["右","right","ユウ, ウ","みぎ"],["北","north","ホク","きた"],["南","south","ナン","みなみ"],["東","east","トウ","ひがし"],["西","west","セイ, サイ","にし"],["外","outside","ガイ, ゲ","そと, ほか"],["国","country","コク","くに"],["語","language, word","ゴ","かた(る)"],["話","talk, story","ワ","はな(す), はなし"],["聞","hear, ask","ブン, モン","き(く)"],["読","read","ドク","よ(む)"],["書","write","ショ","か(く)"],["出","go out","シュツ","で(る), だ(す)"],["入","enter","ニュウ","い(る), はい(る)"],["立","stand","リツ","た(つ)"],["会","meet","カイ, エ","あ(う)"],["社","company, shrine","シャ","やしろ"],["電","electricity","デン","—"],["駅","station","エキ","—"],["魚","fish","ギョ","さかな, うお"],["何","what","カ","なに, なん"],["半","half","ハン","なか(ば)"],["今","now","コン, キン","いま"],["毎","every","マイ","—"],["午","noon","ゴ","—"],["分","minute, part","ブン, フン, ブ","わ(ける), わ(かる)"],["時","time, hour","ジ","とき"],["間","interval, between","カン, ケン","あいだ, ま"],["新","new","シン","あたら(しい)"],["古","old","コ","ふる(い)"],["長","long, chief","チョウ","なが(い)"],["高","tall, expensive","コウ","たか(い)"],["安","cheap, safe","アン","やす(い)"],["低","low","テイ","ひく(い)"],["多","many","タ","おお(い)"],["少","few","ショウ","すく(ない), すこ(し)"],["店","shop","テン","みせ"],["飲","drink","イン","の(む)"],["買","buy","バイ","か(う)"],["道","road, way","ドウ","みち"],["週","week","シュウ","—"],["正","correct","セイ, ショウ","ただ(しい)"],["前","before, front","ゼン","まえ"],["後","after, behind","ゴ, コウ","あと, うし(ろ)"],["曜","day of the week","ヨウ","—"],["悪","bad","アク","わる(い)"],["暗","dark","アン","くら(い)"],["医","medicine, doctor","イ","—"],["意","mind, meaning","イ","—"],["以","from, by means of","イ","—"],["引","pull","イン","ひ(く)"],["院","institution","イン","—"],["員","member","イン","—"],["運","carry, luck","ウン","はこ(ぶ)"],["泳","swim","エイ","およ(ぐ)"],["英","England, excellent","エイ","—"],["遠","far","エン, オン","とお(い)"],["屋","roof, shop","オク","や"],["音","sound","オン, イン","おと, ね"],["歌","song, sing","カ","うた, うた(う)"],["夏","summer","カ","なつ"],["家","house, family","カ, ケ","いえ, うち"],["画","picture, stroke","ガ, カク","—"],["海","sea","カイ","うみ"],["回","times, turn","カイ","まわ(る)"],["開","open","カイ","ひら(く), あ(ける)"],["界","world","カイ","—"],["階","floor, stairs","カイ","—"],["楽","music, pleasant","ガク, ラク","たの(しい)"],["館","hall, building","カン","やかた"],["寒","cold","カン","さむ(い)"],["漢","Chinese","カン","—"],["顔","face","ガン","かお"],["帰","return home","キ","かえ(る)"],["起","wake, rise","キ","お(きる)"],["期","period","キ, ゴ","—"],["客","guest","キャク, カク","—"],["究","research","キュウ","きわ(める)"],["急","hurry","キュウ","いそ(ぐ)"],["級","grade, class","キュウ","—"],["宮","palace, shrine","キュウ, グウ","みや"],["球","ball, sphere","キュウ","たま"],["去","leave, past","キョ, コ","さ(る)"],["橋","bridge","キョウ","はし"],["業","business, work","ギョウ, ゴウ","わざ"],["曲","bend, tune","キョク","ま(がる)"],["局","bureau, office","キョク","—"],["銀","silver","ギン","—"],["区","ward, district","ク","—"],["苦","bitter, painful","ク","くる(しい), にが(い)"],["具","tool","グ","—"],["君","you (familiar)","クン","きみ"],["係","person in charge","ケイ","かかり, かか(る)"],["軽","light (weight)","ケイ","かる(い)"],["決","decide","ケツ","き(める)"],["血","blood","ケツ","ち"],["研","polish, study","ケン","と(ぐ)"],["県","prefecture","ケン","—"],["庫","storehouse","コ, ク","—"],["湖","lake","コ","みずうみ"],["向","face, toward","コウ","む(く), む(かう)"],["幸","happiness","コウ","しあわ(せ), さいわ(い)"],["港","harbor","コウ","みなと"],["号","number, issue","ゴウ","—"],["根","root","コン","ね"],["祭","festival","サイ","まつ(り)"],["皿","plate, dish","—","さら"],["仕","serve, do","シ, ジ","つか(える)"],["死","die, death","シ","し(ぬ)"],["使","use","シ","つか(う)"],["始","begin","シ","はじ(める)"],["指","finger, point","シ","ゆび, さ(す)"],["歯","tooth","シ","は"],["詩","poem","シ","—"],["次","next","ジ, シ","つぎ"],["事","matter, thing","ジ, ズ","こと"],["持","hold, have","ジ","も(つ)"],["式","ceremony, style","シキ","—"],["実","truth, fruit","ジツ","み, みの(る)"],["写","copy, photograph","シャ","うつ(す)"],["者","person","シャ","もの"],["主","master, main","シュ, ス","おも, ぬし"],["守","protect","シュ, ス","まも(る)"],["取","take","シュ","と(る)"],["酒","alcohol, sake","シュ","さけ, さか"],["受","receive","ジュ","う(ける)"],["州","state, province","シュウ","す"],["拾","pick up","シュウ, ジュウ","ひろ(う)"],["終","end","シュウ","お(わる)"],["習","learn","シュウ","なら(う)"],["集","gather","シュウ","あつ(まる)"],["住","live, reside","ジュウ","す(む)"],["重","heavy, layer","ジュウ, チョウ","おも(い), かさ(ねる)"],["宿","inn, lodging","シュク","やど"],["所","place","ショ","ところ"],["暑","hot (weather)","ショ","あつ(い)"],["助","help","ジョ","たす(ける)"],["消","erase, extinguish","ショウ","け(す), き(える)"],["商","trade, merchant","ショウ","あきな(う)"],["章","chapter","ショウ","—"],["勝","win","ショウ","か(つ)"],["乗","ride","ジョウ","の(る)"],["植","plant","ショク","う(える)"],["申","say (humble)","シン","もう(す)"],["身","body","シン","み"],["神","god","シン, ジン","かみ"],["真","true","シン","ま"],["深","deep","シン","ふか(い)"],["進","advance","シン","すす(む)"],["世","world, generation","セ, セイ","よ"],["整","arrange, put in order","セイ","ととの(える)"],["昔","long ago","セキ","むかし"],["全","whole, all","ゼン","まった(く), すべ(て)"],["相","mutual, phase","ソウ, ショウ","あい"],["送","send","ソウ","おく(る)"],["想","idea, imagine","ソウ, ソ","—"],["息","breath","ソク","いき"],["速","fast","ソク","はや(い)"],["族","tribe, family","ゾク","—"],["他","other","タ","ほか"],["打","hit","ダ","う(つ)"],["対","versus, opposite","タイ, ツイ","—"],["待","wait","タイ","ま(つ)"],["代","substitute, generation","ダイ, タイ","か(わる), よ, しろ"],["第","ordinal prefix","ダイ","—"],["題","topic, title","ダイ","—"],["炭","charcoal, coal","タン","すみ"],["短","short","タン","みじか(い)"],["談","talk, consult","ダン","—"],["着","arrive, wear","チャク, ジャク","き(る), つ(く)"],["注","pour, note","チュウ","そそ(ぐ)"],["柱","pillar","チュウ","はしら"],["丁","block, street","チョウ, テイ","—"],["帳","notebook","チョウ","—"],["調","investigate, tune","チョウ","しら(べる)"],["追","chase","ツイ","お(う)"],["定","fix, decide","テイ, ジョウ","さだ(める)"],["庭","garden","テイ","にわ"],["笑","laugh, smile","ショウ","わら(う)"],["弟","younger brother","テイ, ダイ","おとうと"],["兄","older brother","ケイ, キョウ","あに"],["姉","older sister","シ","あね"],["妹","younger sister","マイ","いもうと"],["貸","lend","タイ","か(す)"],["借","borrow","シャク","か(りる)"],["旅","trip","リョ","たび"],["料","fee, material","リョウ","—"],["理","reason, logic","リ","—"],["利","profit, effective","リ","き(く)"],["別","separate, other","ベツ","わか(れる)"],["勉","effort","ベン","—"],["強","strong","キョウ, ゴウ","つよ(い)"],["工","craft, construction","コウ, ク","—"],["公","public","コウ","おおやけ"],["広","wide","コウ","ひろ(い)"],["交","mix, exchange","コウ","まじ(わる), か(う)"],["光","light","コウ","ひかり, ひか(る)"],["考","think","コウ","かんが(える)"],["黒","black","コク","くろ(い)"],["細","thin, fine","サイ","ほそ(い), こま(か)"],["菜","vegetable","サイ","な"],["作","make","サク, サ","つく(る)"],["算","calculate","サン","—"],["紙","paper","シ","かみ"],["思","think","シ","おも(う)"],["室","room","シツ","むろ"],["質","quality, substance","シツ, シチ","—"],["弱","weak","ジャク","よわ(い)"],["首","neck, head","シュ","くび"],["秋","autumn","シュウ","あき"],["春","spring","シュン","はる"],["冬","winter","トウ","ふゆ"],["夜","night","ヤ","よる, よ"],["朝","morning","チョウ","あさ"],["昼","noon, daytime","チュウ","ひる"],["晩","evening","バン","—"],["夕","evening","セキ","ゆう"],["肉","meat","ニク","—"],["茶","tea","チャ, サ","—"],["自","self","ジ, シ","みずか(ら)"],["走","run","ソウ","はし(る)"],["歩","walk","ホ, ブ","ある(く), あゆ(む)"],["止","stop","シ","と(まる), と(める)"],["通","pass, commute","ツウ, ツ","とお(る), かよ(う)"],["動","move","ドウ","うご(く)"],["働","work","ドウ","はたら(く)"],["転","turn, roll","テン","ころ(ぶ)"],["伝","convey","デン","つた(える)"],["堂","hall","ドウ","—"],["特","special","トク","—"],["得","gain","トク","え(る), う(る)"],["内","inside","ナイ, ダイ","うち"],["難","difficult","ナン","むずか(しい), かた(い)"],["念","thought, wish","ネン","—"],["熱","heat, fever","ネツ","あつ(い)"],["発","depart, emit","ハツ, ホツ","—"],["番","number, turn","バン","—"],["飯","meal, rice","ハン","めし"],["悲","sad","ヒ","かな(しい)"],["鳥","bird","チョウ","とり"],["夫","husband","フ, フウ","おっと"],["風","wind","フウ, フ","かぜ"],["服","clothes","フク","—"],["物","thing","ブツ, モツ","もの"],["文","sentence, writing","ブン, モン","ふみ"],["方","direction, way","ホウ","かた"],["味","taste","ミ","あじ"],["民","people","ミン","たみ"],["無","nothing, without","ム, ブ","な(い)"],["明","bright","メイ, ミョウ","あか(るい), あき(らか)"],["問","question","モン","と(う), とん"],["門","gate","モン","かど"],["薬","medicine","ヤク","くすり"],["有","have, exist","ユウ, ウ","あ(る)"],["由","reason","ユ, ユウ, ユイ","よし"],["用","use","ヨウ","もち(いる)"],["洋","ocean, Western","ヨウ","—"],["予","beforehand","ヨ","—"],["要","need, essential","ヨウ","い(る)"],["流","flow","リュウ","なが(れる)"],["両","both","リョウ","—"],["緑","green","リョク","みどり"],["林","woods","リン","はやし"],["野","field, plain","ヤ","の"],["夢","dream","ム","ゆめ"],["映","reflect, project","エイ","うつ(る), は(える)"],["黄","yellow","コウ, オウ","き"],["赤","red","セキ","あか(い)"],["青","blue","セイ","あお(い)"],["色","color","ショク, シキ","いろ"],["池","pond","チ","いけ"],["地","ground, earth","チ, ジ","—"],["図","diagram, map","ズ, ト","はか(る)"],["知","know","チ","し(る)"],["試","test, try","シ","ため(す), こころ(みる)"],["場","place, venue","ジョウ","ば"],["親","parent","シン","おや, した(しい)"],["鉄","iron","テツ","—"],["京","capital","キョウ, ケイ","—"],["遊","play","ユウ, ユ","あそ(ぶ)"],["計","measure, plan","ケイ","はか(る)"],["活","lively, active","カツ","—"],["太","thick, fat","タイ, タ","ふと(い)"],["体","body","タイ, テイ","からだ"],["洗","wash","セン","あら(う)"],["空","sky, empty","クウ","そら, あ(く)"],["元","origin","ゲン, ガン","もと"],["原","field, original","ゲン","はら"],["頭","head","トウ, ズ","あたま, かしら"],["同","same","ドウ","おな(じ)"],["町","town","チョウ","まち"],["教","teach","キョウ","おし(える)"],["近","near","キン","ちか(い)"],["台","stand, counter for machines","ダイ, タイ","—"],["米","rice, America","ベイ, マイ","こめ"],["切","cut","セツ, サイ","き(る)"],["病","sick, illness","ビョウ, ヘイ","や(む)"],["都","capital city","ト, ツ","みやこ"],["化","change","カ, ケ","ば(ける)"],["不","not, un-","フ, ブ","—"],["心","heart, mind","シン","こころ"],["私","I, private","シ","わたし"],["品","goods, article","ヒン","しな"],["馬","horse","バ","うま"],["牛","cow","ギュウ","うし"],["配","distribute","ハイ","くば(る)"],["験","test, verify","ケン, ゲン","—"],["達","reach, plural suffix","タツ","—"]];
+
+var EXS=`日 日本 にほん Japan
+月 月曜日 げつようび Monday
+火 火事 かじ fire
+水 水曜日 すいようび Wednesday
+木 木曜日 もくようび Thursday
+金 お金 おかね money
+土 土曜日 どようび Saturday
+人 日本人 にほんじん Japanese person
+大 大学 だいがく university
+小 小さい ちいさい small
+山 富士山 ふじさん Mt. Fuji
+川 小川 おがわ stream
+田 田んぼ たんぼ rice field
+口 入口 いりぐち entrance
+目 目的 もくてき purpose
+手 上手 じょうず skilled
+足 足りる たりる be enough
+上 上がる あがる go up
+下 下さい ください please give me
+中 中国 ちゅうごく China
+学 学生 がくせい student
+先 先生 せんせい teacher
+生 生まれる うまれる be born
+年 今年 ことし this year
+休 休み やすみ day off
+本 日本 にほん Japan (origin of the sun)
+円 百円 ひゃくえん 100 yen
+王 王様 おうさま king
+天 天気 てんき weather
+気 元気 げんき energetic, well
+雨 大雨 おおあめ heavy rain
+花 花見 はなみ flower viewing
+車 電車 でんしゃ train
+犬 子犬 こいぬ puppy
+食 食べる たべる eat
+見 見る みる see
+行 行く いく go
+来 来年 らいねん next year
+言 言う いう say
+白 白い しろい white
+森 森林 しんりん forest
+女 彼女 かのじょ she, girlfriend
+男 男の子 おとこのこ boy
+子 子ども こども child
+名 名前 なまえ name
+一 一つ ひとつ one
+二 二人 ふたり two people
+三 三月 さんがつ March
+四 四月 しがつ April
+五 五月 ごがつ May
+六 六月 ろくがつ June
+七 七時 しちじ seven o'clock
+八 八百屋 やおや greengrocer
+九 九月 くがつ September
+十 十分 じゅっぷん ten minutes
+百 三百 さんびゃく 300
+千 千円 せんえん 1,000 yen
+万 一万円 いちまんえん 10,000 yen
+耳 右耳 みぎみみ right ear
+力 努力 どりょく effort
+父 お父さん おとうさん father
+母 お母さん おかあさん mother
+友 友達 ともだち friend
+校 学校 がっこう school
+左 左手 ひだりて left hand
+右 右手 みぎて right hand
+北 北海道 ほっかいどう Hokkaido
+南 南口 みなみぐち south exit
+東 東京 とうきょう Tokyo
+西 西口 にしぐち west exit
+外 外国 がいこく foreign country
+国 韓国 かんこく South Korea
+語 日本語 にほんご Japanese language
+話 電話 でんわ telephone
+聞 新聞 しんぶん newspaper
+読 読む よむ read
+書 書く かく write
+出 出口 でぐち exit
+入 入る はいる enter
+立 立つ たつ stand
+会 会社 かいしゃ company
+社 神社 じんじゃ shrine
+電 電気 でんき electricity
+駅 東京駅 とうきょうえき Tokyo Station
+魚 焼き魚 やきざかな grilled fish
+何 何時 なんじ what time
+半 半分 はんぶん half
+今 今日 きょう today
+毎 毎日 まいにち every day
+午 午前 ごぜん morning, a.m.
+分 分かる わかる understand
+時 時間 じかん time
+間 二週間 にしゅうかん two weeks
+新 新しい あたらしい new
+古 古い ふるい old
+長 長い ながい long
+高 高い たかい tall, expensive
+安 安い やすい cheap
+低 低い ひくい low
+多 多い おおい many
+少 少し すこし a little
+店 喫茶店 きっさてん café
+飲 飲む のむ drink
+買 買う かう buy
+道 道路 どうろ road
+週 今週 こんしゅう this week
+正 正しい ただしい correct
+前 駅の前 えきのまえ in front of the station
+後 午後 ごご afternoon, p.m.
+曜 日曜日 にちようび Sunday
+悪 悪い わるい bad
+暗 暗い くらい dark
+医 医者 いしゃ doctor
+意 意味 いみ meaning
+以 以上 いじょう more than
+引 引く ひく pull
+院 病院 びょういん hospital
+員 会社員 かいしゃいん office worker
+運 運動 うんどう exercise
+泳 泳ぐ およぐ swim
+英 英語 えいご English
+遠 遠い とおい far
+屋 部屋 へや room
+音 音楽 おんがく music
+歌 歌手 かしゅ singer
+夏 夏休み なつやすみ summer vacation
+家 家族 かぞく family
+画 映画 えいが movie
+海 海外 かいがい overseas
+回 一回 いっかい once
+開 開ける あける open
+界 世界 せかい world
+階 二階 にかい second floor
+楽 楽しい たのしい fun
+館 図書館 としょかん library
+寒 寒い さむい cold
+漢 漢字 かんじ kanji
+顔 笑顔 えがお smile
+帰 帰る かえる return home
+起 起きる おきる wake up
+期 学期 がっき semester
+客 お客さん おきゃくさん customer
+究 研究 けんきゅう research
+急 急ぐ いそぐ hurry
+級 初級 しょきゅう beginner level
+宮 神宮 じんぐう shrine
+球 野球 やきゅう baseball
+去 去年 きょねん last year
+橋 橋を渡る はしをわたる cross a bridge
+業 授業 じゅぎょう class
+曲 曲がる まがる turn
+局 郵便局 ゆうびんきょく post office
+銀 銀行 ぎんこう bank
+区 区役所 くやくしょ ward office
+苦 苦しい くるしい painful
+具 道具 どうぐ tool
+君 君たち きみたち you all
+係 関係 かんけい relationship
+軽 軽い かるい light
+決 決める きめる decide
+血 血液型 けつえきがた blood type
+研 研修 けんしゅう training
+県 神奈川県 かながわけん Kanagawa Prefecture
+庫 冷蔵庫 れいぞうこ refrigerator
+湖 琵琶湖 びわこ Lake Biwa
+向 向かう むかう head toward
+幸 幸せ しあわせ happy
+港 空港 くうこう airport
+号 番号 ばんごう number
+根 屋根 やね roof
+祭 お祭り おまつり festival
+皿 お皿 おさら plate
+仕 仕事 しごと work
+死 死ぬ しぬ die
+使 使う つかう use
+始 始める はじめる begin
+指 指 ゆび finger
+歯 歯医者 はいしゃ dentist
+詩 詩人 しじん poet
+次 次の駅 つぎのえき next station
+事 食事 しょくじ meal
+持 持つ もつ hold
+式 結婚式 けっこんしき wedding
+実 実は じつは actually
+写 写真 しゃしん photograph
+者 学者 がくしゃ scholar
+主 主人 しゅじん husband, master
+守 守る まもる protect
+取 取る とる take
+酒 お酒 おさけ alcohol
+受 受ける うける receive
+州 九州 きゅうしゅう Kyushu
+拾 拾う ひろう pick up
+終 終わる おわる end
+習 習う ならう learn
+集 集まる あつまる gather
+住 住む すむ live
+重 重い おもい heavy
+宿 宿題 しゅくだい homework
+所 場所 ばしょ place
+暑 暑い あつい hot
+助 助ける たすける help
+消 消す けす turn off
+商 商品 しょうひん product
+章 文章 ぶんしょう text
+勝 勝つ かつ win
+乗 乗る のる ride
+植 植える うえる plant
+申 申す もうす say (humble)
+身 出身 しゅっしん hometown
+神 神様 かみさま god
+真 真ん中 まんなか middle
+深 深い ふかい deep
+進 進む すすむ advance
+世 世話 せわ looking after
+整 整理 せいり organizing
+昔 昔 むかし long ago
+全 全部 ぜんぶ all
+相 相談 そうだん consultation
+送 送る おくる send
+想 感想 かんそう impression
+息 息 いき breath
+速 速い はやい fast
+族 民族 みんぞく ethnic group
+他 他の ほかの other
+打 打つ うつ hit
+対 反対 はんたい opposition
+待 待つ まつ wait
+代 時代 じだい era
+第 第一 だいいち first
+題 問題 もんだい problem
+炭 石炭 せきたん coal
+短 短い みじかい short
+談 面談 めんだん interview
+着 着く つく arrive
+注 注意 ちゅうい caution
+柱 柱 はしら pillar
+丁 丁寧 ていねい polite
+帳 手帳 てちょう planner
+調 調べる しらべる investigate
+追 追う おう chase
+定 予定 よてい plan
+庭 庭 にわ garden
+笑 笑う わらう laugh
+弟 弟 おとうと younger brother
+兄 お兄さん おにいさん older brother
+姉 お姉さん おねえさん older sister
+妹 妹 いもうと younger sister
+貸 貸す かす lend
+借 借りる かりる borrow
+旅 旅行 りょこう travel
+料 料理 りょうり cooking
+理 理由 りゆう reason
+利 便利 べんり convenient
+別 特別 とくべつ special
+勉 勉強 べんきょう study
+強 強い つよい strong
+工 工場 こうじょう factory
+公 公園 こうえん park
+広 広い ひろい wide
+交 交番 こうばん police box
+光 光 ひかり light
+考 考える かんがえる think
+黒 黒い くろい black
+細 細い ほそい thin
+菜 野菜 やさい vegetables
+作 作る つくる make
+算 計算 けいさん calculation
+紙 紙 かみ paper
+思 思う おもう think
+室 教室 きょうしつ classroom
+質 質問 しつもん question
+弱 弱い よわい weak
+首 首 くび neck
+秋 秋 あき autumn
+春 春 はる spring
+冬 冬 ふゆ winter
+夜 今夜 こんや tonight
+朝 朝ご飯 あさごはん breakfast
+昼 昼ご飯 ひるごはん lunch
+晩 今晩 こんばん this evening
+夕 夕方 ゆうがた evening
+肉 牛肉 ぎゅうにく beef
+茶 お茶 おちゃ tea
+自 自分 じぶん oneself
+走 走る はしる run
+歩 歩く あるく walk
+止 止まる とまる stop
+通 通る とおる pass through
+動 動く うごく move
+働 働く はたらく work
+転 運転 うんてん driving
+伝 伝える つたえる convey
+堂 食堂 しょくどう cafeteria
+特 特に とくに especially
+得 得意 とくい good at
+内 内側 うちがわ inside
+難 難しい むずかしい difficult
+念 残念 ざんねん unfortunate
+熱 熱 ねつ fever
+発 出発 しゅっぱつ departure
+番 一番 いちばん number one
+飯 ご飯 ごはん meal, rice
+悲 悲しい かなしい sad
+鳥 鳥 とり bird
+夫 大丈夫 だいじょうぶ okay
+風 台風 たいふう typhoon
+服 洋服 ようふく clothes
+物 荷物 にもつ luggage
+文 作文 さくぶん composition
+方 方法 ほうほう method
+味 趣味 しゅみ hobby
+民 国民 こくみん citizens
+無 無理 むり impossible
+明 説明 せつめい explanation
+問 訪問 ほうもん visit
+門 校門 こうもん school gate
+薬 薬 くすり medicine
+有 有名 ゆうめい famous
+由 自由 じゆう freedom
+用 用事 ようじ errand
+洋 西洋 せいよう the West
+予 予約 よやく reservation
+要 必要 ひつよう necessary
+流 流れる ながれる flow
+両 両親 りょうしん parents
+緑 緑 みどり green
+林 松林 まつばやし pine woods
+野 野原 のはら field
+夢 夢 ゆめ dream
+映 映る うつる be reflected
+黄 黄色 きいろ yellow
+赤 赤い あかい red
+青 青い あおい blue
+色 茶色 ちゃいろ brown
+池 池 いけ pond
+地 地下鉄 ちかてつ subway
+図 地図 ちず map
+知 知る しる know
+試 試験 しけん exam
+場 会場 かいじょう venue
+親 親切 しんせつ kind
+鉄 鉄道 てつどう railway
+京 京都 きょうと Kyoto
+遊 遊ぶ あそぶ play
+計 時計 とけい clock
+活 生活 せいかつ daily life
+太 太い ふとい thick
+体 体 からだ body
+洗 洗う あらう wash
+空 空気 くうき air
+元 地元 じもと local area
+原 原因 げんいん cause
+頭 頭 あたま head
+同 同じ おなじ same
+町 町 まち town
+教 教える おしえる teach
+近 近い ちかい near
+台 台所 だいどころ kitchen
+米 お米 おこめ rice
+切 切る きる cut
+病 病気 びょうき illness
+都 都会 とかい city
+化 文化 ぶんか culture
+不 不便 ふべん inconvenient
+心 心配 しんぱい worry
+私 私 わたし I
+品 食品 しょくひん food product
+馬 馬 うま horse
+牛 牛乳 ぎゅうにゅう milk
+配 配る くばる distribute
+験 経験 けいけん experience
+達 発達 はったつ development`;
+var EXM={};EXS.split("\n").forEach(function(l){var p=l.trim().split(" ");if(p.length>3)EXM[p[0]]=p});
+function exHtml(k){var p=EXM[k];if(!p)return"";return '<div class="ex"><div class="exw" lang="ja">'+esc(p[1])+'</div><div class="exr"><span lang="ja">'+esc(p[2])+'</span><span>'+esc(p.slice(3).join(" "))+'</span></div></div>'}
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社を休みます。|I’ll take tomorrow off work.
+行きます|いきます|go|行く|毎日学校へ行きます。|I go to school every day.
+来ます|きます|come|来る|友達が家に来ます。|A friend is coming to my house.
+飲みます|のみます|drink|飲む|毎朝コーヒーを飲みます。|I drink coffee every morning.
+食べます|たべます|eat|食べる|昼ご飯を食べます。|I eat lunch.
+見ます|みます|see, watch|見る|テレビを見ます。|I watch TV.
+買います|かいます|buy|買う|パンを買います。|I buy bread.
+聞きます|ききます|listen, hear, ask|聞く|音楽を聞きます。|I listen to music.
+読みます|よみます|read|読む|本を読みます。|I read a book.
+帰ります|かえります|return home|帰る|六時に家へ帰ります。|I go home at six.
+書きます|かきます|write|書く|手紙を書きます。|I write a letter.
+起きます|おきます|get up, wake up|起きる|毎朝六時に起きます。|I get up at six every morning.
+寝ます|ねます|sleep, go to bed|寝る|夜十一時に寝ます。|I go to bed at eleven p.m.
+働きます|はたらきます|work|働く|銀行で働きます。|I work at a bank.
+終わります|おわります|end, finish|終わる|授業は五時に終わります。|Class ends at five.
+戻ります|もどります|return, go back|戻る|すぐ席に戻ります。|I’ll be right back to my seat.
+吸います|すいます|smoke, inhale|吸う|たばこを吸います。|I smoke.
+撮ります|とります|take (a photo or video)|撮る|写真を撮ります。|I take a photo.
+会います|あいます|meet|会う|駅で友達に会います。|I meet a friend at the station.
+切ります|きります|cut|切る|紙をはさみで切ります。|I cut paper with scissors.
+送ります|おくります|send|送る|メールを送ります。|I send an email.
+あげます|あげます|give|あげる|友達にプレゼントをあげます。|I give a present to a friend.
+くれます|くれます|give (to me)|くれる|母が私にお金をくれます。|Mom gives me money.
+もらいます|もらいます|receive|もらう|友達から本をもらいます。|I receive a book from a friend.
+貸します|かします|lend|貸す|友達にペンを貸します。|I lend a pen to a friend.
+借ります|かります|borrow|借りる|図書館で本を借ります。|I borrow a book at the library.
+教えます|おしえます|teach, tell|教える|先生が日本語を教えます。|The teacher teaches Japanese.
+習います|ならいます|learn, take lessons|習う|ピアノを習います。|I take piano lessons.
+かけます|かけます|make (a call), put on (glasses)|かける|友達に電話をかけます。|I call a friend.
+分かります|わかります|understand|分かる|日本語が分かります。|I understand Japanese.
+あります|あります|exist (things), have|ある|机の上に本があります。|There is a book on the desk.
+います|います|exist (people, animals)|いる|教室に先生がいます。|The teacher is in the classroom.
+歩きます|あるきます|walk|歩く|駅まで歩きます。|I walk to the station.
+着ます|きます|wear (top half of the body)|着る|シャツを着ます。|I put on a shirt.
+かかります|かかります|take (time, money)|かかる|駅まで十分かかります。|It takes ten minutes to the station.
+遊びます|あそびます|play, hang out|遊ぶ|公園で遊びます。|I play in the park.
+泳ぎます|およぎます|swim|泳ぐ|海で泳ぎます。|I swim in the sea.
+迎えます|むかえます|welcome, go to meet|迎える|空港で友達を迎えます。|I meet a friend at the airport.
+疲れます|つかれます|get tired|疲れる|仕事で疲れます。|I get tired from work.
+出ます|でます|go out, leave|出る|七時に家を出ます。|I leave home at seven.
+出します|だします|take out, send, hand in|出す|手紙を出します。|I mail a letter.
+入ります|はいります|enter|入る|部屋に入ります。|I enter the room.
+入れます|いれます|put in|入れる|かばんに本を入れます。|I put a book in my bag.
+結婚します|けっこんします|get married|結婚する|来年結婚します。|I’ll get married next year.
+食事します|しょくじします|have a meal|食事する|友達と食事します。|I have a meal with a friend.
+散歩します|さんぽします|take a walk|散歩する|公園を散歩します。|I take a walk in the park.
+勉強します|べんきょうします|study|勉強する|毎日日本語を勉強します。|I study Japanese every day.
+つけます|つけます|turn on, attach|つける|電気をつけます。|I turn on the light.
+消えます|きえます|go out, disappear|消える|電気が消えます。|The light goes out.
+消します|けします|turn off, erase|消す|テレビを消します。|I turn off the TV.
+開きます|ひらきます|open (a book, a shop)|開く|本を開きます。|I open a book.
+開けます|あけます|open (a window, a door)|開ける|窓を開けます。|I open the window.
+閉じます|とじます|close (a book, eyes)|閉じる|本を閉じます。|I close the book.
+閉めます|しめます|close (a door, a window)|閉める|ドアを閉めます。|I close the door.
+急ぎます|いそぎます|hurry|急ぐ|時間がないので急ぎます。|I hurry because there’s no time.
+待ちます|まちます|wait|待つ|バス停でバスを待ちます。|I wait for the bus at the bus stop.
+止まります|とまります|stop, come to a halt|止まる|車が止まります。|The car stops.
+留まります|とどまります|remain, stay put|留まる|ここに留まります。|I’ll stay here.
+止めます|やめます|stop, quit (doing)|止める|たばこを止めます。|I quit smoking.
+曲がります|まがります|turn|曲がる|次の角を右に曲がります。|I turn right at the next corner.
+持ちます|もちます|hold, carry, have|持つ|かばんを持ちます。|I carry a bag.
+取ります|とります|take, pick up|取る|塩を取ります。|I take the salt.
+手伝います|てつだいます|help|手伝う|母の料理を手伝います。|I help with my mother’s cooking.
+呼びます|よびます|call, summon|呼ぶ|タクシーを呼びます。|I call a taxi.
+話します|はなします|speak, talk|話す|友達と話します。|I talk with a friend.
+始めます|はじめます|begin, start (something)|始める|授業を始めます。|We begin the class.
+降ります|おります|get off, go down|降りる|次の駅で降ります。|I get off at the next station.
+立ちます|たちます|stand|立つ|ここに立ちます。|I stand here.
+座ります|すわります|sit|座る|いすに座ります。|I sit on the chair.
+使います|つかいます|use|使う|はしを使います。|I use chopsticks.
+置きます|おきます|put, place|置く|机の上に本を置きます。|I put a book on the desk.
+作ります|つくります|make|作る|晩ご飯を作ります。|I make dinner.
+売ります|うります|sell|売る|この店は薬を売ります。|This shop sells medicine.
+知ります|しります|get to know, learn of|知る|ニュースで事故を知ります。|I learn of an accident from the news.
+住みます|すみます|live, reside|住む|東京に住みます。|I live in Tokyo.
+研究します|けんきゅうします|do research|研究する|大学で研究します。|I do research at university.
+乗ります|のります|ride, get on|乗る|電車に乗ります。|I ride the train.
+降ります|ふります|fall (rain, snow)|降る|雨が降ります。|It rains.
+浴びます|あびます|take (a shower)|浴びる|毎朝シャワーを浴びます。|I take a shower every morning.
+辞めます|やめます|quit, resign|辞める|会社を辞めます。|I quit my job.
+押します|おします|push, press|押す|ボタンを押します。|I press the button.
+覚えます|おぼえます|memorize, remember|覚える|漢字を覚えます。|I memorize kanji.
+忘れます|わすれます|forget|忘れる|宿題を忘れます。|I forget my homework.
+なくします|なくします|lose|なくす|鍵をなくします。|I lose my key.
+払います|はらいます|pay|払う|レジでお金を払います。|I pay at the register.
+返します|かえします|return (something)|返す|借りた本を返します。|I return the borrowed book.
+出かけます|でかけます|go out|出かける|日曜日に出かけます。|I go out on Sunday.
+脱ぎます|ぬぎます|take off (clothes, shoes)|脱ぐ|玄関で靴を脱ぎます。|I take off my shoes at the entrance.
+心配します|しんぱいします|worry|心配する|試験のことを心配します。|I worry about the exam.
+残業します|ざんぎょうします|work overtime|残業する|毎日残業します。|I work overtime every day.
+出張します|しゅっちょうします|go on a business trip|出張する|来週大阪へ出張します。|I go on a business trip to Osaka next week.`;
+var VERBS=VS.split("\n").map(function(l){return l.split("|")}).filter(function(p){return p.length>=6});
+VERBS.push(["引きます","ひきます","pull, draw, look up (in a dictionary)","引く","辞書で漢字を引きます。","I look up kanji in a dictionary.","n4"]);
+var AS=`ハンサム|はんさむ|handsome|na-adjective|彼はハンサムです。|He is handsome.
+きれい|きれい|pretty, clean|na-adjective|この花はきれいです。|This flower is pretty.
+静か|しずか|quiet|na-adjective|図書館は静かです。|The library is quiet.
+賑やか|にぎやか|lively, bustling|na-adjective|町は賑やかです。|The town is lively.
+有名|ゆうめい|famous|na-adjective|この店は有名です。|This shop is famous.
+親切|しんせつ|kind, helpful|na-adjective|先生は親切です。|The teacher is kind.
+元気|げんき|healthy, energetic|na-adjective|母は元気です。|My mother is well.
+暇|ひま|free (time)|na-adjective|今日は暇です。|I’m free today.
+便利|べんり|convenient|na-adjective|この辞書は便利です。|This dictionary is convenient.
+素敵|すてき|lovely, wonderful|na-adjective|素敵な服ですね。|What a lovely outfit!
+大きい|おおきい|big|i-adjective|大きい犬です。|It’s a big dog.
+小さい|ちいさい|small|i-adjective|小さい家です。|It’s a small house.
+新しい|あたらしい|new|i-adjective|新しい車です。|It’s a new car.
+古い|ふるい|old (not for people)|i-adjective|古い本です。|It’s an old book.
+良い|いい, よい|good|i-adjective|天気がいいです。|The weather is nice.
+悪い|わるい|bad|i-adjective|天気が悪いです。|The weather is bad.
+暑い|あつい|hot (weather)|i-adjective|今日は暑いです。|It’s hot today.
+寒い|さむい|cold (weather)|i-adjective|冬は寒いです。|Winter is cold.
+冷たい|つめたい|cold (to the touch)|i-adjective|冷たい水を飲みます。|I drink cold water.
+難しい|むずかしい|difficult|i-adjective|漢字は難しいです。|Kanji is difficult.
+易しい|やさしい|easy|i-adjective|日本語の本は易しいです。|The Japanese book is easy.
+優しい|やさしい|kind, gentle|i-adjective|先生は優しいです。|The teacher is gentle.
+高い|たかい|expensive, tall|i-adjective|この時計は高いです。|This watch is expensive.
+安い|やすい|cheap|i-adjective|このパンは安いです。|This bread is cheap.
+低い|ひくい|low|i-adjective|この机は低いです。|This desk is low.
+面白い|おもしろい|interesting, funny|i-adjective|この映画は面白いです。|This movie is interesting.
+美味しい|おいしい|delicious|i-adjective|このラーメンは美味しいです。|This ramen is delicious.
+忙しい|いそがしい|busy|i-adjective|毎日忙しいです。|I’m busy every day.
+楽しい|たのしい|fun, enjoyable|i-adjective|旅行は楽しいです。|The trip is fun.
+白い|しろい|white|i-adjective|白いシャツを着ます。|I wear a white shirt.
+黒い|くろい|black|i-adjective|黒い猫がいます。|There is a black cat.
+赤い|あかい|red|i-adjective|赤い花を買います。|I buy red flowers.
+青い|あおい|blue|i-adjective|空は青いです。|The sky is blue.
+好き|すき|like, fond of|na-adjective|私は犬が好きです。|I like dogs.
+嫌い|きらい|dislike|na-adjective|私は野菜が嫌いです。|I dislike vegetables.
+上手|じょうず|good at, skilled|na-adjective|母は料理が上手です。|My mother is good at cooking.
+下手|へた|bad at, unskilled|na-adjective|私は歌が下手です。|I’m bad at singing.
+色々|いろいろ|various|na-adjective|色々な国へ行きます。|I go to various countries.
+簡単|かんたん|easy, simple|na-adjective|この問題は簡単です。|This problem is simple.
+近い|ちかい|near|i-adjective|駅は家から近いです。|The station is near my house.
+遠い|とおい|far|i-adjective|学校は遠いです。|The school is far.
+速い|はやい|fast|i-adjective|新幹線は速いです。|The Shinkansen is fast.
+早い|はやい|early|i-adjective|母は朝が早いです。|My mother gets up early.
+遅い|おそい|slow, late|i-adjective|バスは遅いです。|The bus is slow.
+多い|おおい|many, much|i-adjective|東京は人が多いです。|Tokyo has many people.
+少ない|すくない|few, little|i-adjective|今日は客が少ないです。|There are few customers today.
+暖かい|あたたかい|warm (weather; 温かい for food, drinks)|i-adjective|今日は暖かいです。|It’s warm today.
+涼しい|すずしい|cool (weather)|i-adjective|秋は涼しいです。|Autumn is cool.
+甘い|あまい|sweet|i-adjective|このケーキは甘いです。|This cake is sweet.
+辛い|からい|spicy|i-adjective|このカレーは辛いです。|This curry is spicy.
+重い|おもい|heavy|i-adjective|このかばんは重いです。|This bag is heavy.
+軽い|かるい|light (weight)|i-adjective|この靴は軽いです。|These shoes are light.
+大変|たいへん|hard, tough, serious|na-adjective|仕事が大変です。|Work is tough.
+欲しい|ほしい|want (a thing)|i-adjective|新しい車が欲しいです。|I want a new car.
+寂しい|さびしい|lonely|i-adjective|一人は寂しいです。|Being alone is lonely.
+広い|ひろい|wide, spacious|i-adjective|部屋が広いです。|The room is spacious.
+狭い|せまい|narrow, cramped|i-adjective|台所が狭いです。|The kitchen is cramped.
+若い|わかい|young|i-adjective|彼は若いです。|He is young.
+長い|ながい|long|i-adjective|この川は長いです。|This river is long.
+短い|みじかい|short|i-adjective|髪が短いです。|My hair is short.
+明るい|あかるい|bright, cheerful|i-adjective|この部屋は明るいです。|This room is bright.
+暗い|くらい|dark|i-adjective|夜は暗いです。|It’s dark at night.
+背が高い|せがたかい|tall (person)|i-adjective phrase|兄は背が高いです。|My older brother is tall.
+大切|たいせつ|important, precious|na-adjective|家族は大切です。|Family is important.
+大丈夫|だいじょうぶ|okay, all right|na-adjective|大丈夫ですか。|Are you okay?
+危ない|あぶない|dangerous|i-adjective|その道は危ないです。|That road is dangerous.`;
+var ADJ=AS.split("\n").map(function(l){return l.split("|")}).filter(function(p){return p.length>=6});
+ADJ.push(["正しい","ただしい","correct, right","i-adjective","正しい答えを選んでください。","Please choose the correct answer.","n4"]);
+var CS=`学校|がっこう|school|学 study + 校 school|学校へ行きます。|I go to school.
+先生|せんせい|teacher|先 before + 生 life|先生の話を聞きます。|I listen to the teacher.
+学生|がくせい|student|学 study + 生 life|私は大学の学生です。|I’m a university student.
+大学|だいがく|university|大 big + 学 study|大学で勉強します。|I study at university.
+日本|にほん|Japan|日 sun + 本 origin|来年日本へ行きます。|I’ll go to Japan next year.
+日本語|にほんご|Japanese language|日本 Japan + 語 language|日本語を話します。|I speak Japanese.
+外国|がいこく|foreign country|外 outside + 国 country|外国に住みます。|I live abroad.
+外国人|がいこくじん|foreigner|外国 foreign country + 人 person|外国人の友達がいます。|I have a foreign friend.
+電車|でんしゃ|train|電 electricity + 車 vehicle|電車で会社へ行きます。|I go to work by train.
+電話|でんわ|telephone|電 electricity + 話 talk|友達に電話します。|I phone a friend.
+電気|でんき|electricity, electric light|電 electricity + 気 spirit|電気を消します。|I turn off the light.
+会社|かいしゃ|company|会 meet + 社 company|会社は駅の近くです。|The company is near the station.
+会社員|かいしゃいん|office worker|会社 company + 員 member|兄は会社員です。|My older brother is an office worker.
+友達|ともだち|friend|友 friend + 達 plural suffix|友達と映画を見ます。|I watch a movie with a friend.
+家族|かぞく|family|家 house + 族 clan|家族は四人です。|My family has four people.
+両親|りょうしん|parents|両 both + 親 parent|両親は大阪に住みます。|My parents live in Osaka.
+兄弟|きょうだい|siblings|兄 older brother + 弟 younger brother|兄弟がいますか。|Do you have siblings?
+子供|こども|child|子 child + 供 accompany|子供が公園で遊びます。|The children play in the park.
+大人|おとな|adult|大 big + 人 person|大人は三百円です。|Adults are 300 yen.
+一人|ひとり|one person, alone|一 one + 人 person|一人で行きます。|I go alone.
+二人|ふたり|two people|二 two + 人 person|二人で食事します。|The two of us have a meal.
+今日|きょう|today|今 now + 日 day|今日は暑いです。|It’s hot today.
+明日|あした|tomorrow|明 bright + 日 day|明日は休みです。|Tomorrow is a day off.
+昨日|きのう|yesterday|昨 previous + 日 day|昨日は雨でした。|It rained yesterday.
+毎日|まいにち|every day|毎 every + 日 day|毎日勉強します。|I study every day.
+毎朝|まいあさ|every morning|毎 every + 朝 morning|毎朝六時に起きます。|I get up at six every morning.
+毎晩|まいばん|every evening|毎 every + 晩 evening|毎晩十一時に寝ます。|I go to bed at eleven every night.
+今朝|けさ|this morning|今 now + 朝 morning|今朝六時に起きました。|I got up at six this morning.
+今晩|こんばん|this evening, tonight|今 now + 晩 evening|今晩友達に会います。|I’m meeting a friend tonight.
+今年|ことし|this year|今 now + 年 year|今年は忙しいです。|This year is busy.
+去年|きょねん|last year|去 leave + 年 year|去年東京に住みました。|I lived in Tokyo last year.
+来年|らいねん|next year|来 come + 年 year|来年結婚します。|I’ll get married next year.
+今月|こんげつ|this month|今 now + 月 month|今月は忙しいです。|This month is busy.
+来月|らいげつ|next month|来 come + 月 month|来月旅行します。|I’ll travel next month.
+先月|せんげつ|last month|先 before + 月 month|先月東京へ行きました。|I went to Tokyo last month.
+今週|こんしゅう|this week|今 now + 週 week|今週は暇です。|I’m free this week.
+来週|らいしゅう|next week|来 come + 週 week|来週試験があります。|There’s an exam next week.
+先週|せんしゅう|last week|先 before + 週 week|先週友達に会いました。|I met a friend last week.
+毎週|まいしゅう|every week|毎 every + 週 week|毎週日曜日に散歩します。|I take a walk every Sunday.
+休日|きゅうじつ|day off, holiday|休 rest + 日 day|休日は家にいます。|I stay home on days off.
+午前|ごぜん|morning, a.m.|午 noon + 前 before|午前九時に会社へ行きます。|I go to work at 9 a.m.
+午後|ごご|afternoon, p.m.|午 noon + 後 after|午後は暇です。|I’m free in the afternoon.
+時間|じかん|time|時 hour + 間 interval|時間がありません。|I don’t have time.
+時計|とけい|clock, watch|時 hour + 計 measure|新しい時計を買います。|I buy a new watch.
+何時|なんじ|what time|何 what + 時 hour|今何時ですか。|What time is it now?
+半分|はんぶん|half|半 half + 分 part|ケーキを半分食べます。|I eat half of the cake.
+名前|なまえ|name|名 name + 前 before|お名前は何ですか。|What is your name?
+自分|じぶん|oneself|自 self + 分 part|自分で作ります。|I make it myself.
+全部|ぜんぶ|all, everything|全 whole + 部 section|全部食べます。|I eat it all.
+自転車|じてんしゃ|bicycle|自 self + 転 turn + 車 vehicle|自転車で学校へ行きます。|I go to school by bicycle.
+地下鉄|ちかてつ|subway|地 ground + 下 below + 鉄 iron|地下鉄に乗ります。|I ride the subway.
+新幹線|しんかんせん|bullet train|新 new + 幹 trunk + 線 line|新幹線で大阪へ行きます。|I go to Osaka by bullet train.
+飛行機|ひこうき|airplane|飛 fly + 行 go + 機 machine|飛行機で北海道へ行きます。|I go to Hokkaido by plane.
+空港|くうこう|airport|空 sky + 港 harbor|空港まで電車で行きます。|I go to the airport by train.
+運転|うんてん|driving|運 carry + 転 turn|毎日運転します。|I drive every day.
+映画|えいが|movie|映 project + 画 picture|映画を見ます。|I watch a movie.
+映画館|えいがかん|movie theater|映画 movie + 館 hall|映画館は駅の近くです。|The movie theater is near the station.
+図書館|としょかん|library|図 diagram + 書 write + 館 hall|図書館で本を借ります。|I borrow a book at the library.
+病院|びょういん|hospital|病 illness + 院 institution|病院へ行きます。|I go to the hospital.
+銀行|ぎんこう|bank|銀 silver + 行 go|銀行は九時に開きます。|The bank opens at nine.
+郵便局|ゆうびんきょく|post office|郵 mail + 便 convenience + 局 bureau|郵便局で手紙を出します。|I mail a letter at the post office.
+公園|こうえん|park|公 public + 園 garden|公園を散歩します。|I take a walk in the park.
+食堂|しょくどう|cafeteria|食 eat + 堂 hall|食堂で昼ご飯を食べます。|I eat lunch at the cafeteria.
+食事|しょくじ|meal|食 eat + 事 matter|食事の前に手を洗います。|I wash my hands before meals.
+料理|りょうり|cooking, dish|料 material + 理 reason|母の料理は美味しいです。|My mother’s cooking is delicious.
+野菜|やさい|vegetables|野 field + 菜 greens|野菜を食べます。|I eat vegetables.
+牛肉|ぎゅうにく|beef|牛 cow + 肉 meat|牛肉を買います。|I buy beef.
+牛乳|ぎゅうにゅう|milk|牛 cow + 乳 milk|毎朝牛乳を飲みます。|I drink milk every morning.
+旅行|りょこう|travel|旅 trip + 行 go|夏休みに旅行します。|I travel during summer vacation.
+勉強|べんきょう|study|勉 effort + 強 strong|図書館で勉強します。|I study at the library.
+宿題|しゅくだい|homework|宿 lodging + 題 topic|宿題をします。|I do my homework.
+質問|しつもん|question|質 quality + 問 question|先生に質問します。|I ask the teacher a question.
+試験|しけん|exam|試 test + 験 verify|明日試験があります。|There’s an exam tomorrow.
+授業|じゅぎょう|class, lesson|授 instruct + 業 business|授業は九時に始まります。|Class starts at nine.
+教室|きょうしつ|classroom|教 teach + 室 room|教室に学生がいます。|There are students in the classroom.
+漢字|かんじ|kanji|漢 Chinese + 字 character|漢字を覚えます。|I memorize kanji.
+言葉|ことば|word, language|言 say + 葉 leaf|新しい言葉を覚えます。|I memorize new words.
+英語|えいご|English|英 England + 語 language|英語を勉強します。|I study English.
+辞書|じしょ|dictionary|辞 word + 書 write|辞書で言葉を調べます。|I look up words in a dictionary.
+意味|いみ|meaning|意 mind + 味 taste|この言葉の意味が分かりません。|I don’t know this word’s meaning.
+新聞|しんぶん|newspaper|新 new + 聞 hear|毎朝新聞を読みます。|I read the newspaper every morning.
+手紙|てがみ|letter|手 hand + 紙 paper|友達に手紙を書きます。|I write a letter to a friend.
+切手|きって|postage stamp|切 cut + 手 hand|切手を買います。|I buy a stamp.
+出口|でぐち|exit|出 go out + 口 mouth|出口はどこですか。|Where is the exit?
+入口|いりぐち|entrance|入 enter + 口 mouth|入口で待ちます。|I wait at the entrance.
+天気|てんき|weather|天 sky + 気 spirit|今日の天気はいいです。|The weather is nice today.
+病気|びょうき|illness|病 illness + 気 spirit|病気で学校を休みます。|I miss school because of illness.
+仕事|しごと|work, job|仕 serve + 事 matter|仕事は六時に終わります。|Work ends at six.
+部屋|へや|room|部 section + 屋 roof|私の部屋は二階です。|My room is on the second floor.
+空気|くうき|air|空 sky + 気 spirit|山の空気はきれいです。|The mountain air is clean.
+生活|せいかつ|daily life, living|生 life + 活 lively|日本の生活は楽しいです。|Life in Japan is fun.
+世界|せかい|world|世 generation + 界 realm|世界を旅行します。|I travel around the world.
+運動|うんどう|exercise|運 carry + 動 move|毎日運動します。|I exercise every day.
+散歩|さんぽ|walk, stroll|散 scatter + 歩 walk|朝に散歩します。|I take a walk in the morning.
+写真|しゃしん|photograph|写 copy + 真 true|写真を撮ります。|I take a photo.
+音楽|おんがく|music|音 sound + 楽 enjoy|音楽を聞きます。|I listen to music.
+動物|どうぶつ|animal|動 move + 物 thing|動物が好きです。|I like animals.
+荷物|にもつ|luggage|荷 load + 物 thing|荷物が重いです。|My luggage is heavy.`;
+var COMBO=CS.split("\n").map(function(l){return l.split("|")}).filter(function(p){return p.length>=6});
+COMBO=COMBO.concat([
+["天気予報","てんきよほう","weather forecast","天気 weather + 予報 forecast","天気予報を見てから出かけます。","I’ll check the weather forecast before going out.","n4"],
+["住所","じゅうしょ","address","住 live + 所 place","住所を紙に書いてください。","Please write your address on the paper.","n4"],
+["地図","ちず","map","地 ground + 図 map","地図を見ながら歩きます。","I walk while looking at the map.","n4"],
+["交差点","こうさてん","intersection","交 cross + 差 difference + 点 point","交差点を右に曲がります。","Turn right at the intersection.","n4"],
+["信号","しんごう","traffic light, signal","信 trust + 号 number","次の信号を左に曲がってください。","Please turn left at the next traffic light.","n4"],
+["乗り場","のりば","boarding place, platform","乗 ride + 場 place","バス乗り場はどこですか。","Where is the bus stop?","n4"],
+["急行","きゅうこう","express train","急 hurry + 行 go","急行に乗ると早いです。","It’s faster if you take the express.","n4"],
+["普通","ふつう","ordinary, local train","普 general + 通 pass","普通電車で行きます。","I’ll go by local train.","n4"],
+["会話","かいわ","conversation","会 meet + 話 talk","日本語で会話を練習します。","I practice conversation in Japanese.","n4"],
+["返事","へんじ","reply, answer","返 return + 事 matter","メールの返事を書きました。","I wrote a reply to the email.","n4"],
+["留守","るす","absence from home","留 stay + 守 guard","父は留守です。","My father is not at home.","n4"],
+["用意","ようい","preparation","用 use + 意 intention","旅行の用意をします。","I prepare for the trip.","n4"],
+["準備","じゅんび","preparation","準 standard + 備 prepare","試験の準備をしています。","I’m preparing for the exam.","n4"],
+["受付","うけつけ","reception, front desk","受 receive + 付 attach","受付で名前を言ってください。","Please give your name at reception.","n4"],
+["案内","あんない","guidance, information","案 plan + 内 inside","駅まで案内します。","I’ll show you the way to the station.","n4"],
+["注文","ちゅうもん","order (food, goods)","注 pour + 文 writing","コーヒーを二つ注文しました。","I ordered two coffees.","n4"],
+["約束","やくそく","promise, appointment","約 promise + 束 bundle","友達と会う約束があります。","I have an appointment with a friend.","n4"],
+["気分","きぶん","feeling, mood","気 spirit + 分 part","今日は気分がいいです。","I feel good today.","n4"],
+["気持ち","きもち","feeling, sensation","気 spirit + 持 hold","気持ちを伝えました。","I expressed how I feel.","n4"],
+["乗り物","のりもの","vehicle, transport","乗 ride + 物 thing","いろいろな乗り物があります。","There are various kinds of vehicles.","n4"],
+["忘れ物","わすれもの","lost item, something left behind","忘 forget + 物 thing","電車に忘れ物をしました。","I left something on the train.","n4"],
+["食料品","しょくりょうひん","groceries, food products","食 eat + 料 material + 品 goods","食料品を買いに行きます。","I’m going to buy groceries.","n4"],
+["海岸","かいがん","coast, seashore","海 sea + 岸 shore","夏に海岸を歩きます。","I walk along the seashore in summer.","n4"],
+["台風","たいふう","typhoon","台 platform + 風 wind","台風が近づいています。","A typhoon is approaching.","n4"],
+["地震","じしん","earthquake","地 ground + 震 shake","地震のときは机の下に入ります。","During an earthquake, get under a desk.","n4"],
+["火事","かじ","fire, conflagration","火 fire + 事 event","近くで火事がありました。","There was a fire nearby.","n4"],
+["動物園","どうぶつえん","zoo","動物 animal + 園 garden","日曜日に動物園へ行きました。","I went to the zoo on Sunday.","n4"],
+["美術館","びじゅつかん","art museum","美術 art + 館 building","美術館で絵を見ました。","I saw paintings at the art museum.","n4"],
+["売り場","うりば","sales counter, department","売 sell + 場 place","切符売り場はあそこです。","The ticket counter is over there.","n4"],
+["忘年会","ぼうねんかい","year-end party","忘 forget + 年 year + 会 gathering","会社の忘年会に行きます。","I’m going to the company year-end party.","n4"],
+["作文","さくぶん","composition, essay","作 make + 文 writing","日本語で作文を書きました。","I wrote an essay in Japanese.","n4"],
+["教科書","きょうかしょ","textbook","教 teach + 科 subject + 書 write","教科書を開いてください。","Please open your textbook.","n4"],
+["文化祭","ぶんかさい","school festival","文化 culture + 祭 festival","文化祭で歌を歌います。","I’ll sing at the school festival.","n4"],
+["運動会","うんどうかい","sports day","運動 exercise + 会 gathering","来週、学校で運動会があります。","There’s a sports day at school next week.","n4"],
+["市役所","しやくしょ","city hall","市 city + 役 duty + 所 place","市役所で住所を登録しました。","I registered my address at city hall.","n4"],
+["交番","こうばん","police box","交 exchange + 番 station","道が分からないので交番で聞きます。","I’ll ask at the police box because I’m lost.","n4"],
+["会場","かいじょう","venue, meeting place","会 gather + 場 place","会場は駅の前です。","The venue is in front of the station.","n4"],
+["場所","ばしょ","place, location","場 place + 所 place","待ち合わせの場所を決めましょう。","Let’s decide where to meet.","n4"],
+["番号","ばんごう","number","番 turn + 号 number","電話番号を教えてください。","Please tell me your phone number.","n4"],
+["注意","ちゅうい","caution, attention","注 pour + 意 attention","車に注意してください。","Please watch out for cars.","n4"],
+["交通","こうつう","traffic, transportation","交 cross + 通 pass","この町は交通が便利です。","Transportation is convenient in this town.","n4"],
+["運転手","うんてんしゅ","driver","運転 driving + 手 person","運転手に駅の場所を聞きました。","I asked the driver where the station is.","n4"],
+["切符","きっぷ","ticket","切 cut + 符 ticket","駅で切符を買いました。","I bought a ticket at the station.","n4"],
+["入学","にゅうがく","school admission, enrollment","入 enter + 学 study","妹は来年高校に入学します。","My younger sister will enter high school next year.","n4"],
+["卒業","そつぎょう","graduation","卒 finish + 業 work","兄は大学を卒業しました。","My older brother graduated from university.","n4"],
+["試合","しあい","match, game","試 test + 合 fit","日曜日にサッカーの試合があります。","There’s a soccer game on Sunday.","n4"],
+["出発","しゅっぱつ","departure","出 go out + 発 start","電車は八時に出発します。","The train departs at eight.","n4"],
+["到着","とうちゃく","arrival","到 arrive + 着 arrive","飛行機は午後に到着します。","The plane arrives in the afternoon.","n4"],
+["乗り換え","のりかえ","transfer, change trains","乗 ride + 換 exchange","次の駅で電車を乗り換えます。","I’ll transfer trains at the next station.","n4"],
+["小学生","しょうがくせい","elementary school student","小 small + 学 study + 生 student","妹は小学生です。","My younger sister is an elementary school student.","n4"],
+["中学生","ちゅうがくせい","middle school student","中 middle + 学 study + 生 student","弟は中学生です。","My younger brother is a middle school student.","n4"],
+["高校生","こうこうせい","high school student","高 high + 校 school + 生 student","友達は高校生です。","My friend is a high school student.","n4"],
+["日本人","にほんじん","Japanese person","日本 Japan + 人 person","日本人の友達がいます。","I have a Japanese friend.","n4"],
+["外国語","がいこくご","foreign language","外国 foreign country + 語 language","外国語を二つ勉強しています。","I’m studying two foreign languages.","n4"],
+["安全","あんぜん","safe, safety","安 safe + 全 whole","この町は夜も安全です。","This town is safe even at night.","n4"],
+["危険","きけん","danger, dangerous","危 danger + 険 steep","ここは危険ですから入らないでください。","This is dangerous, so please don’t enter.","n4"],
+["便利","べんり","convenient","便 convenience + 利 useful","駅の近くはとても便利です。","It’s very convenient near the station.","n4"],
+["不便","ふべん","inconvenient","不 not + 便 convenience","バスが少なくて不便です。","There are few buses, so it’s inconvenient.","n4"],
+["大事","だいじ","important, valuable","大 big + 事 matter","これは大事な書類です。","This is an important document.","n4"],
+["生活費","せいかつひ","living expenses","生活 daily life + 費 expense","東京は生活費が高いです。","Living expenses are high in Tokyo.","n4"],
+["気温","きおん","air temperature","気 air + 温 temperature","今日の気温は二十度です。","Today’s temperature is 20 degrees.","n4"],
+["水道","すいどう","water supply, tap","水 water + 道 way","水道の水を飲みます。","I drink tap water.","n4"],
+["電池","でんち","battery","電 electricity + 池 pool","時計の電池を交換しました。","I replaced the clock’s battery.","n4"]
+]);
+COMBO=COMBO.concat([
+["駅前","えきまえ","in front of the station","駅 station + 前 front","駅前で友達を待っています。","I’m waiting for a friend in front of the station.","n5"],
+["駅員","えきいん","station attendant","駅 station + 員 member","駅員に道を聞きました。","I asked the station attendant for directions.","n4"],
+["電話番号","でんわばんごう","telephone number","電話 telephone + 番号 number","電話番号を教えてください。","Please tell me your phone number.","n4"],
+["住所","じゅうしょ","address","住 live + 所 place","新しい住所を書きました。","I wrote my new address.","n4"],
+["建物","たてもの","building","建 build + 物 thing","あの建物は新しいです。","That building is new.","n4"],
+["工場","こうじょう","factory","工 manufacture + 場 place","父は工場で働いています。","My father works at a factory.","n4"],
+["店員","てんいん","store clerk","店 shop + 員 member","店員にサイズを聞きました。","I asked the store clerk about the size.","n4"],
+["肉屋","にくや","butcher, meat shop","肉 meat + 屋 shop","肉屋で牛肉を買いました。","I bought beef at the butcher’s.","n4"],
+["魚屋","さかなや","fish shop","魚 fish + 屋 shop","魚屋で魚を買います。","I buy fish at the fish shop.","n4"],
+["花屋","はなや","flower shop","花 flower + 屋 shop","花屋で花を買いました。","I bought flowers at the flower shop.","n4"],
+["本屋","ほんや","bookstore","本 book + 屋 shop","駅の近くの本屋へ行きます。","I’m going to the bookstore near the station.","n5"],
+["薬屋","くすりや","pharmacy, drugstore","薬 medicine + 屋 shop","薬屋で薬を買います。","I buy medicine at the pharmacy.","n4"],
+["食べ物","たべもの","food","食 eat + 物 thing","好きな食べ物は何ですか。","What food do you like?","n5"],
+["飲み物","のみもの","drink, beverage","飲 drink + 物 thing","冷たい飲み物をください。","A cold drink, please.","n5"],
+["建て物","たてもの","building","建 build + 物 thing","古い建て物を見ました。","I saw an old building.","n4"],
+["手作り","てづくり","handmade","手 hand + 作 make","これは母の手作りです。","This is handmade by my mother.","n4"],
+["手伝い","てつだい","help, assistance","手 hand + 伝 convey","引っ越しの手伝いをしました。","I helped with the move.","n4"],
+["見物","けんぶつ","sightseeing","見 see + 物 thing","京都でお寺を見物しました。","I went sightseeing at temples in Kyoto.","n4"],
+["見学","けんがく","study tour, observation","見 see + 学 study","工場を見学しました。","I toured the factory.","n4"],
+["外国語","がいこくご","foreign language","外国 foreign country + 語 language","外国語を勉強しています。","I’m studying a foreign language.","n4"],
+["英会話","えいかいわ","English conversation","英語 English + 会話 conversation","週に一度、英会話を習います。","I take English conversation lessons once a week.","n4"],
+["日本語学校","にほんごがっこう","Japanese-language school","日本語 Japanese + 学校 school","日本語学校で勉強しています。","I study at a Japanese-language school.","n4"],
+["小学校","しょうがっこう","elementary school","小 small + 学校 school","弟は小学校に通っています。","My younger brother goes to elementary school.","n5"],
+["中学校","ちゅうがっこう","junior high school","中 middle + 学校 school","中学校の先生に会いました。","I met a junior high school teacher.","n4"],
+["高校","こうこう","high school","高 high + 校 school","妹は高校に通っています。","My younger sister attends high school.","n4"],
+["大学生","だいがくせい","university student","大学 university + 生 student","姉は大学生です。","My older sister is a university student.","n5"],
+["留学生","りゅうがくせい","international student","留 stay + 学生 student","留学生と日本語で話しました。","I spoke in Japanese with an international student.","n4"],
+["教室の中","きょうしつのなか","inside the classroom","教室 classroom + 中 inside","教室の中は静かです。","It’s quiet inside the classroom.","n4"],
+["駅の近く","えきのちかく","near the station","駅 station + 近 near","駅の近くに銀行があります。","There’s a bank near the station.","n4"],
+["家の前","いえのまえ","in front of the house","家 house + 前 front","家の前に車があります。","There’s a car in front of the house.","n5"],
+["家の中","いえのなか","inside the house","家 house + 中 inside","家の中で待っていてください。","Please wait inside the house.","n4"],
+["山の上","やまのうえ","on top of the mountain","山 mountain + 上 above","山の上から町が見えます。","You can see the town from the top of the mountain.","n5"],
+["川の近く","かわのちかく","near the river","川 river + 近 near","川の近くを散歩しました。","I took a walk near the river.","n4"],
+["日本の文化","にほんのぶんか","Japanese culture","日本 Japan + 文化 culture","日本の文化に興味があります。","I’m interested in Japanese culture.","n4"],
+["外国の人","がいこくのひと","person from another country","外国 foreign country + 人 person","外国の人に道を教えました。","I gave directions to a person from another country.","n4"],
+["毎日の生活","まいにちのせいかつ","everyday life","毎日 every day + 生活 life","毎日の生活を大切にしています。","I value my everyday life.","n4"],
+["学校生活","がっこうせいかつ","school life","学校 school + 生活 life","学校生活は楽しいです。","School life is fun.","n4"],
+["新しい年","あたらしいとし","new year","新しい new + 年 year","新しい年が始まりました。","The new year has begun.","n4"],
+["雨の日","あめのひ","rainy day","雨 rain + 日 day","雨の日は家で本を読みます。","I read books at home on rainy days.","n5"],
+["休みの日","やすみのひ","day off","休み rest + 日 day","休みの日に友達と出かけます。","I go out with friends on my day off.","n5"],
+["仕事の後","しごとのあと","after work","仕事 work + 後 after","仕事の後で買い物をします。","I shop after work.","n4"],
+["昼休み","ひるやすみ","lunch break","昼 noon + 休み rest","昼休みにお弁当を食べます。","I eat my lunch during the break.","n4"],
+["夏休み","なつやすみ","summer vacation","夏 summer + 休み break","夏休みに家族と旅行します。","I travel with my family during summer vacation.","n5"],
+["冬休み","ふゆやすみ","winter vacation","冬 winter + 休み break","冬休みに国へ帰ります。","I return to my country during winter vacation.","n4"],
+["誕生日","たんじょうび","birthday","誕 birth + 生 life + 日 day","今日は母の誕生日です。","Today is my mother’s birthday.","n4"],
+["毎年","まいとし","every year","毎 every + 年 year","毎年、家族で旅行します。","Every year, I travel with my family.","n5"],
+["今度","こんど","this time, next time","今 now + 度 time","今度一緒に映画を見ましょう。","Let’s watch a movie together next time.","n4"],
+["何回","なんかい","how many times","何 what + 回 times","この映画を何回見ましたか。","How many times have you seen this movie?","n4"],
+["一番","いちばん","number one, most","一 one + 番 number","この店のラーメンが一番好きです。","I like this shop’s ramen the best.","n5"],
+["本当","ほんとう","truth, really","本 true + 当 hit","本当のことを話してください。","Please tell me the truth.","n4"],
+["大切な人","たいせつなひと","important person","大切 precious + 人 person","家族は大切な人です。","Family members are important people.","n4"],
+["安全な場所","あんぜんなばしょ","safe place","安全 safe + 場所 place","安全な場所で待ちましょう。","Let’s wait in a safe place.","n4"],
+["有名な店","ゆうめいなみせ","famous shop","有名 famous + 店 shop","有名な店で食事をしました。","I ate at a famous restaurant.","n4"],
+["便利な道具","べんりなどうぐ","useful tool","便利 convenient + 道具 tool","便利な道具を買いました。","I bought a useful tool.","n4"],
+["病院の先生","びょういんのせんせい","doctor at the hospital","病院 hospital + 先生 teacher","病院の先生に聞いてください。","Please ask the doctor at the hospital.","n4"],
+["駅の出口","えきのでぐち","station exit","駅 station + 出口 exit","駅の出口で会いましょう。","Let’s meet at the station exit.","n4"],
+["電車の中","でんしゃのなか","inside the train","電車 train + 中 inside","電車の中で電話をしないでください。","Please don’t make phone calls on the train.","n4"],
+["食事の前","しょくじのまえ","before a meal","食事 meal + 前 before","食事の前に手を洗います。","I wash my hands before a meal.","n4"],
+["食事の後","しょくじのあと","after a meal","食事 meal + 後 after","食事の後で薬を飲みます。","I take medicine after a meal.","n4"],
+["世界中","せかいじゅう","all over the world","世界 world + 中 throughout","世界中の人が集まりました。","People from all over the world gathered.","n4"],
+["今週末","こんしゅうまつ","this weekend","今週 this week + 末 end","今週末は家で休みます。","I’ll rest at home this weekend.","n4"]
+]);
+COMBO=COMBO.concat([
+["毎月","まいつき","every month","毎 every + 月 month","毎月、本を二冊読みます。","I read two books every month.","n4"],
+["姉妹","しまい","sisters","姉 older sister + 妹 younger sister","私には姉妹が二人います。","I have two sisters.","n4"],
+["三人","さんにん","three people","三 three + 人 person","三人で写真を撮りました。","The three of us took a photo.","n5"],
+["四人","よにん","four people","四 four + 人 person","家族は四人です。","There are four people in my family.","n5"],
+["国語","こくご","Japanese language (school subject)","国 country + 語 language","学校で国語を勉強します。","I study Japanese language arts at school.","n4"],
+["文学","ぶんがく","literature","文 writing + 学 study","日本の文学を読んでいます。","I’m reading Japanese literature.","n4"],
+["山道","やまみち","mountain path","山 mountain + 道 road","山道をゆっくり歩きました。","I walked slowly along the mountain path.","n4"],
+["左右","さゆう","left and right","左 left + 右 right","左右をよく見て渡ってください。","Look both ways carefully before crossing.","n4"],
+["上下","じょうげ","up and down","上 up + 下 down","箱を上下に動かしてください。","Please move the box up and down.","n4"],
+["前後","ぜんご","before and after","前 before + 後 after","前後の文を読んで意味を考えます。","I read the sentences before and after to understand the meaning.","n4"],
+["東西","とうざい","east and west","東 east + 西 west","町の東西に大きな道があります。","There are large roads east and west of town.","n4"],
+["南北","なんぼく","north and south","南 south + 北 north","この道は南北に走っています。","This road runs north to south.","n4"],
+["国内","こくない","within the country","国 country + 内 inside","国内を旅行する予定です。","I plan to travel within the country.","n4"],
+["国外","こくがい","outside the country","国 country + 外 outside","国外へ荷物を送ります。","I’ll send a package abroad.","n4"],
+["夕方","ゆうがた","evening","夕 evening + 方 direction","夕方、駅で会いましょう。","Let’s meet at the station in the evening.","n5"],
+["元気","げんき","healthy, energetic","元 origin + 気 spirit","祖母はとても元気です。","My grandmother is very healthy.","n5"],
+["有名","ゆうめい","famous","有 have + 名 name","この町は温泉で有名です。","This town is famous for its hot springs.","n4"],
+["人気","にんき","popular, popularity","人 person + 気 spirit","この店のケーキは人気があります。","This shop’s cake is popular.","n4"],
+["親友","しんゆう","close friend","親 close + 友 friend","親友に手紙を書きました。","I wrote a letter to a close friend.","n4"]
+]);
+var comboSeen={};COMBO=COMBO.filter(function(c){if(comboSeen[c[0]])return false;comboSeen[c[0]]=true;return true});
+var VOCABS=[
+["家","いえ","house, home","家 house","家に帰ります。","I go home.","n5"],
+["名前","なまえ","name","名 name + 前 before","名前を書いてください。","Please write your name.","n5"],
+["今日","きょう","today","今 now + 日 day","今日は学校へ行きます。","I’m going to school today.","n5"],
+["明日","あした","tomorrow","明 bright + 日 day","明日は休みです。","Tomorrow is a day off.","n5"],
+["昨日","きのう","yesterday","昨 previous + 日 day","昨日、本を読みました。","I read a book yesterday.","n5"],
+["毎日","まいにち","every day","毎 every + 日 day","毎日日本語を勉強します。","I study Japanese every day.","n5"],
+["午前","ごぜん","morning, a.m.","午 noon + 前 before","午前八時に起きます。","I get up at eight a.m.","n5"],
+["午後","ごご","afternoon, p.m.","午 noon + 後 after","午後に友達と会います。","I’ll meet a friend in the afternoon.","n5"],
+["時間","じかん","time, hours","時 hour + 間 interval","時間がありますか。","Do you have time?","n5"],
+["天気","てんき","weather","天 sky + 気 spirit","今日の天気はいいです。","The weather is nice today.","n5"],
+["部屋","へや","room","部 section + 屋 roof","部屋を掃除します。","I clean the room.","n5"],
+["食べ物","たべもの","food","食 eat + 物 thing","好きな食べ物は何ですか。","What food do you like?","n5"],
+["飲み物","のみもの","drink, beverage","飲 drink + 物 thing","冷たい飲み物をください。","A cold drink, please.","n5"],
+["買い物","かいもの","shopping","買 buy + 物 thing","母と買い物に行きます。","I go shopping with my mother.","n5"],
+["友達","ともだち","friend","友 friend + 達 plural suffix","友達と映画を見ます。","I watch a movie with a friend.","n5"],
+["家族","かぞく","family","家 house + 族 group","家族は四人です。","There are four people in my family.","n5"],
+["子供","こども","child, children","子 child + 供 accompany","子供が公園で遊んでいます。","Children are playing in the park.","n5"],
+["大人","おとな","adult","大 big + 人 person","大人は千円です。","It’s 1,000 yen for adults.","n5"],
+["一人","ひとり","one person, alone","一 one + 人 person","一人で昼ご飯を食べます。","I eat lunch alone.","n5"],
+["二人","ふたり","two people","二 two + 人 person","二人で写真を撮りました。","We took a photo together.","n5"],
+["自分","じぶん","oneself","自 self + 分 part","自分で作りました。","I made it myself.","n4"],
+["全部","ぜんぶ","all, everything","全 whole + 部 section","宿題は全部終わりました。","I finished all my homework.","n4"],
+["最近","さいきん","recently","最 most + 近 near","最近、日本語を勉強しています。","I’ve been studying Japanese recently.","n4"],
+["最初","さいしょ","first, beginning","最 most + 初 beginning","最初に名前を書いてください。","Please write your name first.","n4"],
+["最後","さいご","last, end","最 most + 後 after","最後まで読みました。","I read to the end.","n4"],
+["理由","りゆう","reason","理 reason + 由 cause","理由を教えてください。","Please tell me the reason.","n4"],
+["必要","ひつよう","necessary, need","必 certain + 要 need","パスポートが必要です。","A passport is necessary.","n4"],
+["予定","よてい","plan, schedule","予 beforehand + 定 decide","週末は予定があります。","I have plans this weekend.","n4"],
+["用事","ようじ","errand, business","用 use + 事 matter","午後は用事があります。","I have an errand this afternoon.","n4"],
+["心配","しんぱい","worry, concern","心 heart + 配 distribute","心配しないでください。","Please don’t worry.","n4"],
+["説明","せつめい","explanation","説 explain + 明 clear","もう一度説明してください。","Please explain it one more time.","n4"],
+["練習","れんしゅう","practice","練 train + 習 learn","毎日会話の練習をします。","I practice conversation every day.","n4"],
+["経験","けいけん","experience","経 pass through + 験 test","いい経験になりました。","It became a good experience.","n4"],
+["文化","ぶんか","culture","文 writing + 化 change","日本の文化に興味があります。","I’m interested in Japanese culture.","n4"],
+["世界","せかい","world","世 generation + 界 realm","世界のニュースを読みます。","I read world news.","n4"],
+["生活","せいかつ","daily life","生 life + 活 lively","日本での生活に慣れました。","I’ve gotten used to life in Japan.","n4"],
+["場合","ばあい","case, situation","場 place + 合 fit","雨の場合は家にいます。","If it rains, I’ll stay home.","n4"],
+["途中","とちゅう","on the way, halfway","途 route + 中 middle","学校へ行く途中で会いました。","I met them on the way to school.","n4"],
+["以外","いがい","except, other than","以 by means of + 外 outside","日曜日以外は働きます。","I work every day except Sunday.","n4"]
+];
+var ADVERBS=[
+["いつも","いつも","always, usually","Frequency","いつも朝ご飯を食べます。","I always eat breakfast.","n5"],
+["よく","よく","often, well","Frequency / degree","週末によく映画を見ます。","I often watch movies on weekends.","n5"],
+["時々","ときどき","sometimes","時 time + 々 repetition","時々友達と電話で話します。","I sometimes talk with friends on the phone.","n5"],
+["たくさん","たくさん","a lot, many","Quantity","昨日、りんごをたくさん食べました。","I ate a lot of apples yesterday.","n5"],
+["少し","すこし","a little","少 few + し","日本語が少し分かります。","I understand a little Japanese.","n5"],
+["とても","とても","very","Degree","この本はとても面白いです。","This book is very interesting.","n5"],
+["あまり","あまり","not very (with negative)","Degree; usually used with a negative","肉はあまり食べません。","I don’t eat meat very often.","n5"],
+["ちょっと","ちょっと","a little, just a moment","Quantity / softener","ちょっと待ってください。","Please wait a moment.","n5"],
+["すぐ","すぐ","right away, soon","Time","駅はすぐそこです。","The station is right there.","n5"],
+["もう","もう","already, anymore","Time","もう昼ご飯を食べました。","I already ate lunch.","n5"],
+["まだ","まだ","still, not yet","Time","宿題はまだ終わっていません。","I haven’t finished my homework yet.","n5"],
+["一緒に","いっしょに","together","一 one + 緒 thread","一緒に帰りましょう。","Let’s go home together.","n5"],
+["ゆっくり","ゆっくり","slowly, leisurely","Manner","ゆっくり話してください。","Please speak slowly.","n5"],
+["だんだん","だんだん","gradually","Change","だんだん暖かくなりました。","It gradually got warmer.","n4"],
+["だいたい","だいたい","mostly, approximately","Extent / approximation","駅までだいたい十分です。","It takes about ten minutes to the station.","n4"],
+["かなり","かなり","considerably, fairly","Degree","今日はかなり寒いです。","It’s quite cold today.","n4"],
+["ずっと","ずっと","continuously, much more","Duration / comparison","昨日からずっと勉強しています。","I’ve been studying continuously since yesterday.","n4"],
+["しばらく","しばらく","for a while","Duration","ここでしばらく待ちます。","I’ll wait here for a while.","n4"],
+["ほとんど","ほとんど","almost, mostly","Degree; often used with a negative","宿題はほとんど終わりました。","I’ve almost finished my homework.","n4"],
+["特に","とくに","especially, particularly","特 special + に","特に日本料理が好きです。","I especially like Japanese food.","n4"],
+["もちろん","もちろん","of course","Agreement","もちろん手伝います。","Of course I’ll help.","n4"],
+["例えば","たとえば","for example","例 example + えば","例えば、寿司や天ぷらが好きです。","For example, I like sushi and tempura.","n4"],
+["実は","じつは","actually, to tell the truth","実 truth + は","実は、明日は休みです。","Actually, tomorrow is a day off.","n4"],
+["必ず","かならず","without fail, certainly","必 certain + ず","毎日必ず薬を飲みます。","I make sure to take my medicine every day.","n4"],
+["一度","いちど","once","一 one + 度 time","一度京都へ行きたいです。","I want to go to Kyoto once.","n4"],
+["何度も","なんども","many times, repeatedly","何 what + 度 time + も","何度もこの歌を聞きました。","I listened to this song many times.","n4"],
+["まず","まず","first of all","Order","まず名前を書いてください。","First, please write your name.","n4"],
+["やっと","やっと","finally, at last","Time / result","やっと駅に着きました。","I finally arrived at the station.","n4"],
+["急に","きゅうに","suddenly","急 sudden + に","急に雨が降り始めました。","It suddenly started raining.","n4"],
+["なかなか","なかなか","quite; not easily (with negative)","Degree","バスがなかなか来ません。","The bus isn’t coming easily.","n4"],
+["きっと","きっと","surely, certainly","Certainty","明日はきっと晴れるでしょう。","It will surely be sunny tomorrow.","n4"]
+];
+var N5_COMBO_WORDS=("学校 先生 学生 大学 日本 日本語 外国 電車 電話 電気 会社 友達 家族 子供 大人 一人 二人 今日 明日 昨日 毎日 毎朝 今朝 今年 去年 来年 今月 来月 先月 今週 来週 先週 毎週 休日 午前 午後 時間 時計 何時 半分 名前 自分 全部 自転車 地下鉄 空港 運転 映画 図書館 病院 銀行 公園 食堂 食事 料理 野菜 牛肉 牛乳 旅行 勉強 宿題 質問 試験 授業 教室 漢字 言葉 英語 辞書 意味 新聞 手紙 切手 出口 入口 天気 病気 仕事 部屋 空気 生活 世界 運動 散歩 写真 音楽 動物 荷物").split(" ");
+var N5_VERB_WORDS=("休みます 行きます 来ます 飲みます 食べます 見ます 買います 聞きます 読みます 帰ります 書きます 起きます 寝ます 働きます 終わります 会います 歩きます 遊びます 泳ぎます 疲れます あります います 分かります").split(" ");
+var N5_ADJ_WORDS=("大きい 小さい 新しい 古い 長い 高い 安い 多い 少ない 白い 黒い 赤い 青い 暑い 寒い おいしい 忙しい 楽しい 面白い 好き 嫌い 元気 静か").split(" ");
+var mode=load("kf-mode","kanji");
+var studyView=load("kf-view","review");
+function kf(c){return mode!=="kanji"?c[0]+"|"+c[1]:c[0]}
+function kkey(){return mode==="verbs"?"kf-known-v":mode==="adj"?"kf-known-a":mode==="combo"?"kf-known-c":mode==="adverb"?"kf-known-r":"kf-known"}
+function fs(c){return mode!=="kanji"?' style="font-size:min(7rem,calc((min(100vw,460px) - 90px)/'+c[0].length+'))"':""}
+function vHead(c){return '<div class="mini" lang="ja">'+esc(c[1])+'</div><div class="meaning">'+esc(c[2])+'</div>'}
+function vRest(c){return '<dl class="read"><dt>'+(mode==="verbs"?"Dictionary form":mode==="combo"?"Made of":"Type")+'</dt><dd lang="ja">'+esc(c[3])+'</dd></dl><div class="ex"><div class="exw" lang="ja" style="font-size:1.2rem">'+esc(c[4])+'</div><div class="exr"><span>'+esc(c[5])+'</span></div></div>'}
+var custom=load("kf-custom",[]);
+var level=load("kf-level","all");
+var N5="日一国人年大十二本中長出三時行見月分後前生五間上東四今金九入学高円子外八六下来気小七山話女北午百書先名川千水半男西電校語土木聞食車何南万毎白天母火右読友左休父雨";
+BASE=BASE.concat([
+["度","degree, time","ド, ト","たび"],
+["売","sell","バイ","う(る)"],
+["建","build","ケン, コン","た(てる), た(つ)"],
+["供","accompany, offer","キョウ, ク","そな(える), とも"],
+["昨","previous, last","サク","—"],
+["部","section, part","ブ","—"],
+["幹","trunk, main part","カン","みき"],
+["線","line, route","セン","—"],
+["飛","fly","ヒ","と(ぶ), と(ばす)"],
+["機","machine, opportunity","キ","はた"],
+["郵","mail","ユウ","—"],
+["便","convenience, mail","ベン, ビン","たよ(り)"],
+["園","garden, park","エン","その"],
+["乳","milk","ニュウ","ちち"],
+["授","instruct, grant","ジュ","さず(ける), さず(かる)"],
+["字","character, letter","ジ","あざ"],
+["葉","leaf","ヨウ","は"],
+["辞","word, resign","ジ","や(める)"],
+["散","scatter","サン","ち(る), ち(らす)"],
+["荷","load, luggage","カ","に"],
+["最","most","サイ","もっと(も)"],
+["初","first, beginning","ショ","はじ(め), はじ(めて), はつ"],
+["必","certain, necessary","ヒツ","かなら(ず)"],
+["説","explain, theory","セツ, ゼイ","と(く)"],
+["練","practice, refine","レン","ね(る)"],
+["経","pass through, manage","ケイ, キョウ","へ(る)"],
+["合","fit, match","ゴウ, ガッ, カッ","あ(う), あ(わせる)"],
+["途","route, way","ト","—"]
+]);
+var known=load("kf-known",[]);
+var deck=[],queue=[],flipped=false;
+var $=function(id){return document.getElementById(id)};
+
+var VERB_KANJI={},ADJECTIVE_KANJI={};
+VERBS.forEach(function(v){if(/^[\u4e00-\u9fff][\u3040-\u309f]+$/.test(v[3]))VERB_KANJI[v[3][0]]=true});
+ADJ.forEach(function(a){if(/^[\u4e00-\u9fff][\u3040-\u309f]*$/.test(a[0]))ADJECTIVE_KANJI[a[0][0]]=true});
+function overlapsVerbOrAdjective(c){return !!(VERB_KANJI[c]||ADJECTIVE_KANJI[c])}
+var SINGLE_NOUN_DATA=`雪|ゆき|snow|n4
+星|ほし|star|n4
+窓|まど|window|n4
+島|しま|island|n4
+虫|むし|insect|n4
+声|こえ|voice|n4
+髪|かみ|hair|n4
+肩|かた|shoulder|n4
+腕|うで|arm|n4
+胸|むね|chest|n4
+船|ふね|ship, boat|n4
+橋|はし|bridge|n4
+指|ゆび|finger|n4
+皿|さら|plate, dish|n4
+坂|さか|slope, hill|n4
+畑|はたけ|field, farm|n4
+箱|はこ|box|n4
+棚|たな|shelf|n4
+鏡|かがみ|mirror|n4
+布|ぬの|cloth|n4
+畳|たたみ|tatami mat|n4
+机|つくえ|desk|n4
+森|もり|forest|n5
+池|いけ|pond|n5
+林|はやし|woods|n5
+寺|てら|temple|n4
+島|しま|island|n4
+畳|たたみ|tatami mat|n4
+庭|にわ|garden|n4
+笛|ふえ|flute|n4
+壁|かべ|wall|n4
+鍋|なべ|pot, pan|n4
+針|はり|needle|n4
+糸|いと|thread|n4
+靴|くつ|shoes|n4
+傘|かさ|umbrella|n4
+布団|ふとん|futon|n4
+石|いし|stone|n5
+草|くさ|grass|n4
+竹|たけ|bamboo|n4
+雲|くも|cloud|n4
+雪|ゆき|snow|n4
+波|なみ|wave|n4
+島|しま|island|n4
+猿|さる|monkey|n4
+牛|うし|cow|n5
+馬|うま|horse|n4
+豚|ぶた|pig, pork|n4
+鳥|とり|bird|n5`;
+var SINGLE_NOUNS=SINGLE_NOUN_DATA.split("\n").map(function(l){
+  var p=l.split("|"),word=p[0],meaning=p[2];
+  return [word,p[1],meaning,"noun",word+"です。",meaning+".",p[3]];
+});
+var singleNounSeen={};
+SINGLE_NOUNS=SINGLE_NOUNS.filter(function(c){
+  if(c[0].length!==1||singleNounSeen[c[0]]||BASE.some(function(b){return b[0]===c[0]}))return false;
+  singleNounSeen[c[0]]=true;return true;
+});
+var COMBO_EXTRA_DATA=`去年|きょねん|last year|n5
+来年|らいねん|next year|n5
+今年|ことし|this year|n5
+毎年|まいとし|every year|n5
+毎月|まいつき|every month|n4
+来月|らいげつ|next month|n5
+先月|せんげつ|last month|n5
+今月|こんげつ|this month|n4
+毎週|まいしゅう|every week|n5
+来週|らいしゅう|next week|n5
+先週|せんしゅう|last week|n5
+今週|こんしゅう|this week|n5
+今週末|こんしゅうまつ|this weekend|n4
+毎朝|まいあさ|every morning|n5
+毎晩|まいばん|every evening|n4
+今朝|けさ|this morning|n5
+今晩|こんばん|this evening, tonight|n5
+午前|ごぜん|morning, a.m.|n5
+午後|ごご|afternoon, p.m.|n5
+昼休み|ひるやすみ|lunch break|n4
+夏休み|なつやすみ|summer vacation|n5
+冬休み|ふゆやすみ|winter vacation|n4
+休み時間|やすみじかん|break time|n4
+誕生日|たんじょうび|birthday|n5
+何曜日|なんようび|what day of the week|n5
+何月|なんがつ|what month|n5
+何日|なんにち|what day, how many days|n5
+何年|なんねん|what year, how many years|n4
+何時|なんじ|what time|n5
+一時間|いちじかん|one hour|n5
+二時間|にじかん|two hours|n4
+一週間|いっしゅうかん|one week|n4
+一か月|いっかげつ|one month|n4
+何回|なんかい|how many times|n4
+一回|いっかい|one time|n4
+二回|にかい|two times|n4
+三回|さんかい|three times|n4
+一度|いちど|once|n4
+今度|こんど|this time, next time|n4
+時間割|じかんわり|timetable|n4
+時計台|とけいだい|clock tower|n4
+朝ご飯|あさごはん|breakfast|n5
+昼ご飯|ひるごはん|lunch|n5
+晩ご飯|ばんごはん|dinner|n5
+夕食|ゆうしょく|dinner|n4
+朝食|ちょうしょく|breakfast|n4
+昼食|ちゅうしょく|lunch|n4
+食事|しょくじ|meal|n5
+食堂|しょくどう|cafeteria, dining hall|n5
+食料品|しょくりょうひん|groceries, food products|n4
+食べ物|たべもの|food|n5
+飲み物|のみもの|drink, beverage|n5
+買い物|かいもの|shopping|n5
+見物|けんぶつ|sightseeing|n4
+見学|けんがく|study tour, observation|n4
+読書|どくしょ|reading books|n4
+作文|さくぶん|composition, essay|n4
+教科書|きょうかしょ|textbook|n5
+辞書|じしょ|dictionary|n5
+新聞紙|しんぶんし|newspaper (paper)|n4
+手紙|てがみ|letter|n5
+切手|きって|postage stamp|n5
+電話番号|でんわばんごう|telephone number|n4
+携帯電話|けいたいでんわ|mobile phone|n4
+電話帳|でんわちょう|telephone directory|n4
+電気代|でんきだい|electricity bill|n4
+電気屋|でんきや|electronics shop|n4
+電車賃|でんしゃちん|train fare|n4
+終電|しゅうでん|last train|n4
+始発|しはつ|first train|n4
+急行電車|きゅうこうでんしゃ|express train|n4
+普通電車|ふつうでんしゃ|local train|n4
+地下鉄|ちかてつ|subway|n5
+新幹線|しんかんせん|bullet train|n5
+飛行機|ひこうき|airplane|n5
+自動車|じどうしゃ|automobile|n4
+自転車|じてんしゃ|bicycle|n5
+乗り物|のりもの|vehicle, transportation|n4
+乗り場|のりば|boarding place, platform|n4
+乗り換え|のりかえ|transfer, change trains|n4
+駅前|えきまえ|in front of the station|n5
+駅員|えきいん|station attendant|n4
+駅長|えきちょう|stationmaster|n4
+出口|でぐち|exit|n5
+入口|いりぐち|entrance|n5
+交差点|こうさてん|intersection|n4
+信号|しんごう|traffic light, signal|n4
+横断歩道|おうだんほどう|crosswalk|n4
+歩道橋|ほどうきょう|pedestrian bridge|n4
+交通事故|こうつうじこ|traffic accident|n4
+交通費|こうつうひ|transportation expenses|n4
+運転手|うんてんしゅ|driver|n4
+運転席|うんてんせき|driver’s seat|n4
+駐車場|ちゅうしゃじょう|parking lot|n4
+駐車禁止|ちゅうしゃきんし|no parking|n4
+道順|みちじゅん|route, directions|n4
+近道|ちかみち|shortcut|n4
+歩道|ほどう|sidewalk|n4
+山道|やまみち|mountain path|n4
+国道|こくどう|national highway|n4
+高速道路|こうそくどうろ|expressway|n4
+住所|じゅうしょ|address|n4
+市役所|しやくしょ|city hall|n4
+区役所|くやくしょ|ward office|n4
+交番|こうばん|police box|n4
+郵便局|ゆうびんきょく|post office|n5
+銀行員|ぎんこういん|bank employee|n4
+銀行口座|ぎんこうこうざ|bank account|n4
+会社員|かいしゃいん|office worker|n5
+会社社長|かいしゃしゃちょう|company president|n4
+店員|てんいん|store clerk|n5
+売り場|うりば|sales counter, department|n4
+肉屋|にくや|butcher, meat shop|n4
+魚屋|さかなや|fish shop|n4
+花屋|はなや|flower shop|n4
+本屋|ほんや|bookstore|n5
+薬屋|くすりや|pharmacy, drugstore|n4
+八百屋|やおや|greengrocer|n4
+食料品店|しょくりょうひんてん|grocery store|n4
+商店街|しょうてんがい|shopping street|n4
+店先|みせさき|in front of a shop|n4
+工場|こうじょう|factory|n4
+建物|たてもの|building|n4
+美術館|びじゅつかん|art museum|n4
+動物園|どうぶつえん|zoo|n4
+植物園|しょくぶつえん|botanical garden|n4
+遊園地|ゆうえんち|amusement park|n4
+映画館|えいがかん|movie theater|n5
+図書館|としょかん|library|n5
+体育館|たいいくかん|gymnasium|n4
+大使館|たいしかん|embassy|n4
+旅館|りょかん|Japanese inn|n4
+病院|びょういん|hospital|n5
+歯医者|はいしゃ|dentist|n4
+薬局|やっきょく|pharmacy|n4
+診察室|しんさつしつ|examination room|n4
+受付|うけつけ|reception, front desk|n4
+待合室|まちあいしつ|waiting room|n4
+救急車|きゅうきゅうしゃ|ambulance|n4
+健康保険|けんこうほけん|health insurance|n4
+薬代|くすりだい|medicine cost|n4
+薬指|くすりゆび|ring finger|n4
+目薬|めぐすり|eye drops|n4
+体温計|たいおんけい|thermometer|n4
+体重計|たいじゅうけい|scale, weighing machine|n4
+家族|かぞく|family|n5
+両親|りょうしん|parents|n5
+父親|ちちおや|father|n4
+母親|ははおや|mother|n4
+兄弟|きょうだい|siblings|n5
+姉妹|しまい|sisters|n4
+兄妹|けいまい|brother and sister|n4
+夫婦|ふうふ|married couple|n4
+主人|しゅじん|husband, master|n4
+奥さん|おくさん|wife, someone’s wife|n4
+お子さん|おこさん|someone’s child|n4
+子供|こども|child, children|n5
+大人|おとな|adult|n5
+一人|ひとり|one person, alone|n5
+二人|ふたり|two people|n5
+三人|さんにん|three people|n5
+四人|よにん|four people|n5
+外国人|がいこくじん|foreigner|n5
+日本人|にほんじん|Japanese person|n5
+留学生|りゅうがくせい|international student|n4
+大学生|だいがくせい|university student|n5
+高校生|こうこうせい|high school student|n4
+中学生|ちゅうがくせい|middle school student|n4
+小学生|しょうがくせい|elementary school student|n4
+新入生|しんにゅうせい|new student|n4
+卒業生|そつぎょうせい|graduate|n4
+同級生|どうきゅうせい|classmate|n4
+先輩|せんぱい|senior, upperclassman|n4
+後輩|こうはい|junior, underclassman|n4
+友達|ともだち|friend|n5
+親友|しんゆう|close friend|n4
+知人|ちじん|acquaintance|n4
+人々|ひとびと|people|n4
+皆さん|みなさん|everyone|n4
+近所|きんじょ|neighborhood|n4
+近所の人|きんじょのひと|neighbor|n4
+隣人|りんじん|neighbor|n4
+会議|かいぎ|meeting, conference|n4
+会議室|かいぎしつ|conference room|n4
+会場|かいじょう|venue, meeting place|n4
+歓迎会|かんげいかい|welcome party|n4
+送別会|そうべつかい|farewell party|n4
+忘年会|ぼうねんかい|year-end party|n4
+新年会|しんねんかい|New Year’s party|n4
+誕生会|たんじょうかい|birthday party|n4
+結婚式|けっこんしき|wedding ceremony|n4
+卒業式|そつぎょうしき|graduation ceremony|n4
+入学式|にゅうがくしき|entrance ceremony|n4
+文化祭|ぶんかさい|school festival|n4
+運動会|うんどうかい|sports day|n4
+花火大会|はなびたいかい|fireworks festival|n4
+祭り|まつり|festival|n5
+準備|じゅんび|preparation|n4
+用意|ようい|preparation|n4
+予定|よてい|plan, schedule|n4
+約束|やくそく|promise, appointment|n4
+用事|ようじ|errand, business|n4
+仕事|しごと|work, job|n5
+残業|ざんぎょう|overtime work|n4
+給料|きゅうりょう|salary|n4
+出張|しゅっちょう|business trip|n4
+休憩|きゅうけい|break, rest|n4
+昼休み|ひるやすみ|lunch break|n4
+会話|かいわ|conversation|n4
+返事|へんじ|reply, answer|n4
+連絡|れんらく|contact, communication|n4
+相談|そうだん|consultation|n4
+説明|せつめい|explanation|n4
+案内|あんない|guidance, information|n4
+注意|ちゅうい|caution, attention|n4
+意見|いけん|opinion|n4
+質問|しつもん|question|n5
+答え|こたえ|answer|n5
+問題|もんだい|problem, question|n4
+理由|りゆう|reason|n4
+意味|いみ|meaning|n5
+結果|けっか|result|n4
+原因|げんいん|cause|n4
+方法|ほうほう|method, way|n4
+場合|ばあい|case, situation|n4
+機会|きかい|opportunity|n4
+経験|けいけん|experience|n4
+生活|せいかつ|daily life|n4
+習慣|しゅうかん|habit, custom|n4
+文化|ぶんか|culture|n4
+社会|しゃかい|society|n4
+世界|せかい|world|n4
+外国語|がいこくご|foreign language|n4
+日本語|にほんご|Japanese language|n5
+英語|えいご|English language|n5
+国語|こくご|Japanese language arts|n4
+文学|ぶんがく|literature|n4
+歴史|れきし|history|n4
+地理|ちり|geography|n4
+科学|かがく|science|n4
+数学|すうがく|mathematics|n4
+音楽|おんがく|music|n5
+美術|びじゅつ|art|n4
+体育|たいいく|physical education|n4
+授業|じゅぎょう|class, lesson|n5
+教室|きょうしつ|classroom|n5
+学校|がっこう|school|n5
+小学校|しょうがっこう|elementary school|n5
+中学校|ちゅうがっこう|junior high school|n4
+高校|こうこう|high school|n4
+大学|だいがく|university|n5
+専門学校|せんもんがっこう|vocational school|n4
+入学|にゅうがく|school admission, enrollment|n4
+卒業|そつぎょう|graduation|n4
+試験|しけん|exam|n5
+試験問題|しけんもんだい|exam question|n4
+宿題|しゅくだい|homework|n5
+練習|れんしゅう|practice|n4
+復習|ふくしゅう|review, revision|n4
+予習|よしゅう|preparation for a lesson|n4
+教科|きょうか|school subject|n4
+成績|せいせき|grades, results|n4
+合格|ごうかく|passing an exam|n4
+不合格|ふごうかく|failure, not passing|n4
+教科書|きょうかしょ|textbook|n5
+辞書|じしょ|dictionary|n5
+黒板|こくばん|blackboard|n4
+机|つくえ|desk|n5
+本棚|ほんだな|bookshelf|n4
+鉛筆|えんぴつ|pencil|n5
+消しゴム|けしごむ|eraser|n5
+筆箱|ふでばこ|pencil case|n4
+定規|じょうぎ|ruler|n4
+教室前|きょうしつまえ|in front of the classroom|n4
+机の上|つくえのうえ|on the desk|n4
+机の下|つくえのした|under the desk|n4
+台所|だいどころ|kitchen|n5
+冷蔵庫|れいぞうこ|refrigerator|n4
+洗濯機|せんたくき|washing machine|n4
+掃除機|そうじき|vacuum cleaner|n4
+電子レンジ|でんしれんじ|microwave oven|n4
+電気製品|でんきせいひん|electrical appliance|n4
+家具|かぐ|furniture|n4
+食器|しょっき|tableware|n4
+茶碗|ちゃわん|rice bowl, teacup|n4
+湯飲み|ゆのみ|teacup|n4
+箸|はし|chopsticks|n5
+包丁|ほうちょう|kitchen knife|n4
+台所用品|だいどころようひん|kitchen goods|n4
+玄関|げんかん|entryway|n4
+居間|いま|living room|n4
+寝室|しんしつ|bedroom|n4
+子供部屋|こどもべや|children’s room|n4
+風呂場|ふろば|bathroom|n4
+洗面所|せんめんじょ|washroom|n4
+押し入れ|おしいれ|closet|n4
+屋根|やね|roof|n4
+庭先|にわさき|in the garden|n4
+引っ越し|ひっこし|moving house|n4
+荷物|にもつ|luggage, baggage|n5
+忘れ物|わすれもの|lost item|n4
+落とし物|おとしもの|lost property|n4
+忘れ物係|わすれものがかり|lost and found desk|n4
+鍵|かぎ|key|n4
+財布|さいふ|wallet|n5
+小銭|こぜに|small change|n4
+お金|おかね|money|n5
+銀行|ぎんこう|bank|n5
+料金|りょうきん|fee, charge|n4
+電気代|でんきだい|electricity bill|n4
+水道代|すいどうだい|water bill|n4
+家賃|やちん|rent|n4
+生活費|せいかつひ|living expenses|n4
+食費|しょくひ|food expenses|n4
+値段|ねだん|price|n4
+半額|はんがく|half price|n4
+売り上げ|うりあげ|sales, proceeds|n4
+買い物客|かいものきゃく|shopper|n4
+商品|しょうひん|product, merchandise|n4
+品物|しなもの|goods, item|n4
+品切れ|しなぎれ|out of stock|n4
+注文|ちゅうもん|order (food, goods)|n4
+配達|はいたつ|delivery|n4
+宅配便|たくはいびん|home delivery service|n4
+小包|こづつみ|parcel|n4
+郵便物|ゆうびんぶつ|mail item|n4
+切符売り場|きっぷうりば|ticket counter|n4
+入場券|にゅうじょうけん|admission ticket|n4
+定期券|ていきけん|commuter pass|n4
+乗車券|じょうしゃけん|boarding ticket|n4
+旅行|りょこう|travel|n5
+旅行会社|りょこうがいしゃ|travel agency|n4
+旅行先|りょこうさき|travel destination|n4
+旅行中|りょこうちゅう|during a trip|n4
+観光地|かんこうち|tourist spot|n4
+観光客|かんこうきゃく|tourist|n4
+名所|めいしょ|famous place|n4
+温泉|おんせん|hot spring|n4
+海岸|かいがん|coast, seashore|n4
+海水浴|かいすいよく|sea bathing|n4
+山登り|やまのぼり|mountain climbing|n4
+登山|とざん|mountain climbing|n4
+山頂|さんちょう|mountain peak|n4
+頂上|ちょうじょう|summit, top|n4
+動物|どうぶつ|animal|n5
+植物|しょくぶつ|plant|n4
+野菜|やさい|vegetables|n5
+果物|くだもの|fruit|n5
+食べ物|たべもの|food|n5
+飲み物|のみもの|drink, beverage|n5
+牛肉|ぎゅうにく|beef|n5
+豚肉|ぶたにく|pork|n4
+鶏肉|とりにく|chicken meat|n4
+牛乳|ぎゅうにゅう|milk|n5
+魚料理|さかなりょうり|fish dish|n4
+肉料理|にくりょうり|meat dish|n4
+日本料理|にほんりょうり|Japanese cuisine|n4
+中華料理|ちゅうかりょうり|Chinese cuisine|n4
+洋食|ようしょく|Western food|n4
+和食|わしょく|Japanese food|n4
+朝ご飯|あさごはん|breakfast|n5
+昼ご飯|ひるごはん|lunch|n5
+晩ご飯|ばんごはん|dinner|n5
+食事中|しょくじちゅう|while eating|n4
+食事代|しょくじだい|meal cost|n4
+飲食店|いんしょくてん|restaurant|n4
+定食|ていしょく|set meal|n4
+弁当|べんとう|boxed lunch|n5
+お弁当|おべんとう|lunch box|n5
+朝食|ちょうしょく|breakfast|n4
+夕食|ゆうしょく|dinner|n4
+食欲|しょくよく|appetite|n4
+満腹|まんぷく|full stomach|n4
+空腹|くうふく|hunger|n4
+飲み会|のみかい|drinking party|n4
+料理人|りょうりにん|cook, chef|n4
+台所|だいどころ|kitchen|n5
+味見|あじみ|tasting food|n4
+味付け|あじつけ|seasoning|n4
+塩味|しおあじ|salty taste|n4
+甘味|あまみ|sweetness|n4
+辛口|からくち|hot, spicy; dry taste|n4
+水分|すいぶん|moisture, water content|n4
+水道|すいどう|water supply, tap|n4
+水泳|すいえい|swimming|n4
+火事|かじ|fire, conflagration|n4
+火山|かざん|volcano|n4
+地震|じしん|earthquake|n4
+台風|たいふう|typhoon|n4
+大雨|おおあめ|heavy rain|n4
+大雪|おおゆき|heavy snow|n4
+天気予報|てんきよほう|weather forecast|n4
+気温|きおん|air temperature|n4
+温度|おんど|temperature|n4
+気分|きぶん|feeling, mood|n4
+気持ち|きもち|feeling, sensation|n4
+人気|にんき|popularity|n4
+元気|げんき|health, energy|n5
+病気|びょうき|illness|n5
+健康|けんこう|health|n4
+健康診断|けんこうしんだん|health checkup|n4
+頭痛|ずつう|headache|n4
+腹痛|ふくつう|stomachache|n4
+熱|ねつ|fever, heat|n4
+風邪|かぜ|cold (illness)|n4
+薬局|やっきょく|pharmacy|n4
+薬|くすり|medicine|n5
+目|め|eye|n5
+耳|みみ|ear|n5
+口|くち|mouth|n5
+手|て|hand|n5
+足|あし|foot, leg|n5
+指|ゆび|finger|n4
+頭|あたま|head|n5
+体|からだ|body|n5
+心|こころ|heart, mind|n4
+顔|かお|face|n4
+背中|せなか|back|n4
+手足|てあし|hands and feet|n4
+右手|みぎて|right hand|n5
+左手|ひだりて|left hand|n5
+右足|みぎあし|right foot|n4
+左足|ひだりあし|left foot|n4
+手首|てくび|wrist|n4
+足首|あしくび|ankle|n4
+首|くび|neck|n4
+顔色|かおいろ|complexion|n4
+目玉|めだま|eyeball|n4
+目印|めじるし|landmark, sign|n4
+口紅|くちべに|lipstick|n4
+人口|じんこう|population|n4
+人間|にんげん|human being|n4
+人形|にんぎょう|doll|n4
+人手|ひとで|helping hands, workforce|n4
+大勢|おおぜい|many people|n4
+人数|にんずう|number of people|n4
+作品|さくひん|work of art|n4
+写真|しゃしん|photograph|n5
+写真家|しゃしんか|photographer|n4
+写真館|しゃしんかん|photo studio|n4
+映画|えいが|movie|n5
+映画館|えいがかん|movie theater|n5
+音楽会|おんがくかい|concert|n4
+歌手|かしゅ|singer|n4
+人気者|にんきもの|popular person|n4
+世界中|せかいじゅう|all over the world|n4
+国内|こくない|within the country|n4
+国外|こくがい|outside the country|n4
+外国|がいこく|foreign country|n5
+外国人|がいこくじん|foreigner|n5
+国内旅行|こくないりょこう|domestic travel|n4
+海外旅行|かいがいりょこう|overseas travel|n4
+日本国内|にほんこくない|within Japan|n4
+日本全国|にほんぜんこく|throughout Japan|n4
+東口|ひがしぐち|east exit|n4
+西口|にしぐち|west exit|n4
+南口|みなみぐち|south exit|n4
+北口|きたぐち|north exit|n4
+東側|ひがしがわ|east side|n4
+西側|にしがわ|west side|n4
+南側|みなみがわ|south side|n4
+北側|きたがわ|north side|n4
+東西|とうざい|east and west|n4
+南北|なんぼく|north and south|n4
+左右|さゆう|left and right|n4
+上下|じょうげ|up and down|n4
+前後|ぜんご|before and after|n4
+内側|うちがわ|inside, inner side|n4
+外側|そとがわ|outside, outer side|n4
+近所|きんじょ|neighborhood|n4
+遠足|えんそく|school trip, excursion|n4
+途中|とちゅう|on the way, halfway|n4
+最初|さいしょ|first, beginning|n4
+最後|さいご|last, end|n4
+最近|さいきん|recently|n4
+今まで|いままで|until now|n4
+これから|これから|from now on|n4
+昔話|むかしばなし|old tale, folktale|n4
+昔|むかし|olden times|n4
+将来|しょうらい|future|n4
+未来|みらい|future|n4
+今後|こんご|from now on|n4
+以後|いご|after this|n4
+以内|いない|within, less than|n4
+以上|いじょう|more than, above|n4
+以下|いか|less than, below|n4
+以外|いがい|except, other than|n4
+一部分|いちぶぶん|a part|n4
+全部|ぜんぶ|all, everything|n4
+半分|はんぶん|half|n5
+大部分|だいぶぶん|most, greater part|n4
+一番|いちばん|number one, most|n5
+二番目|にばんめ|second|n4
+第一|だいいち|first|n4
+最後の日|さいごのひ|the last day|n4
+真ん中|まんなか|middle, center|n4
+中心|ちゅうしん|center|n4
+周り|まわり|surroundings|n4
+近く|ちかく|nearby|n5
+遠く|とおく|far away|n5
+向こう側|むこうがわ|other side|n4
+こちら側|こちらがわ|this side|n4
+向かい側|むかいがわ|opposite side|n4
+入口前|いりぐちまえ|in front of the entrance|n4
+出口前|でぐちまえ|in front of the exit|n4
+山の上|やまのうえ|on top of the mountain|n4
+川の近く|かわのちかく|near the river|n4
+海の近く|うみのちかく|near the sea|n4
+駅の近く|えきのちかく|near the station|n4
+家の前|いえのまえ|in front of the house|n4
+家の中|いえのなか|inside the house|n4
+町の中|まちのなか|in town|n4
+町外れ|まちはずれ|outskirts of town|n4
+山の中|やまのなか|in the mountains|n4
+川下|かわしも|downstream|n4
+川上|かわかみ|upstream|n4
+海辺|うみべ|seaside|n4
+岸辺|きしべ|shore|n4
+田舎|いなか|countryside|n4
+都会|とかい|city, urban area|n4
+町並み|まちなみ|townscape|n4
+村人|むらびと|villager|n4
+村長|そんちょう|village head|n4
+市内|しない|within the city|n4
+市外|しがい|outside the city|n4
+町内|ちょうない|within the town|n4
+国内線|こくないせん|domestic flight|n4
+国際線|こくさいせん|international flight|n4
+国際電話|こくさいでんわ|international phone call|n4
+国際交流|こくさいこうりゅう|international exchange|n4
+外国文化|がいこくぶんか|foreign culture|n4
+日本文化|にほんぶんか|Japanese culture|n4
+日本語学校|にほんごがっこう|Japanese-language school|n4
+語学|ごがく|language study|n4
+英会話|えいかいわ|English conversation|n4
+日本語会話|にほんごかいわ|Japanese conversation|n4
+会話教室|かいわきょうしつ|conversation class|n4
+読書会|どくしょかい|book club|n4
+図書室|としょしつ|library room|n4
+本屋|ほんや|bookstore|n5
+本店|ほんてん|main store|n4
+支店|してん|branch office, branch store|n4
+支社|ししゃ|branch office|n4
+本社|ほんしゃ|head office|n4
+社長|しゃちょう|company president|n4
+店長|てんちょう|store manager|n4
+会長|かいちょう|chairperson|n4
+部長|ぶちょう|department manager|n4
+課長|かちょう|section chief|n4
+社員|しゃいん|company employee|n4
+店員|てんいん|store clerk|n5
+会社員|かいしゃいん|office worker|n5
+工事|こうじ|construction work|n4
+工事中|こうじちゅう|under construction|n4
+工事現場|こうじげんば|construction site|n4
+建築|けんちく|architecture, construction|n4
+建築家|けんちくか|architect|n4
+建物内|たてものない|inside a building|n4
+入口付近|いりぐちふきん|near the entrance|n4
+地下一階|ちかいっかい|first basement floor|n4
+二階建て|にかいだて|two-story building|n4
+四階建て|よんかいだて|four-story building|n4
+高層ビル|こうそうびる|high-rise building|n4
+市民会館|しみんかいかん|civic hall|n4
+公民館|こうみんかん|community center|n4
+市民|しみん|citizen|n4
+住民|じゅうみん|resident|n4
+住所録|じゅうしょろく|address book|n4
+電話番号|でんわばんごう|telephone number|n4
+郵便番号|ゆうびんばんごう|postal code|n4
+名前|なまえ|name|n5
+名字|みょうじ|surname|n4
+名前順|なまえじゅん|alphabetical order by name|n4
+番号順|ばんごうじゅん|numerical order|n4
+順番|じゅんばん|order, turn|n4
+順番待ち|じゅんばんまち|waiting in line|n4
+受付時間|うけつけじかん|reception hours|n4
+営業時間|えいぎょうじかん|business hours|n4
+開店時間|かいてんじかん|opening time|n4
+閉店時間|へいてんじかん|closing time|n4
+休日|きゅうじつ|day off, holiday|n5
+平日|へいじつ|weekday|n4
+祝日|しゅくじつ|national holiday|n4
+休日出勤|きゅうじつしゅっきん|working on a day off|n4
+日曜日|にちようび|Sunday|n5
+月曜日|げつようび|Monday|n5
+火曜日|かようび|Tuesday|n5
+水曜日|すいようび|Wednesday|n5
+木曜日|もくようび|Thursday|n5
+金曜日|きんようび|Friday|n5
+土曜日|どようび|Saturday|n5
+日用品|にちようひん|daily necessities|n4
+安全|あんぜん|safety|n4
+不安|ふあん|anxiety, uneasiness|n4
+安心|あんしん|peace of mind, relief|n4
+有名|ゆうめい|famous|n4
+便利|べんり|convenient|n4
+不便|ふべん|inconvenient|n4
+親切|しんせつ|kindness|n4
+大切|たいせつ|important, precious|n4
+大事|だいじ|important, valuable|n4
+必要|ひつよう|necessity|n4
+大変|たいへん|serious, difficult|n4
+自由|じゆう|freedom|n4
+注意点|ちゅういてん|point to note|n4
+心配|しんぱい|worry|n4
+急用|きゅうよう|urgent business|n4
+用意|ようい|preparation|n4
+正解|せいかい|correct answer|n4
+不正解|ふせいかい|incorrect answer|n4
+回答|かいとう|answer, response|n4
+返事|へんじ|reply|n4
+会話|かいわ|conversation|n4
+会話中|かいわちゅう|in conversation|n4
+言語|げんご|language|n4
+言葉|ことば|word, language|n5
+文章|ぶんしょう|sentence, writing|n4
+文法|ぶんぽう|grammar|n4
+発音|はつおん|pronunciation|n4
+漢字|かんじ|kanji|n5
+文字|もじ|letter, character|n4
+数字|すうじ|number, numeral|n4
+計算|けいさん|calculation|n4
+算数|さんすう|arithmetic|n4
+数学|すうがく|mathematics|n4
+試合|しあい|match, game|n4
+勝負|しょうぶ|match, contest|n4
+勝利|しょうり|victory|n4
+失敗|しっぱい|failure, mistake|n4
+成功|せいこう|success|n4
+努力|どりょく|effort|n4
+練習|れんしゅう|practice|n4
+運動|うんどう|exercise|n5
+運動場|うんどうじょう|sports field|n4
+水泳|すいえい|swimming|n4
+散歩|さんぽ|walk, stroll|n5
+歩行者|ほこうしゃ|pedestrian|n4
+出発|しゅっぱつ|departure|n4
+到着|とうちゃく|arrival|n4
+帰国|きこく|return to one’s country|n4
+入国|にゅうこく|entry into a country|n4
+国内|こくない|domestic, within the country|n4
+海外|かいがい|overseas|n4
+旅行者|りょこうしゃ|traveler|n4
+旅先|たびさき|travel destination|n4
+留守|るす|absence from home|n4
+留守番|るすばん|looking after a house|n4
+週末|しゅうまつ|weekend|n4
+月末|げつまつ|end of the month|n4
+年末|ねんまつ|year-end|n4
+年始|ねんし|beginning of the year|n4
+平日|へいじつ|weekday|n4
+休日|きゅうじつ|holiday, day off|n5
+休業|きゅうぎょう|business closure|n4
+休講|きゅうこう|class cancellation|n4
+開始|かいし|start, beginning|n4
+終了|しゅうりょう|end, completion|n4
+中止|ちゅうし|cancellation|n4
+延期|えんき|postponement|n4
+変更|へんこう|change, alteration|n4
+確認|かくにん|confirmation|n4
+連絡先|れんらくさき|contact information|n4
+電話中|でんわちゅう|on the phone|n4
+電話代|でんわだい|telephone bill|n4
+電話番号|でんわばんごう|telephone number|n4
+番号札|ばんごうふだ|numbered ticket|n4
+待ち時間|まちじかん|waiting time|n4
+待合|まちあい|waiting area|n4
+乗車|じょうしゃ|boarding a vehicle|n4
+下車|げしゃ|get off a vehicle|n4
+発車|はっしゃ|departure of a vehicle|n4
+停車|ていしゃ|stopping a vehicle|n4
+終点|しゅうてん|last stop, terminus|n4
+始点|してん|starting point|n4
+定期|ていき|commuter pass|n4
+切符|きっぷ|ticket|n5
+駅長|えきちょう|stationmaster|n4
+駅前|えきまえ|in front of the station|n5
+駅中|えきなか|inside a station|n4
+車内|しゃない|inside a vehicle|n4
+車外|しゃがい|outside a vehicle|n4
+自動車|じどうしゃ|automobile|n4
+自動|じどう|automatic|n4
+運転|うんてん|driving|n4
+運転中|うんてんちゅう|while driving|n4
+運転手|うんてんしゅ|driver|n4
+乗り場|のりば|boarding area|n4
+通学|つうがく|commuting to school|n4
+通勤|つうきん|commuting to work|n4
+帰宅|きたく|returning home|n4
+外出|がいしゅつ|going out|n4
+出入|でいり|coming and going|n4
+入口前|いりぐちまえ|in front of the entrance|n4
+出口前|でぐちまえ|in front of the exit|n4
+上り|のぼり|uphill, outbound (train)|n4
+下り|くだり|downhill, inbound (train)|n4
+山道|やまみち|mountain path|n4
+山川|やまかわ|mountains and rivers|n4
+川辺|かわべ|riverside|n4
+川岸|かわぎし|riverbank|n4
+海辺|うみべ|seaside|n4
+海岸|かいがん|coast, seashore|n4
+海水|かいすい|seawater|n4
+山火事|やまかじ|forest fire|n4
+火事|かじ|fire|n4
+火山|かざん|volcano|n4
+台風|たいふう|typhoon|n4
+雨天|うてん|rainy weather|n4
+雪国|ゆきぐに|snow country|n4
+風邪|かぜ|cold (illness)|n4
+花火|はなび|fireworks|n5
+花火大会|はなびたいかい|fireworks festival|n4
+花見|はなみ|cherry-blossom viewing|n4
+紅葉|こうよう|autumn leaves|n4
+草花|くさばな|plants and flowers|n4
+林道|りんどう|forest road|n4
+森林|しんりん|forest|n4
+木材|もくざい|lumber|n4
+木造|もくぞう|wooden construction|n4
+石油|せきゆ|petroleum|n4
+石炭|せきたん|coal|n4
+鉄道|てつどう|railway|n4
+鉄橋|てっきょう|iron bridge|n4
+道路|どうろ|road|n5
+国道|こくどう|national highway|n4
+歩道|ほどう|sidewalk|n4
+水道|すいどう|water supply|n4
+水道代|すいどうだい|water bill|n4
+電気代|でんきだい|electricity bill|n4
+電気屋|でんきや|electronics shop|n4
+電気店|でんきてん|electronics store|n4
+電気室|でんきしつ|electrical room|n4
+電話機|でんわき|telephone set|n4
+電子|でんし|electron|n4
+電子辞書|でんしじしょ|electronic dictionary|n4
+写真家|しゃしんか|photographer|n4
+写真集|しゃしんしゅう|photo album|n4
+映画館|えいがかん|movie theater|n5
+映画会|えいがかい|film showing|n4
+音楽会|おんがくかい|concert|n4
+歌声|うたごえ|singing voice|n4
+歌手|かしゅ|singer|n4
+音声|おんせい|voice, sound|n4
+声楽|せいがく|vocal music|n4
+人気者|にんきもの|popular person|n4
+有名人|ゆうめいじん|famous person|n4
+友人|ゆうじん|friend|n4
+知人|ちじん|acquaintance|n4
+人間|にんげん|human being|n4
+人形|にんぎょう|doll|n4
+男女|だんじょ|men and women|n4
+男女別|だんじょべつ|separated by gender|n4
+父母|ふぼ|parents|n4
+母親|ははおや|mother|n4
+父親|ちちおや|father|n4
+兄妹|けいまい|brother and sister|n4
+姉妹|しまい|sisters|n4
+夫婦|ふうふ|married couple|n4
+家内|かない|wife|n4
+家族|かぞく|family|n5
+家出|いえで|running away from home|n4
+家事|かじ|housework|n4
+家賃|やちん|rent|n4
+本店|ほんてん|main store|n4
+支店|してん|branch store|n4
+本社|ほんしゃ|head office|n4
+支社|ししゃ|branch office|n4
+社員|しゃいん|company employee|n4
+店長|てんちょう|store manager|n4
+会長|かいちょう|chairperson|n4
+部長|ぶちょう|department manager|n4
+課長|かちょう|section chief|n4
+店先|みせさき|in front of a shop|n4
+店内|てんない|inside a shop|n4
+店外|てんがい|outside a shop|n4
+売店|ばいてん|kiosk, small shop|n4
+商店|しょうてん|shop, store|n4
+品物|しなもの|goods, item|n4
+商品|しょうひん|product, merchandise|n4
+売り場|うりば|sales counter|n4
+売上|うりあげ|sales, proceeds|n4
+買い手|かいて|buyer|n4
+買い主|かいぬし|owner, purchaser|n4
+食費|しょくひ|food expenses|n4
+生活費|せいかつひ|living expenses|n4
+電気料金|でんきりょうきん|electricity charges|n4
+水道料金|すいどうりょうきん|water charges|n4
+給料日|きゅうりょうび|payday|n4
+小銭入れ|こぜにいれ|coin purse|n4
+銀行員|ぎんこういん|bank employee|n4
+郵便屋|ゆうびんや|post carrier|n4
+郵便物|ゆうびんぶつ|mail item|n4
+小包|こづつみ|parcel|n4
+配達|はいたつ|delivery|n4
+注文|ちゅうもん|order|n4
+品切れ|しなぎれ|out of stock|n4
+半額|はんがく|half price|n4
+値段|ねだん|price|n4
+料金|りょうきん|fee, charge|n4
+代金|だいきん|price, payment|n4
+現金|げんきん|cash|n4
+預金|よきん|bank deposit|n4
+貯金|ちょきん|savings|n4
+銀行口座|ぎんこうこうざ|bank account|n4
+仕事中|しごとちゅう|at work|n4
+勉強中|べんきょうちゅう|studying now|n4
+授業中|じゅぎょうちゅう|during class|n4
+工事中|こうじちゅう|under construction|n4
+使用中|しようちゅう|in use|n4
+受付中|うけつけちゅう|accepting applications|n4
+営業中|えいぎょうちゅう|open for business|n4
+準備中|じゅんびちゅう|in preparation|n4
+会議中|かいぎちゅう|in a meeting|n4
+休み中|やすみちゅう|on break|n4
+読書中|どくしょちゅう|reading a book|n4
+食事中|しょくじちゅう|while eating|n4`;
+var COMBO_EXTRA=COMBO_EXTRA_DATA.split("\n").map(function(l){
+  var p=l.split("|"),word=p[0],reading=p[1],meaning=p[2],level=p[3];
+  return [word,reading,meaning,"",word+"です。",meaning+".",level];
+});
+var KANJI_GLOSSES={};
+BASE.forEach(function(c){KANJI_GLOSSES[c[0]]=c[1]});
+SINGLE_NOUNS.forEach(function(c){if(!KANJI_GLOSSES[c[0]])KANJI_GLOSSES[c[0]]=c[2]});
+COMBO_EXTRA.forEach(function(c){
+  c[3]=(c[0].match(/[\u4e00-\u9fff々]/g)||[]).map(function(k){return k+" "+(KANJI_GLOSSES[k]||"kanji")}).join(" + ");
+});
+var COMBINABLE_KANJI={};
+BASE.concat(SINGLE_NOUNS).forEach(function(c){COMBINABLE_KANJI[c[0]]=true});
+function isCombinationEntry(c){
+  var kanji=(c[0].match(/[\u4e00-\u9fff々]/g)||[]);
+  return kanji.length>=2&&kanji.every(function(k){return COMBINABLE_KANJI[k]});
+}
+COMBO=COMBO.filter(isCombinationEntry);
+COMBO=COMBO.concat(VOCABS.filter(isCombinationEntry),COMBO_EXTRA.filter(isCombinationEntry));
+var combinedSeen={};COMBO=COMBO.filter(function(c){if(combinedSeen[c[0]])return false;combinedSeen[c[0]]=true;return true});
+VOCABS=[];
+function build(){
+  if(mode==="kanji"){
+    known=load("kf-known",[]);
+    deck=[];var seen={};BASE.concat(custom).forEach(function(c){if(!seen[c[0]]){seen[c[0]]=1;deck.push(c)}});
+    SINGLE_NOUNS.forEach(function(c){if(!seen[c[0]]){seen[c[0]]=1;deck.push(c)}});
+    var cust={};custom.forEach(function(c){cust[c[0]]=1});
+    deck=deck.filter(function(c){
+      if(cust[c[0]])return true;
+      if(c[6]==="n5"||c[6]==="n4")return level==="all"||c[6]===level;
+      var n5=N5.indexOf(c[0])>=0;
+      return level==="all"||(level==="n5"?n5:!n5);
+    });
+  }else{
+    var sources={verbs:VERBS,adj:ADJ,combo:COMBO,adverb:ADVERBS};
+    var n5Words=mode==="combo"?N5_COMBO_WORDS:(mode==="verbs"?N5_VERB_WORDS:(mode==="adj"?N5_ADJ_WORDS:[]));
+    deck=sources[mode].map(function(c){if(c.length<7)c[6]=n5Words.indexOf(c[0])>=0?"n5":"n4";return c})
+      .filter(function(c){return level==="all"||c[6]===level});
+    known=load(kkey(),[]);
+  }
+  queue=deck.filter(function(c){return known.indexOf(kf(c))<0});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+function itemLevel(c){return mode==="kanji"?(custom.some(function(x){return x[0]===c[0]})?"Custom":(c[6]==="n5"?"N5":(c[6]==="n4"?"N4":(N5.indexOf(c[0])>=0?"N5":"N4")))):(c[6]==="n5"?"N5":"N4")}
+function studyItem(c){
+  var kanji=mode==="kanji"&&c.length<7;
+  var word=esc(c[0]),reading=kanji?"":'<div class="study-reading" lang="ja">'+esc(c[1])+'</div>';
+  var meaning=kanji?c[1]:c[2];
+  var details=kanji?'<div class="study-detail">On’yomi: <span lang="ja">'+esc(c[2]||"—")+'</span><br>Kun’yomi: <span lang="ja">'+esc(c[3]||"—")+'</span></div>':'<div class="study-detail">'+esc(c[3]||"")+'</div>';
+  var example=kanji?exHtml(c[0]):'<div class="study-example"><div class="exw" lang="ja">'+esc(c[4])+'</div><div class="exr"><span>'+esc(c[5])+'</span></div></div>';
+  return '<article class="study-item"><div class="study-top"><div><div class="study-word" lang="ja">'+word+'</div>'+reading+'</div><span class="badge">'+itemLevel(c)+'</span></div><div class="study-meaning">'+esc(meaning)+'</div>'+details+example+'</article>';
+}
+function render(){
+  var total=deck.length,done=total-queue.length;
+  var m=$("main");
+  if(studyView==="learn"){
+    $("search").hidden=false;
+    var query=$("search").value.trim().toLowerCase();
+    var list=deck.filter(function(c){return !query||c.join(" ").toLowerCase().indexOf(query)>=0});
+    $("count").textContent=list.length+" of "+total+" terms";
+    $("bar").style.width=(total?done/total*100:0)+"%";
+    m.innerHTML=list.length?'<div class="learn-list">'+list.map(studyItem).join("")+'</div>':'<div class="empty">No study items match that search.</div>';
+    return;
+  }
+  $("search").hidden=true;
+  $("count").textContent=done+" of "+total+" known";
+  $("bar").style.width=(total?done/total*100:0)+"%";
+  if(!queue.length){
+    m.innerHTML='<div class="done"><div class="kanji">完</div><h2 style="margin:0">All '+total+' cards known</h2><p>Start over to go through the deck again.</p><button class="b main" id="again2">Start over</button></div>';
+    $("again2").onclick=restart;return;
+  }
+  var c=queue[0];
+  m.innerHTML='<div class="stage"><button class="card'+(flipped?' flip':'')+'" id="card" aria-label="Flashcard. Tap to flip.">'
+   +'<div class="face"><div class="kanji" lang="ja"'+fs(c)+'>'+esc(c[0])+'</div><div class="hint">Tap to flip</div></div>'
+   +'<div class="face back">'+(mode!=="kanji"?vHead(c):'<div class="mini" lang="ja">'+esc(c[0])+'</div><div class="meaning">'+esc(c[1])+'</div>')
+   +(mode!=="kanji"?vRest(c):'<dl class="read"><dt>On’yomi</dt><dd lang="ja">'+esc(c[2]||"—")+'</dd><dt>Kun’yomi</dt><dd lang="ja">'+esc(c[3]||"—")+'</dd></dl>'+exHtml(c[0]))+'</div>'
+   +'</button></div>'
+   +'<div class="actions"><button class="b" id="again">Again</button><button class="b main" id="got">I know it</button></div>';
+  $("card").onclick=flip;
+  $("again").onclick=function(){next(false)};
+  $("got").onclick=function(){next(true)};
+}
+function flip(){flipped=!flipped;var el=$("card");if(el)el.classList.toggle("flip",flipped)}
+function next(ok){
+  var c=queue.shift();
+  if(ok){var kk=kf(c);if(known.indexOf(kk)<0)known.push(kk);save(kkey(),known)}
+  else queue.push(c);
+  flipped=false;render();
+}
+function restart(){known=known.filter(function(k){return !deck.some(function(c){return kf(c)===k})});save(kkey(),known);build();flipped=false;render()}
+function shuffle(){
+  for(var i=queue.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=queue[i];queue[i]=queue[j];queue[j]=t}
+  flipped=false;render();
+}
+
+$("shuf").onclick=shuffle;
+$("reset").onclick=restart;
+$("add").onclick=function(){$("err").textContent="";$("sheet").classList.add("on");$("fk").focus()};
+$("cancel").onclick=function(){$("sheet").classList.remove("on")};
+$("sheet").onclick=function(e){if(e.target===$("sheet"))$("sheet").classList.remove("on")};
+$("save").onclick=function(){
+  var k=$("fk").value.trim(),m=$("fm").value.trim();
+  if(!k||!m){$("err").textContent="Enter a kanji and its meaning.";return}
+  if(BASE.concat(custom).some(function(c){return c[0]===k})){$("err").textContent="That kanji is already in the deck.";return}
+  custom.push([k,m,$("fo").value.trim(),$("fu").value.trim()]);
+  save("kf-custom",custom);
+  ["fk","fm","fo","fu"].forEach(function(i){$(i).value=""});
+  $("sheet").classList.remove("on");
+  build();queue=queue.filter(function(c){return c[0]!==k});queue.unshift(deck[deck.length-1]);flipped=false;render();
+};
+document.addEventListener("keydown",function(e){
+  if($("sheet").classList.contains("on"))return;
+  if(e.key===" "||e.key==="Enter"){if(/^(BUTTON|INPUT|TEXTAREA)$/.test(document.activeElement.tagName))return;e.preventDefault();flip()}
+  if(e.key==="ArrowRight"&&queue.length)next(true);
+  if(e.key==="ArrowLeft"&&queue.length)next(false);
+});
+function paintSeg(){Array.prototype.forEach.call($("seg").children,function(b){var on=b.getAttribute("data-l")===level;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})}
+Array.prototype.forEach.call($("seg").children,function(b){b.onclick=function(){level=b.getAttribute("data-l");save("kf-level",level);$("search").value="";build();flipped=false;paintSeg();render()}});
+var TOPICS={
+  kanji:["Single kanji","Readings, meanings, and example vocabulary for each character."],
+  combo:["Combination Kanji","Words formed by combining kanji from the Single Kanji set, with readings and examples."],
+  adverb:["Adverbs","Frequency, time, degree, and manner words in context."],
+  verbs:["Verbs","Verb meanings, dictionary forms, and example sentences."],
+  adj:["Adjectives","Common descriptive words and example sentences."]
+};
+function paintTabs(){
+  Array.prototype.forEach.call($("tabs").children,function(b){var on=b.getAttribute("data-m")===mode;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
+  $("add").style.display=mode==="kanji"&&studyView==="review"?"":"none";
+  $("topicTitle").textContent=TOPICS[mode][0];
+  $("topicDescription").textContent=TOPICS[mode][1]+" Level lists are study guides; JLPT does not publish a definitive vocabulary or kanji list.";
+}
+Array.prototype.forEach.call($("tabs").children,function(b){b.onclick=function(){mode=b.getAttribute("data-m");save("kf-mode",mode);$("search").value="";build();flipped=false;paintTabs();render()}});
+Array.prototype.forEach.call($("viewSwitch").children,function(b){b.onclick=function(){studyView=b.getAttribute("data-view");save("kf-view",studyView);flipped=false;paintView();paintTabs();render()}});
+function paintView(){
+  Array.prototype.forEach.call($("viewSwitch").children,function(b){var on=b.getAttribute("data-view")===studyView;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
+  document.body.classList.toggle("learn-mode",studyView==="learn");
+}
+$("search").oninput=render;
+paintTabs();paintView();paintSeg();build();render();
+</script>
+</body>
+</html>
