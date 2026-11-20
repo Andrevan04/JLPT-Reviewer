@@ -84,12 +84,49 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
 .empty{padding:38px 16px;text-align:center;color:var(--mute);background:var(--card);border:1px dashed var(--line);border-radius:16px}
 .tools{margin-top:14px}
 .modal-note{font-size:.8rem;color:var(--mute);margin:0}
+.custom-mode,.custom-session-mode{height:auto;min-height:100%;overflow-y:auto}
+.custom-mode .wrap,.custom-session-mode .wrap{height:auto;min-height:100vh;flex:none}
+.custom-mode #tabs,.custom-mode .controls,.custom-mode .intro,.custom-mode #search,.custom-mode .bar,
+.custom-session-mode #tabs,.custom-session-mode .controls{display:none!important}
+.custom-mode #main,.custom-session-mode #main{flex:0 0 auto!important;min-height:0!important}
+.custom-mode .tools{justify-content:flex-end}
+.custom-mode .tools button:not(#customBtn),.custom-session-mode .tools button#add{display:none}
+.custom-page{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:18px;align-items:start}
+.custom-page h2,.custom-page h3{margin:0}
+.custom-intro{grid-column:1/-1}
+.custom-intro p,.custom-section-note{margin:4px 0 0;color:var(--mute);font-size:.92rem}
+.custom-card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px}
+.custom-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.custom-field{display:grid;gap:5px;font-size:.85rem;font-weight:600}
+.custom-field input,.custom-field select,.custom-filter{font:inherit;font-weight:400;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.custom-filter{font-size:1rem}
+.custom-list{display:grid;gap:6px;max-height:52vh;overflow:auto;overscroll-behavior:contain}
+.custom-word{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.custom-word input{width:18px;height:18px;accent-color:var(--accent)}
+.custom-word-main{min-width:0}
+.custom-word-jp{font-weight:700}
+.custom-word-sub{font-size:.8rem;color:var(--mute);overflow-wrap:anywhere}
+.custom-actions{display:flex;gap:8px;flex-wrap:wrap}
+.custom-actions .b{font-size:.9rem;padding:10px 12px}
+.custom-count{font-size:.85rem;color:var(--mute);margin:0}
+.custom-message{min-height:1.2em;color:var(--accent);font-size:.9rem;margin:0}
+.custom-sets{display:grid;gap:9px}
+.custom-set{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:12px}
+.custom-set-title{font-weight:700;overflow-wrap:anywhere}
+.custom-set-info{font-size:.8rem;color:var(--mute)}
+.custom-set .b{font-size:.85rem;padding:9px 10px}
+.custom-set .delete-set{color:#a53636}
 @media(max-width:700px){.wrap{padding:15px 14px}.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.controls{gap:8px}.controls .seg{flex-basis:100%}.view-switch{max-width:none}.stage{min-height:360px}.learn-list{grid-template-columns:1fr}}
 @media(max-width:700px){
   body.learn-mode{height:auto;min-height:100%;overflow-y:auto}
   .learn-mode .wrap{height:auto;min-height:100vh;flex:none}
   .learn-mode #main{flex:0 0 auto!important;min-height:0!important}
   .learn-mode .learn-list{overflow:visible;flex:none;min-height:auto;padding-bottom:12px}
+  .custom-page{grid-template-columns:1fr}
+  .custom-intro{grid-column:auto}
+  .custom-list{max-height:48vh}
+  .custom-set{grid-template-columns:minmax(0,1fr) auto}
+  .custom-set .delete-set{grid-column:2}
 }
 @media(min-width:900px){.stage{min-height:480px}.face{padding:36px 56px}}
 </style>
@@ -109,6 +146,7 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
     <button id="add">Add a card</button>
     <button id="shuf">Shuffle</button>
     <button id="reset">Start over</button>
+    <button id="customBtn">Custom sets</button>
   </div>
   <div id="main" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
 </div>
@@ -999,8 +1037,12 @@ var N5_VERB_WORDS=("休みます 行きます 来ます 飲みます 食べま�
 var N5_ADJ_WORDS=("大きい 小さい 新しい 古い 長い 高い 安い 多い 少ない 白い 黒い 赤い 青い 暑い 寒い おいしい 忙しい 楽しい 面白い 好き 嫌い 元気 静か").split(" ");
 var mode=load("kf-mode","kanji");
 var studyView=load("kf-view","review");
+var customSets=load("kf-custom-sets",[]).filter(function(s){return s&&s.id&&(s.type==="verbs"||s.type==="adj")&&Array.isArray(s.words)});
+var customSelected={},customScreen=false,activeCustomSetId=null;
+var customReturnMode=mode,customReturnStudyView=studyView,customReturnLevel=load("kf-level","all");
+var customTypeChoice="verbs",customLevelChoice="n5",customSetName="",customSearchTerm="";
 function kf(c){return mode!=="kanji"?c[0]+"|"+c[1]:c[0]}
-function kkey(){return mode==="verbs"?"kf-known-v":mode==="adj"?"kf-known-a":mode==="combo"?"kf-known-c":mode==="adverb"?"kf-known-r":"kf-known"}
+function kkey(){return activeCustomSetId?"kf-known-set-"+activeCustomSetId:mode==="verbs"?"kf-known-v":mode==="adj"?"kf-known-a":mode==="combo"?"kf-known-c":mode==="adverb"?"kf-known-r":"kf-known"}
 function fs(c){return mode!=="kanji"?' style="font-size:min(7rem,calc((min(100vw,460px) - 90px)/'+c[0].length+'))"':""}
 function vHead(c){return '<div class="mini" lang="ja">'+esc(c[1])+'</div><div class="meaning">'+esc(c[2])+'</div>'}
 function verbGroup(c){
@@ -1951,8 +1993,114 @@ COMBO=COMBO.filter(isCombinationEntry);
 COMBO=COMBO.concat(VOCABS.filter(isCombinationEntry),COMBO_EXTRA.filter(isCombinationEntry));
 var combinedSeen={};COMBO=COMBO.filter(function(c){if(combinedSeen[c[0]])return false;combinedSeen[c[0]]=true;return true});
 VOCABS=[];
+function customLevelOf(c,type){
+  var n5Words=type==="verbs"?N5_VERB_WORDS:N5_ADJ_WORDS;
+  return n5Words.indexOf(c[0])>=0||c[6]==="n5"?"n5":"n4";
+}
+function customSource(type){return type==="verbs"?VERBS:ADJ}
+function customSet(id){return customSets.find(function(s){return s.id===id})}
+function customSelectionKey(type,c){return type+"|"+c[0]+"|"+c[1]}
+function customCandidates(){
+  var q=customSearchTerm.trim().toLowerCase();
+  return customSource(customTypeChoice).filter(function(c){
+    var matchLevel=customLevelChoice==="all"||customLevelOf(c,customTypeChoice)===customLevelChoice;
+    return matchLevel&&(!q||c.join(" ").toLowerCase().indexOf(q)>=0);
+  });
+}
+function customWordLabel(type,c){
+  var detail=type==="verbs"?"Dictionary: "+c[3]+" · Group "+verbGroup(c):c[3];
+  return '<label class="custom-word"><input type="checkbox" data-pick="'+encodeURIComponent(customSelectionKey(type,c))+'"'+(customSelected[customSelectionKey(type,c)]?" checked":"")+'><span class="custom-word-main"><span class="custom-word-jp" lang="ja">'+esc(c[0])+' <span class="custom-word-sub" lang="ja">'+esc(c[1])+'</span></span><br><span class="custom-word-sub">'+esc(c[2])+(detail?" · "+esc(detail):"")+'</span></span><span class="badge">'+customLevelOf(c,type).toUpperCase()+'</span></label>';
+}
+function renderCustomManager(){
+  $("count").textContent=customSets.length+" saved sets";
+  var candidates=customCandidates();
+  var selectedCount=Object.keys(customSelected).length;
+  $("main").innerHTML='<section class="custom-page">'
+    +'<div class="custom-intro"><h2>Custom verb and adjective study</h2><p>Choose N5, N4, or both, then select exactly the words you want in each set. Every set contains only your selections, with no fixed size limit.</p></div>'
+    +'<div class="custom-card"><h3>Choose words</h3><div class="custom-fields">'
+    +'<label class="custom-field">Study list<select id="customType"><option value="verbs"'+(customTypeChoice==="verbs"?" selected":"")+'>Verbs</option><option value="adj"'+(customTypeChoice==="adj"?" selected":"")+'>Adjectives</option></select></label>'
+    +'<label class="custom-field">JLPT level<select id="customLevel"><option value="n5"'+(customLevelChoice==="n5"?" selected":"")+'>N5 only</option><option value="n4"'+(customLevelChoice==="n4"?" selected":"")+'>N4 only</option><option value="all"'+(customLevelChoice==="all"?" selected":"")+'>N5 + N4</option></select></label>'
+    +'<label class="custom-field">Set name (optional)<input id="customSetName" type="text" maxlength="40" placeholder="e.g. N4 verbs"></label></div>'
+    +'<input class="custom-filter" id="customSearch" type="search" value="'+esc(customSearchTerm)+'" placeholder="Search words, readings, or meanings" aria-label="Search words to add">'
+    +'<div class="custom-actions"><button class="b" id="customSelectVisible">Select visible ('+candidates.length+')</button><button class="b" id="customClearSelection">Clear selection</button></div>'
+    +'<p class="custom-count" id="customSelectedCount">'+selectedCount+' words selected</p>'
+    +'<div class="custom-list">'+(candidates.length?candidates.map(function(c){return customWordLabel(customTypeChoice,c)}).join(""):'<p class="custom-section-note">No words match these filters.</p>')+'</div>'
+    +'<button class="b main" id="customCreate">Save selected words as set(s)</button><p class="custom-message" id="customMessage" aria-live="polite"></p></div>'
+    +'<div class="custom-card"><h3>Your sets</h3><p class="custom-section-note">Progress is saved separately for each set.</p><div class="custom-sets">'
+    +(customSets.length?customSets.slice().reverse().map(function(s){
+      var learned=load("kf-known-set-"+s.id,[]);
+      var done=s.words.filter(function(w){return learned.indexOf(w)>=0}).length;
+      var label=s.type==="verbs"?"Verbs":"Adjectives";
+      var levelLabel=s.level==="all"?"N5 + N4":s.level.toUpperCase();
+      return '<div class="custom-set"><div><div class="custom-set-title">'+esc(s.name)+'</div><div class="custom-set-info">'+levelLabel+' '+label+' · '+done+'/'+s.words.length+' learned</div></div><button class="b main" data-start-set="'+esc(s.id)+'">Start</button><button class="b delete-set" data-delete-set="'+esc(s.id)+'">Delete</button></div>';
+    }).join(""):'<p class="custom-section-note">No custom sets yet. Select words and create your first set.</p>')+'</div></div></section>';
+  $("customType").onchange=function(){customTypeChoice=this.value;renderCustomManager()};
+  $("customLevel").onchange=function(){customLevelChoice=this.value;renderCustomManager()};
+  $("customSetName").value=customSetName;
+  $("customSetName").oninput=function(){customSetName=this.value};
+  $("customSearch").oninput=function(){customSearchTerm=this.value;renderCustomManager();$("customSearch").focus();$("customSearch").setSelectionRange(customSearchTerm.length,customSearchTerm.length)};
+  Array.prototype.forEach.call(document.querySelectorAll("[data-pick]"),function(input){
+    input.onchange=function(){var key=decodeURIComponent(this.getAttribute("data-pick"));if(this.checked)customSelected[key]=true;else delete customSelected[key];$("customSelectedCount").textContent=Object.keys(customSelected).length+" words selected"};
+  });
+  $("customSelectVisible").onclick=function(){candidates.forEach(function(c){customSelected[customSelectionKey(customTypeChoice,c)]=true});renderCustomManager()};
+  $("customClearSelection").onclick=function(){customSelected={};renderCustomManager()};
+  $("customCreate").onclick=createCustomSets;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-start-set]"),function(b){b.onclick=function(){startCustomSet(this.getAttribute("data-start-set"))}});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-delete-set]"),function(b){b.onclick=function(){deleteCustomSet(this.getAttribute("data-delete-set"))}});
+}
+function createCustomSets(){
+  var groups={},records=[];
+  Object.keys(customSelected).forEach(function(key){
+    var p=key.split("|"),type=p[0],source=customSource(type);
+    var c=source.find(function(item){return item[0]===p[1]&&item[1]===p[2]});
+    if(c)records.push({type:type,level:customLevelOf(c,type),item:c});
+  });
+  if(!records.length){$("customMessage").textContent="Select at least one word first.";return}
+  records.forEach(function(r){(groups[r.type]||(groups[r.type]=[])).push(r)});
+  var created=[];
+  var types=Object.keys(groups);
+  types.forEach(function(type){
+    var items=groups[type],levels=[];
+    items.forEach(function(r){if(levels.indexOf(r.level)<0)levels.push(r.level)});
+    var levelLabel=levels.length>1?"N5 + N4":levels[0].toUpperCase();
+    var typeLabel=type==="verbs"?"Verbs":"Adjectives";
+    var label=levelLabel+" "+typeLabel;
+    var name=customSetName.trim()?(types.length>1?customSetName.trim()+" - "+typeLabel:customSetName.trim()):label;
+    var id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    customSets.push({id:id,name:name,type:type,level:levels.length>1?"all":levels[0],words:items.map(function(r){return r.item[0]+"|"+r.item[1]})});
+    created.push(name);
+  });
+  save("kf-custom-sets",customSets);
+  customSelected={};customSetName="";
+  renderCustomManager();
+  $("customMessage").textContent="Created "+created.length+" set"+(created.length===1?"":"s")+": "+created.join(", ");
+}
+function startCustomSet(id){
+  var s=customSet(id);
+  if(!s)return;
+  customReturnMode=customReturnMode||mode;
+  activeCustomSetId=s.id;customScreen=false;mode=s.type;studyView="review";level="all";
+  $("search").value="";paintCustomState();paintView();paintTabs();build();render();
+}
+function deleteCustomSet(id){
+  customSets=customSets.filter(function(s){return s.id!==id});
+  try{localStorage.removeItem("kf-known-set-"+id)}catch(e){}
+  save("kf-custom-sets",customSets);
+  if(activeCustomSetId===id)activeCustomSetId=null;
+  render();
+}
 function build(){
-  if(mode==="kanji"){
+  if(activeCustomSetId){
+    var currentSet=customSet(activeCustomSetId);
+    if(!currentSet){activeCustomSetId=null;return build()}
+    mode=currentSet.type;
+    deck=currentSet.words.map(function(key){
+      var p=key.split("|"),item=customSource(currentSet.type).find(function(c){return c[0]===p[0]&&c[1]===p[1]});
+      if(!item)return null;
+      var copy=item.slice();copy[6]=customLevelOf(item,currentSet.type);return copy;
+    }).filter(Boolean);
+    known=load(kkey(),[]);
+  }else if(mode==="kanji"){
     known=load("kf-known",[]);
     deck=[];var seen={};BASE.concat(custom).forEach(function(c){if(!seen[c[0]]){seen[c[0]]=1;deck.push(c)}});
     SINGLE_NOUNS.forEach(function(c){if(!seen[c[0]]){seen[c[0]]=1;deck.push(c)}});
@@ -1984,6 +2132,8 @@ function studyItem(c){
   return '<article class="study-item"><div class="study-top"><div><div class="study-word" lang="ja">'+word+'</div>'+reading+'</div><span class="badge">'+itemLevel(c)+'</span></div><div class="study-meaning">'+esc(meaning)+'</div>'+details+example+'</article>';
 }
 function render(){
+  paintCustomState();
+  if(customScreen){renderCustomManager();return}
   var total=deck.length,done=total-queue.length;
   var m=$("main");
   if(studyView==="learn"){
@@ -2021,6 +2171,25 @@ function next(ok){
   flipped=false;render();
 }
 function restart(){known=known.filter(function(k){return !deck.some(function(c){return kf(c)===k})});save(kkey(),known);build();flipped=false;render()}
+function paintCustomState(){
+  document.body.classList.toggle("custom-mode",customScreen);
+  document.body.classList.toggle("custom-session-mode",!!activeCustomSetId);
+  $("customBtn").textContent=customScreen?"Back to study":"Custom sets";
+  $("customBtn").setAttribute("aria-label",customScreen?"Return to regular study":"Open custom verb and adjective sets");
+  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen?"":"none";
+  $("shuf").style.display=customScreen?"none":"";
+  $("reset").style.display=customScreen?"none":"";
+}
+function openCustomSets(){
+  if(customScreen){
+    customScreen=false;activeCustomSetId=null;
+    mode=customReturnMode;studyView=customReturnStudyView;level=customReturnLevel;
+    paintCustomState();paintTabs();paintSeg();paintView();build();render();return;
+  }
+  if(!activeCustomSetId){customReturnMode=mode;customReturnStudyView=studyView;customReturnLevel=level}
+  activeCustomSetId=null;customScreen=true;$("search").value="";
+  paintCustomState();render();
+}
 function shuffle(){
   var list=studyView==="learn"?deck:queue;
   for(var i=list.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=list[i];list[i]=list[j];list[j]=t}
@@ -2029,6 +2198,7 @@ function shuffle(){
 
 $("shuf").onclick=shuffle;
 $("reset").onclick=restart;
+$("customBtn").onclick=openCustomSets;
 $("add").onclick=function(){$("err").textContent="";$("sheet").classList.add("on");$("fk").focus()};
 $("cancel").onclick=function(){$("sheet").classList.remove("on")};
 $("sheet").onclick=function(e){if(e.target===$("sheet"))$("sheet").classList.remove("on")};
@@ -2059,9 +2229,15 @@ var TOPICS={
 };
 function paintTabs(){
   Array.prototype.forEach.call($("tabs").children,function(b){var on=b.getAttribute("data-m")===mode;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
-  $("add").style.display=mode==="kanji"?"":"none";
-  $("topicTitle").textContent=TOPICS[mode][0];
-  $("topicDescription").textContent=TOPICS[mode][1]+" Level lists are study guides; JLPT does not publish a definitive vocabulary or kanji list.";
+  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen?"":"none";
+  if(activeCustomSetId){
+    var s=customSet(activeCustomSetId);
+    $("topicTitle").textContent=s?s.name:"Custom study";
+    $("topicDescription").textContent="Custom "+(mode==="verbs"?"verb":"adjective")+" review set. Progress is saved separately for this set.";
+  }else{
+    $("topicTitle").textContent=TOPICS[mode][0];
+    $("topicDescription").textContent=TOPICS[mode][1]+" Level lists are study guides; JLPT does not publish a definitive vocabulary or kanji list.";
+  }
 }
 Array.prototype.forEach.call($("tabs").children,function(b){b.onclick=function(){mode=b.getAttribute("data-m");save("kf-mode",mode);$("search").value="";build();flipped=false;paintTabs();render()}});
 Array.prototype.forEach.call($("viewSwitch").children,function(b){b.onclick=function(){studyView=b.getAttribute("data-view");save("kf-view",studyView);flipped=false;paintView();paintTabs();render()}});
