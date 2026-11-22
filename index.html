@@ -555,7 +555,7 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 食べます|たべます|eat|食べる|昼ご飯を食べます。|I eat lunch.
 見ます|みます|see, watch|見る|テレビを見ます。|I watch TV.
 買います|かいます|buy|買う|パンを買います。|I buy bread.
-聞きます|ききます|listen, hear, ask|聞く|音楽を聞きます。|I listen to music.
+聞きます|ききます|listen to, hear; ask|聞く|先生に駅までの道を聞きます。|I ask the teacher for directions to the station.
 読みます|よみます|read|読む|本を読みます。|I read a book.
 帰ります|かえります|return home|帰る|六時に家へ帰ります。|I go home at six.
 書きます|かきます|write|書く|手紙を書きます。|I write a letter.
@@ -568,7 +568,7 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 撮ります|とります|take (a photo or video)|撮る|写真を撮ります。|I take a photo.
 会います|あいます|meet|会う|駅で友達に会います。|I meet a friend at the station.
 切ります|きります|cut|切る|紙をはさみで切ります。|I cut paper with scissors.
-送ります|おくります|send|送る|メールを送ります。|I send an email.
+送ります|おくります|send; escort (someone), see someone off|送る|駅まで友達を送りました。|I saw my friend off at the station.
 あげます|あげます|give|あげる|友達にプレゼントをあげます。|I give a present to a friend.
 くれます|くれます|give (to me)|くれる|母が私にお金をくれます。|Mom gives me money.
 もらいます|もらいます|receive|もらう|友達から本をもらいます。|I receive a book from a friend.
@@ -578,7 +578,7 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 習います|ならいます|learn, take lessons|習う|ピアノを習います。|I take piano lessons.
 かけます|かけます|make (a call), put on (glasses)|かける|友達に電話をかけます。|I call a friend.
 分かります|わかります|understand|分かる|日本語が分かります。|I understand Japanese.
-あります|あります|exist (things), have|ある|机の上に本があります。|There is a book on the desk.
+あります|あります|exist, have; be held, take place (an event)|ある|日曜日に町でお祭りがあります。|There is a festival in town on Sunday.
 います|います|exist (people, animals)|いる|教室に先生がいます。|The teacher is in the classroom.
 歩きます|あるきます|walk|歩く|駅まで歩きます。|I walk to the station.
 着ます|きます|wear (top half of the body)|着る|シャツを着ます。|I put on a shirt.
@@ -590,7 +590,7 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 出ます|でます|go out, leave|出る|七時に家を出ます。|I leave home at seven.
 出します|だします|take out, send, hand in|出す|手紙を出します。|I mail a letter.
 入ります|はいります|enter|入る|部屋に入ります。|I enter the room.
-入れます|いれます|put in|入れる|かばんに本を入れます。|I put a book in my bag.
+入れます|いれます|put in; make (coffee or tea)|入れる|コーヒーを入れます。|I make coffee.
 結婚します|けっこんします|get married|結婚する|来年結婚します。|I’ll get married next year.
 食事します|しょくじします|have a meal|食事する|友達と食事します。|I have a meal with a friend.
 散歩します|さんぽします|take a walk|散歩する|公園を散歩します。|I take a walk in the park.
@@ -609,7 +609,7 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 止めます|やめます|stop, quit (doing)|止める|たばこを止めます。|I quit smoking.
 曲がります|まがります|turn|曲がる|次の角を右に曲がります。|I turn right at the next corner.
 持ちます|もちます|hold, carry, have|持つ|かばんを持ちます。|I carry a bag.
-取ります|とります|take, pick up|取る|塩を取ります。|I take the salt.
+取ります|とります|take, pick up; grow old (年を取る)|取る|祖父は年を取りました。|My grandfather has grown old.
 手伝います|てつだいます|help|手伝う|母の料理を手伝います。|I help with my mother’s cooking.
 呼びます|よびます|call, summon|呼ぶ|タクシーを呼びます。|I call a taxi.
 話します|はなします|speak, talk|話す|友達と話します。|I talk with a friend.
@@ -641,6 +641,54 @@ var VS=`休みます|やすみます|rest, take a day off|休む|明日は会社
 出張します|しゅっちょうします|go on a business trip|出張する|来週大阪へ出張します。|I go on a business trip to Osaka next week.`;
 var VERBS=VS.split("\n").map(function(l){return l.split("|")}).filter(function(p){return p.length>=6});
 VERBS.push(["引きます","ひきます","pull, draw, look up (in a dictionary)","引く","辞書で漢字を引きます。","I look up kanji in a dictionary.","n4"]);
+VERBS.push(
+  ["出来ます","できます","can do, be able to","出来る","自転車に乗ることができます。","I can ride a bicycle.","n5"],
+  ["洗います","あらいます","wash","洗う","食事の前に手を洗います。","I wash my hands before a meal.","n5"],
+  ["弾きます","ひきます","play (a stringed instrument)","弾く","妹はギターを弾きます。","My younger sister plays the guitar.","n4"],
+  ["歌います","うたいます","sing","歌う","みんなで歌を歌います。","We sing a song together.","n5"],
+  ["集めます","あつめます","collect, gather","集める","切手を集めています。","I collect postage stamps.","n4"],
+  ["捨てます","すてます","throw away, discard","捨てる","古い紙を捨てます。","I throw away the old paper.","n4"],
+  ["変えます","かえます","change, alter","変える","予定を変えました。","I changed the plan.","n4"],
+  ["運転します","うんてんします","drive","運転する","父は毎日車を運転します。","My father drives a car every day.","n4"],
+  ["予約します","よやくします","reserve, book","予約する","ホテルを予約しました。","I booked a hotel.","n4"],
+  ["見学します","けんがくします","visit and observe (for study)","見学する","工場を見学します。","We tour the factory.","n4"],
+  ["登ります","のぼります","climb (a mountain)","登る","週末に山に登ります。","I climb a mountain on the weekend.","n4"],
+  ["泊まります","とまります","stay overnight","泊まる","京都のホテルに泊まります。","I stay at a hotel in Kyoto.","n4"],
+  ["掃除します","そうじします","clean, tidy (a room)","掃除する","毎週部屋を掃除します。","I clean my room every week.","n4"],
+  ["洗濯します","せんたくします","do the laundry, wash clothes","洗濯する","日曜日に服を洗濯します。","I do the laundry on Sundays.","n4"],
+  ["練習します","れんしゅうします","practice","練習する","毎日ピアノを練習します。","I practice the piano every day.","n5"],
+  ["なります","なります","become","なる","将来、先生になりたいです。","I want to become a teacher in the future.","n5"]
+);
+VERBS.push(
+  ["要ります","いります","need, require","要る","日本に行くにはビザが要ります。","You need a visa to go to Japan.","n4"],
+  ["調べます","しらべます","check, investigate","調べる","辞書で言葉の意味を調べます。","I look up a word’s meaning in a dictionary.","n4"],
+  ["直します","なおします","repair, fix, correct","直す","間違いを直します。","I correct the mistake.","n4"],
+  ["修理します","しゅうりします","repair","修理する","壊れた時計を修理します。","I repair the broken clock.","n4"],
+  ["電話します","でんわします","phone, call","電話する","後で友達に電話します。","I’ll call my friend later.","n5"],
+  ["思います","おもいます","think, believe","思う","明日は雨だと思います。","I think it will rain tomorrow.","n5"],
+  ["言います","いいます","say, tell","言う","名前を言ってください。","Please say your name.","n5"],
+  ["足ります","たります","be enough, be sufficient","足りる","このお金で足ります。","This money is enough.","n4"],
+  ["勝ちます","かちます","win","勝つ","私たちのチームが勝ちました。","Our team won.","n4"],
+  ["負けます","まけます","lose, be defeated","負ける","試合に負けました。","I lost the match.","n4"],
+  ["役に立ちます","やくにたちます","be useful, be helpful","役に立つ","この辞書は日本語の勉強に役に立ちます。","This dictionary is useful for studying Japanese.","n4"],
+  ["履きます","はきます","put on, wear (shoes or trousers)","履く","新しい靴を履きます。","I put on new shoes.","n5"],
+  ["被ります","かぶります","put on, wear (a hat)","被る","帽子を被ります。","I put on a hat.","n4"],
+  ["生まれます","うまれます","be born","生まれる","私は日本で生まれました。","I was born in Japan.","n4"],
+  ["回します","まわします","turn, rotate","回す","ドアの鍵を回します。","I turn the door key.","n4"],
+  ["触ります","さわります","touch","触る","展示品に触らないでください。","Please do not touch the exhibit.","n4"],
+  ["動きます","うごきます","move; work, operate (a machine)","動く","この時計はまだ動きます。","This clock still works.","n4"],
+  ["渡ります","わたります","cross (a road, bridge, etc.)","渡る","橋を渡ります。","I cross the bridge.","n4"],
+  ["気を付けます","きをつけます","be careful, pay attention","気を付ける","車に気を付けてください。","Please watch out for cars.","n4"],
+  ["引っ越します","ひっこします","move house, relocate","引っ越す","来月、新しい家に引っ越します。","I’m moving to a new house next month.","n4"],
+  ["連れて行きます","つれていきます","take (someone) along","連れて行く","子供を公園に連れて行きます。","I take my child to the park.","n4"],
+  ["連れて来ます","つれてきます","bring (someone) along","連れて来る","友達を家に連れて来ます。","I bring a friend to my house.","n4"],
+  ["紹介します","しょうかいします","introduce","紹介する","友達に家族を紹介します。","I introduce my family to my friend.","n4"],
+  ["案内します","あんないします","guide, show the way","案内する","駅まで案内します。","I’ll show you the way to the station.","n4"],
+  ["説明します","せつめいします","explain","説明する","使い方を説明します。","I explain how to use it.","n4"],
+  ["考えます","かんがえます","think, consider","考える","将来のことを考えます。","I think about the future.","n4"],
+  ["着きます","つきます","arrive, reach (a place)","着く","電車は駅に着きました。","The train arrived at the station.","n4"],
+  ["留学します","りゅうがくします","study abroad","留学する","来年、日本に留学します。","I’ll study abroad in Japan next year.","n4"]
+);
 var AS=`ハンサム|はんさむ|handsome|na-adjective|彼はハンサムです。|He is handsome.
 きれい|きれい|pretty, clean|na-adjective|この花はきれいです。|This flower is pretty.
 静か|しずか|quiet|na-adjective|図書館は静かです。|The library is quiet.
@@ -709,6 +757,17 @@ var AS=`ハンサム|はんさむ|handsome|na-adjective|彼はハンサムです
 危ない|あぶない|dangerous|i-adjective|その道は危ないです。|That road is dangerous.`;
 var ADJ=AS.split("\n").map(function(l){return l.split("|")}).filter(function(p){return p.length>=6});
 ADJ.push(["正しい","ただしい","correct, right","i-adjective","正しい答えを選んでください。","Please choose the correct answer.","n4"]);
+ADJ.push(
+  ["眠い","ねむい","sleepy","i-adjective","今日はとても眠いです。","I’m very sleepy today.","n4"],
+  ["強い","つよい","strong","i-adjective","このチームは強いです。","This team is strong.","n4"],
+  ["弱い","よわい","weak","i-adjective","私はお酒に弱いです。","I can’t hold my alcohol well.","n4"],
+  ["調子がいい","ちょうしがいい","in good condition, feeling well","i-adjective phrase","今日は体の調子がいいです。","I’m feeling well today.","n4"],
+  ["調子が悪い","ちょうしがわるい","in bad condition, feeling unwell","i-adjective phrase","今日は少し調子が悪いです。","I’m feeling a little unwell today.","n4"],
+  ["無駄","むだ","wasteful, useless","na-adjective","無駄な買い物をしません。","I don’t make wasteful purchases.","n4"],
+  ["不便","ふべん","inconvenient","na-adjective","この町は電車が少なくて不便です。","This town is inconvenient because there are few trains.","n4"]
+);
+VERBS.forEach(function(c){c[6]="n5"});
+ADJ.forEach(function(c){c[6]="n5"});
 var CS=`学校|がっこう|school|学 study + 校 school|学校へ行きます。|I go to school.
 先生|せんせい|teacher|先 before + 生 life|先生の話を聞きます。|I listen to the teacher.
 学生|がくせい|student|学 study + 生 life|私は大学の学生です。|I’m a university student.
@@ -1038,6 +1097,15 @@ var N5_ADJ_WORDS=("大きい 小さい 新しい 古い 長い 高い 安い 多
 var mode=load("kf-mode","kanji");
 var studyView=load("kf-view","review");
 var customSets=load("kf-custom-sets",[]).filter(function(s){return s&&s.id&&(s.type==="verbs"||s.type==="adj")&&Array.isArray(s.words)});
+var customSetsMigrated=false;
+customSets.forEach(function(s){
+  if(s.level!=="n5"){s.level="n5";customSetsMigrated=true}
+  if(s.name==="N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
+  if(s.name==="N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
+  if(s.name==="N5 + N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
+  if(s.name==="N5 + N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
+});
+if(customSetsMigrated)save("kf-custom-sets",customSets);
 var customSelected={},customScreen=false,activeCustomSetId=null;
 var customReturnMode=mode,customReturnStudyView=studyView,customReturnLevel=load("kf-level","all");
 var customTypeChoice="verbs",customLevelChoice="n5",customSetName="",customSearchTerm="";
@@ -1047,9 +1115,9 @@ function fs(c){return mode!=="kanji"?' style="font-size:min(7rem,calc((min(100vw
 function vHead(c){return '<div class="mini" lang="ja">'+esc(c[1])+'</div><div class="meaning">'+esc(c[2])+'</div>'}
 function verbGroup(c){
   var dictionary=c[3];
-  if(dictionary==="来る"||dictionary.slice(-2)==="する")return 3;
+  if(dictionary==="来る"||dictionary.slice(-2)==="来る"||dictionary.slice(-2)==="する")return 3;
   if(dictionary==="ある")return 1;
-  var groupOneRu=["帰る","終わる","戻る","撮る","切る","送る","分かる","かかる","入る","止まる","留まる","曲がる","取る","座る","作る","売る","知る","乗る","降る"];
+  var groupOneRu=["帰る","終わる","戻る","撮る","切る","送る","分かる","かかる","入る","止まる","留まる","曲がる","取る","座る","作る","売る","知る","乗る","降る","登る","泊まる","なる","要る","被る","触る","渡る"];
   return dictionary.slice(-1)==="る"&&!groupOneRu.includes(dictionary)?2:1;
 }
 function vRest(c){
