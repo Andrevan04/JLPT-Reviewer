@@ -60,11 +60,14 @@ header .brand{display:grid;gap:2px}
 h1{font-size:1.35rem;letter-spacing:-.02em}
 .subtitle{font-size:.88rem;color:var(--mute)}
 .count{white-space:nowrap}
-.tabs{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:14px}
+.tabs{grid-template-columns:repeat(6,minmax(0,1fr));margin-bottom:14px}
 .seg button{white-space:nowrap}
+.tabs button{white-space:normal;overflow-wrap:anywhere}
 .controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .controls .seg{flex:1}
-.view-switch{max-width:230px;grid-template-columns:repeat(2,1fr)}
+.view-switch{max-width:330px;grid-template-columns:repeat(3,1fr)}
+.quiz-categories{display:none;grid-template-columns:repeat(4,minmax(0,1fr));max-width:560px}
+body.quiz-mode #quizCategories{display:grid}
 .intro{margin:2px 0 14px}
 .intro h2{font-size:1.1rem;margin:0 0 3px}
 .intro p{font-size:.9rem;color:var(--mute);margin:0}
@@ -116,7 +119,7 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
 .custom-set-info{font-size:.8rem;color:var(--mute)}
 .custom-set .b{font-size:.85rem;padding:9px 10px}
 .custom-set .delete-set{color:#a53636}
-@media(max-width:700px){.wrap{padding:15px 14px}.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.controls{gap:8px}.controls .seg{flex-basis:100%}.view-switch{max-width:none}.stage{min-height:360px}.learn-list{grid-template-columns:1fr}}
+@media(max-width:700px){.wrap{padding:15px 14px}.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.tabs button{font-size:.8rem;line-height:1.15;padding:7px 3px}.controls{gap:8px}.controls .seg{flex-basis:100%}.view-switch{max-width:none}.stage{min-height:360px}.learn-list{grid-template-columns:1fr}}
 @media(max-width:700px){
   body.learn-mode{height:auto;min-height:100%;overflow-y:auto}
   .learn-mode .wrap{height:auto;min-height:100vh;flex:none}
@@ -128,6 +131,29 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
   .custom-set{grid-template-columns:minmax(0,1fr) auto}
   .custom-set .delete-set{grid-column:2}
 }
+body.quiz-mode{height:auto;min-height:100%;overflow-y:auto}
+body.quiz-mode .wrap{height:auto;min-height:100vh;flex:none}
+body.quiz-mode #main{flex:0 0 auto!important;min-height:0!important}
+.quiz-screen{width:min(100%,760px);margin:0 auto;display:grid;gap:16px}
+.quiz-progress{display:flex;justify-content:space-between;gap:12px;color:var(--mute);font-size:.92rem}
+.quiz-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,4vw,32px);display:grid;gap:18px}
+.quiz-question{text-align:center;display:grid;gap:10px}
+.quiz-instruction{margin:0;color:var(--mute);font-size:.95rem}
+.quiz-word{font-family:"Zen Old Mincho","Noto Serif JP",serif;font-size:clamp(2.6rem,9vw,4.2rem);font-weight:700;line-height:1.2}
+.quiz-prompt{margin:0;font-size:1.15rem;line-height:1.8;white-space:pre-wrap}
+.quiz-reading{color:var(--mute);font-size:1rem}
+.quiz-passage{text-align:left;white-space:pre-wrap;font-size:1.05rem;line-height:2;background:var(--bg);border-radius:12px;padding:14px}
+.quiz-reading-question{margin:0;font-size:1.08rem;line-height:1.6}
+.quiz-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quiz-option{font:inherit;font-size:1.15rem;font-weight:700;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);cursor:pointer}
+.quiz-option:disabled{cursor:default}
+.quiz-option.correct{border-color:#27834a;background:#e4f4e9;color:#175d31}
+.quiz-option.incorrect{border-color:#be4545;background:#fae8e8;color:#8a2727}
+@media(prefers-color-scheme:dark){.quiz-option.correct{background:#183a29;color:#a6e2b7}.quiz-option.incorrect{background:#452626;color:#ffc0c0}}
+.quiz-feedback{min-height:1.5em;margin:0;font-weight:700;text-align:center}
+.quiz-answer{margin:0;text-align:center;color:var(--mute);line-height:1.6}
+.quiz-next{width:100%}
+@media(max-width:700px){.quiz-options{grid-template-columns:1fr}.quiz-card{padding:18px}.quiz-categories{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:900px){.stage{min-height:480px}.face{padding:36px 56px}}
 </style>
 </head>
@@ -137,7 +163,8 @@ h1{font-size:1.35rem;letter-spacing:-.02em}
   <div class="seg tabs" id="tabs" role="group" aria-label="Study topic"><button data-m="kanji">Single Kanji</button><button data-m="combo">Combination Kanji</button><button data-m="adverb">Adverbs</button><button data-m="verbs">Verbs</button><button data-m="adj">Adjectives</button></div>
   <div class="controls">
     <div class="seg" id="seg" role="group" aria-label="JLPT level"><button data-l="n5">N5 only</button><button data-l="n4">N4 only</button><button data-l="all">N5 + N4</button></div>
-    <div class="seg view-switch" id="viewSwitch" role="group" aria-label="Study style"><button data-view="review">Review</button><button data-view="learn">Learn</button></div>
+    <div class="seg view-switch" id="viewSwitch" role="group" aria-label="Study style"><button data-view="review">Review</button><button data-view="learn">Learn</button><button data-view="quiz">Quiz</button></div>
+    <div class="seg quiz-categories" id="quizCategories" role="group" aria-label="Quiz section"><button data-q="grammar">Grammar</button><button data-q="vocabulary">Vocabulary</button><button data-q="kanji">Kanji</button><button data-q="reading">Reading</button></div>
   </div>
   <div class="intro"><h2 id="topicTitle"></h2><p id="topicDescription"></p></div>
   <input class="learn-search" id="search" type="search" placeholder="Search words, readings, or meanings" aria-label="Search study list" hidden>
@@ -768,6 +795,85 @@ ADJ.push(
 );
 VERBS.forEach(function(c){c[6]="n5"});
 ADJ.forEach(function(c){c[6]="n5"});
+function extendVerbForN4(word,reading,meaning,example,translation,dictionary){
+  var c=VERBS.find(function(item){return item[0]===word&&item[1]===reading});
+  if(!c)throw new Error("Missing existing verb: "+word+" ("+reading+")");
+  if(c[2].indexOf(meaning)<0)c[2]+="; "+meaning;
+  c[4]=example;c[5]=translation;c[6]="both";
+  if(dictionary)c[3]=dictionary;
+}
+extendVerbForN4("見ます","みます","check, inspect","予定を見ます。","I check the schedule.");
+extendVerbForN4("取ります","とります","take (a holiday)","休みを取ります。","I take a day off.");
+extendVerbForN4("出来ます","できます","be made, be completed, come into existence","駅の前に新しい店が出来ました。","A new shop has opened in front of the station.");
+extendVerbForN4("開きます","ひらきます","hold (a class or event)","来月、日本語のクラスを開きます。","I will hold a Japanese class next month.");
+extendVerbForN4("止まります","とまります","stop (an elevator)","エレベーターが止まりました。","The elevator stopped.");
+extendVerbForN4("消えます","きえます","go off (a light)","部屋の電気が消えました。","The light in the room went out.");
+extendVerbForN4("かかります","かかります","be locked (e.g. a door)","ドアに鍵がかかっています。","The door is locked.","掛かる");
+extendVerbForN4("かけます","かけます","hang (something)","壁に絵を掛けます。","I hang a picture on the wall.","掛ける");
+VERBS.push(
+  ["探します","さがします","look for, search","探す","財布を探しています。","I’m looking for my wallet.","n4"],
+  ["遅れます","おくれます","be late (for an appointment)","遅れる","約束の時間に遅れました。","I was late for the appointment.","n4"],
+  ["間に合います","まにあいます","be in time (for an appointment)","間に合う","約束の時間に間に合いました。","I arrived in time for the appointment.","n4"],
+  ["やります","やります","do","やる","今日、宿題をやります。","I’ll do my homework today.","n4"],
+  ["参加します","さんかします","attend, participate (in a party)","参加する","友達のパーティーに参加します。","I’ll attend my friend’s party.","n4"],
+  ["申し込みます","もうしこみます","apply for, enter for","申し込む","日本語のコースに申し込みます。","I’ll apply for a Japanese course.","n4"],
+  ["飼います","かいます","keep (a pet), raise (an animal)","飼う","犬を飼っています。","I have a dog.","n4"],
+  ["建てます","たてます","build","建てる","去年、新しい家を建てました。","I built a new house last year.","n4"],
+  ["走ります","はしります","run; drive (along a road)","走る","この道をまっすぐ走ります。","I run straight along this road.","n4"],
+  ["見えます","みえます","can be seen","見える","窓から山が見えます。","A mountain can be seen from the window.","n4"],
+  ["聞こえます","きこえます","can be heard","聞こえる","隣の部屋から音楽が聞こえます。","Music can be heard from the next room.","n4"],
+  ["開きます","あきます","open (a door; intransitive)","開く","ドアが開きます。","The door opens.","n4"],
+  ["売れます","うれます","sell, be sold","売れる","このパンはよく売れます。","This bread sells well.","n4"],
+  ["踊ります","おどります","dance","踊る","パーティーで踊ります。","I dance at the party.","n4"],
+  ["噛みます","かみます","chew, bite","噛む","よく噛んで食べてください。","Please chew well before eating.","n4"],
+  ["選びます","えらびます","choose","選ぶ","好きな色を選びます。","I’ll choose my favorite color.","n4"],
+  ["違います","ちがいます","be different","違う","私の意見は彼と違います。","My opinion is different from his.","n4"],
+  ["通います","かよいます","go to and from (e.g. a university)","通う","大学に通っています。","I go to university.","n4"],
+  ["メモします","めもします","take a memo","メモする","大切なことをメモします。","I’ll make a note of the important things.","n4"],
+  ["閉まります","しまります","close, shut (a door; intransitive)","閉まる","ドアが閉まります。","The door closes.","n4"],
+  ["点きます","つきます","come on (a light)","点く","部屋の電気が点きました。","The light in the room came on.","n4"],
+  ["混みます","こみます","get crowded (e.g. a road)","混む","この道は朝、混みます。","This road gets crowded in the morning.","n4"],
+  ["空きます","すきます","get empty, clear (e.g. a road)","空く","夜はこの道が空きます。","This road clears up at night.","n4"],
+  ["壊れます","こわれます","break (e.g. a chair)","壊れる","いすが壊れました。","The chair broke.","n4"],
+  ["割れます","われます","break, smash (e.g. glass)","割れる","コップが割れました。","The glass broke.","n4"],
+  ["折れます","おれます","break, snap (e.g. a tree branch)","折れる","強い風で木の枝が折れました。","A tree branch snapped in the strong wind.","n4"],
+  ["破れます","やぶれます","tear (e.g. paper)","破れる","紙が破れました。","The paper tore.","n4"],
+  ["汚れます","よごれます","get dirty (e.g. clothes)","汚れる","シャツが汚れました。","My shirt got dirty.","n4"],
+  ["付きます","つきます","be attached (e.g. a pocket)","付く","このシャツにはポケットが付いています。","This shirt has a pocket.","n4"],
+  ["外れます","はずれます","come undone (e.g. a button)","外れる","ボタンが外れました。","A button came undone.","n4"],
+  ["間違えます","まちがえます","make a mistake","間違える","駅の名前を間違えました。","I got the station name wrong.","n4"],
+  ["落とします","おとします","drop, lose","落とす","駅で財布を落としました。","I dropped my wallet at the station.","n4"],
+  ["貼ります","はります","put up, post, paste","貼る","壁にポスターを貼ります。","I put a poster on the wall.","n4"],
+  ["飾ります","かざります","display, decorate","飾る","部屋に花を飾ります。","I decorate the room with flowers.","n4"],
+  ["並べます","ならべます","arrange, line up","並べる","机の上に本を並べます。","I line up the books on the desk.","n4"],
+  ["植えます","うえます","plant","植える","庭に木を植えました。","I planted a tree in the garden.","n4"],
+  ["戻します","もどします","return, put back","戻す","本を棚に戻します。","I put the book back on the shelf.","n4"],
+  ["まとめます","まとめます","put together, organize, sum up","まとめる","会議の内容をまとめます。","I’ll summarize the meeting.","n4"],
+  ["片付けます","かたづけます","put things in order, tidy up","片付ける","部屋を片付けます。","I tidy up the room.","n4"],
+  ["しまいます","しまいます","put things in their proper place","しまう","使った道具を引き出しにしまいます。","I put the tools I used away in a drawer.","n4"],
+  ["決めます","きめます","decide","決める","旅行の日を決めました。","I decided the date of the trip.","n4"],
+  ["知らせます","しらせます","inform, let someone know","知らせる","結果を友達に知らせます。","I’ll let my friend know the result.","n4"],
+  ["相談します","そうだんします","consult, discuss","相談する","先生に進路を相談します。","I’ll discuss my future plans with my teacher.","n4"],
+  ["予習します","よしゅうします","prepare one’s lesson","予習する","明日の授業を予習します。","I’ll prepare for tomorrow’s lesson.","n4"],
+  ["復習します","ふくしゅうします","review one’s lesson","復習する","今日の授業を復習します。","I’ll review today’s lesson.","n4"],
+  ["そのままにします","そのままにします","leave things as they are","そのままにする","机の上の本はそのままにしてください。","Please leave the books on the desk as they are.","n4"]
+);
+function extendAdjectiveForN4(word,reading){
+  var c=ADJ.find(function(item){return item[0]===word&&item[1]===reading});
+  if(!c)throw new Error("Missing existing adjective: "+word+" ("+reading+")");
+  c[6]="both";
+}
+extendAdjectiveForN4("優しい","やさしい");
+ADJ.push(
+  ["都合がいい","つごうがいい","convenient (concerning time)","i-adjective phrase","明日の午後は都合がいいです。","Tomorrow afternoon is convenient for me.","n4"],
+  ["都合が悪い","つごうがわるい","inconvenient (concerning time)","i-adjective phrase","今日は都合が悪いです。","Today is inconvenient for me.","n4"],
+  ["気分がいい","きぶんがいい","feel well","i-adjective phrase","今日は気分がいいです。","I feel well today.","n4"],
+  ["気分が悪い","きぶんがわるい","feel ill","i-adjective phrase","少し気分が悪いです。","I feel a little ill.","n4"],
+  ["真面目","まじめ","serious","na-adjective","彼は真面目な学生です。","He is a serious student.","n4"],
+  ["熱心","ねっしん","earnest, enthusiastic","na-adjective","彼女は日本語の勉強に熱心です。","She is enthusiastic about studying Japanese.","n4"],
+  ["偉い","えらい","great, admirable","i-adjective","彼は偉い人です。","He is an admirable person.","n4"],
+  ["ちょうどいい","ちょうどいい","proper, just right","i-adjective phrase","この大きさがちょうどいいです。","This size is just right.","n4"]
+);
 var CS=`学校|がっこう|school|学 study + 校 school|学校へ行きます。|I go to school.
 先生|せんせい|teacher|先 before + 生 life|先生の話を聞きます。|I listen to the teacher.
 学生|がくせい|student|学 study + 生 life|私は大学の学生です。|I’m a university student.
@@ -1095,7 +1201,9 @@ var N5_COMBO_WORDS=("学校 先生 学生 大学 日本 日本語 外国 電車 
 var N5_VERB_WORDS=("休みます 行きます 来ます 飲みます 食べます 見ます 買います 聞きます 読みます 帰ります 書きます 起きます 寝ます 働きます 終わります 会います 歩きます 遊びます 泳ぎます 疲れます あります います 分かります").split(" ");
 var N5_ADJ_WORDS=("大きい 小さい 新しい 古い 長い 高い 安い 多い 少ない 白い 黒い 赤い 青い 暑い 寒い おいしい 忙しい 楽しい 面白い 好き 嫌い 元気 静か").split(" ");
 var mode=load("kf-mode","kanji");
+if(mode==="quiz"){mode="combo";save("kf-mode",mode)}
 var studyView=load("kf-view","review");
+if(studyView!=="review"&&studyView!=="learn"&&studyView!=="quiz")studyView="review";
 var customSets=load("kf-custom-sets",[]).filter(function(s){return s&&s.id&&(s.type==="verbs"||s.type==="adj")&&Array.isArray(s.words)});
 var customSetsMigrated=false;
 customSets.forEach(function(s){
@@ -1109,15 +1217,124 @@ if(customSetsMigrated)save("kf-custom-sets",customSets);
 var customSelected={},customScreen=false,activeCustomSetId=null;
 var customReturnMode=mode,customReturnStudyView=studyView,customReturnLevel=load("kf-level","all");
 var customTypeChoice="verbs",customLevelChoice="n5",customSetName="",customSearchTerm="";
+var quizQuestions=[],quizIndex=0,quizScore=0,quizAnswered=false,quizComplete=false;
+var quizCategory=load("kf-quiz-category","kanji");
+if(["grammar","vocabulary","kanji","reading"].indexOf(quizCategory)<0)quizCategory="kanji";
+var QUIZ_ROUND_SIZE=10;
 function kf(c){return mode!=="kanji"?c[0]+"|"+c[1]:c[0]}
 function kkey(){return activeCustomSetId?"kf-known-set-"+activeCustomSetId:mode==="verbs"?"kf-known-v":mode==="adj"?"kf-known-a":mode==="combo"?"kf-known-c":mode==="adverb"?"kf-known-r":"kf-known"}
 function fs(c){return mode!=="kanji"?' style="font-size:min(7rem,calc((min(100vw,460px) - 90px)/'+c[0].length+'))"':""}
 function vHead(c){return '<div class="mini" lang="ja">'+esc(c[1])+'</div><div class="meaning">'+esc(c[2])+'</div>'}
+function shuffled(items){
+  var out=items.slice();
+  for(var i=out.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),v=out[i];out[i]=out[j];out[j]=v}
+  return out;
+}
+var GRAMMAR_QUESTIONS=[
+  ["n5","わたし＿学生です。","は",["は","が","を","で"],"「は」 marks the topic of the sentence."],
+  ["n5","毎朝六時＿起きます。","に",["に","で","を","と"],"「に」 marks the time when something happens."],
+  ["n5","水＿飲みます。","を",["を","が","に","で"],"「を」 marks the thing being drunk."],
+  ["n5","図書館＿本を読みます。","で",["で","に","を","へ"],"「で」 marks where an action takes place."],
+  ["n5","友達＿映画を見ました。","と",["と","に","で","が"],"「と」 means doing something together with a friend."],
+  ["n5","家＿猫がいます。","に",["に","で","を","と"],"「に」 marks where a person or animal exists."],
+  ["n5","これは私＿かばんです。","の",["の","は","が","を"],"「の」 connects a person to something they own."],
+  ["n5","日本語＿分かります。","が",["が","を","に","で"],"「が」 is used with 分かります to mark what is understood."],
+  ["n5","りんご＿二つください。","を",["を","が","に","で"],"「を」 marks the item being requested."],
+  ["n5","昨日、学校へ行き＿。","ました",["ました","ます","ません","ましょう"],"「ました」 makes the verb past tense."],
+  ["n5","ここで写真を撮って＿。","はいけません",["はいけません","もいいです","ください","います"],"「てはいけません」 means an action is not allowed."],
+  ["n5","毎日、日本語を勉強し＿。","ます",["ます","ました","ませんでした","ましょうか"],"「ます」 is the polite non-past verb form."],
+  ["n5","日曜日に友達＿会います。","に",["に","を","で","が"],"「に」 marks the person you meet."],
+  ["n5","駅までバス＿行きます。","で",["で","に","を","と"],"「で」 marks the means of transportation."],
+  ["n5","この本はとてもおもしろ＿。","いです",["いです","なです","くです","かったですか"],"い-adjectives end in 「い」 before 「です」."],
+  ["n4","約束の時間に遅れない＿、早く家を出ました。","ように",["ように","ために","そうに","みたいに"],"「ないように」 expresses doing something to avoid an unwanted result."],
+  ["n4","忘れない＿に、メモしてください。","よう",["よう","ので","のに","ため"],"「ないように」 means so that you do not forget."],
+  ["n4","日本へ来て＿三年になります。","から",["から","まで","より","しか"],"「てから」 marks the time since an event."],
+  ["n4","雨が降っている＿、試合は中止になりました。","ので",["ので","のに","ながら","ても"],"「ので」 gives a reason for the cancellation."],
+  ["n4","休みの日は本を読ん＿過ごします。","で",["で","に","を","が"],"「て過ごす」 describes how time is spent."],
+  ["n4","説明を聞いた＿、まだよく分かりません。","のに",["のに","ので","ため","ながら"],"「のに」 means although or despite the fact that."],
+  ["n4","来年、日本へ留学する＿です。","つもり",["つもり","ところ","はず","ため"],"「つもりです」 expresses an intention."],
+  ["n4","この町は、前に住んでいた町＿静かです。","より",["より","ほど","しか","まで"],"「より」 marks the basis of a comparison."],
+  ["n4","今日は昨日＿寒くありません。","ほど",["ほど","より","だけ","しか"],"「ほど〜ない」 means not as much as."],
+  ["n4","先生に作文を直して＿ました。","もらい",["もらい","あげ","くれ","しまい"],"「てもらう」 describes receiving a favor."],
+  ["n4","友達が駅まで迎えに来て＿ました。","くれ",["くれ","もらい","あげ","しまい"],"「てくれる」 describes someone doing a favor for you."],
+  ["n4","日本語が少し話せる＿なりました。","ように",["ように","ために","そうに","ことに"],"「ようになる」 describes a change or newly acquired ability."],
+  ["n4","この料理はおいしい＿、安いです。","し",["し","ので","のに","ても"],"「し」 can connect reasons or positive qualities."],
+  ["n4","駅に着いた＿、電話してください。","ら",["ら","ので","のに","まで"],"「たら」 means when or after something happens."],
+  ["n4","彼は医者＿です。","のよう",["のよう","そう","ため","しか"],"「のようです」 expresses resemblance or appearance."],
+  ["n4","この店は夜十時＿開いています。","まで",["まで","から","より","しか"],"「まで」 marks the time an action continues until."]
+];
+var READING_QUESTIONS=[
+  ["n5","わたしは毎朝六時に起きます。朝ごはんを食べて、七時に家を出ます。学校までバスで二十分かかります。","わたしは何時に起きますか。","六時",["六時","七時","八時","九時"],"The passage says the writer wakes up at six."],
+  ["n5","わたしは毎朝六時に起きます。朝ごはんを食べて、七時に家を出ます。学校までバスで二十分かかります。","何で学校へ行きますか。","バス",["バス","電車","自転車","歩いて"],"The writer goes to school by bus."],
+  ["n5","わたしは毎朝六時に起きます。朝ごはんを食べて、七時に家を出ます。学校までバスで二十分かかります。","学校までどのくらいかかりますか。","二十分",["二十分","十分","三十分","一時間"],"The bus ride takes twenty minutes."],
+  ["n5","田中さんは土曜日に友達と図書館へ行きました。午前中、日本語の本を二冊読みました。午後は近くの喫茶店でコーヒーを飲みました。","田中さんはだれと図書館へ行きましたか。","友達",["友達","先生","家族","一人で"],"Tanaka went to the library with a friend."],
+  ["n5","田中さんは土曜日に友達と図書館へ行きました。午前中、日本語の本を二冊読みました。午後は近くの喫茶店でコーヒーを飲みました。","午前中、何冊本を読みましたか。","二冊",["二冊","一冊","三冊","四冊"],"Tanaka read two books in the morning."],
+  ["n5","田中さんは土曜日に友達と図書館へ行きました。午前中、日本語の本を二冊読みました。午後は近くの喫茶店でコーヒーを飲みました。","午後、どこでコーヒーを飲みましたか。","近くの喫茶店",["近くの喫茶店","図書館","学校","家"],"Tanaka drank coffee at a nearby cafe."],
+  ["n5","きょうは雨です。山田さんは傘を持っていませんでした。駅で傘を買って、電車で会社へ行きました。","きょうの天気はどうですか。","雨",["雨","雪","晴れ","くもり"],"The passage says it is raining."],
+  ["n5","きょうは雨です。山田さんは傘を持っていませんでした。駅で傘を買って、電車で会社へ行きました。","山田さんは駅で何を買いましたか。","傘",["傘","切符","本","コーヒー"],"Yamada bought an umbrella at the station."],
+  ["n5","きょうは雨です。山田さんは傘を持っていませんでした。駅で傘を買って、電車で会社へ行きました。","山田さんは何で会社へ行きましたか。","電車",["電車","バス","車","歩いて"],"Yamada went to work by train."],
+  ["n5","山本さんへ。日曜日のパーティーは午後六時からです。食べ物と飲み物はこちらで用意します。駅の前で五時半に会いましょう。","パーティーは何時からですか。","午後六時",["午後六時","午後五時半","午後七時","午後五時"],"The party begins at six in the evening."],
+  ["n5","山本さんへ。日曜日のパーティーは午後六時からです。食べ物と飲み物はこちらで用意します。駅の前で五時半に会いましょう。","食べ物と飲み物はだれが用意しますか。","手紙を書いた人",["手紙を書いた人","山本さん","駅の人","友達全員"],"The writer says they will prepare the food and drinks."],
+  ["n5","山本さんへ。日曜日のパーティーは午後六時からです。食べ物と飲み物はこちらで用意します。駅の前で五時半に会いましょう。","どこで会いますか。","駅の前",["駅の前","学校の中","喫茶店","家"],"They will meet in front of the station."],
+  ["n4","来週の土曜日、学校で日本語の発表会があります。発表する人は、金曜日までに先生に題を知らせてください。会場の準備を手伝いたい人は、当日の午前九時に教室へ来てください。","発表する人は、いつまでに題を知らせますか。","金曜日まで",["金曜日まで","土曜日の朝まで","来週の日曜日まで","今日まで"],"Presenters must tell the teacher their topic by Friday."],
+  ["n4","来週の土曜日、学校で日本語の発表会があります。発表する人は、金曜日までに先生に題を知らせてください。会場の準備を手伝いたい人は、当日の午前九時に教室へ来てください。","午前九時に来るのはどんな人ですか。","会場の準備を手伝いたい人",["会場の準備を手伝いたい人","発表を聞きたい人","先生に題を知らせる人","土曜日に休みたい人"],"People who want to help prepare the venue should come at nine."],
+  ["n4","来週の土曜日、学校で日本語の発表会があります。発表する人は、金曜日までに先生に題を知らせてください。会場の準備を手伝いたい人は、当日の午前九時に教室へ来てください。","学校で何がありますか。","日本語の発表会",["日本語の発表会","日本語の試験","音楽のコンサート","先生との会議"],"A Japanese presentation event will be held at the school."],
+  ["n4","駅前の店で、新しい自転車を売り始めました。来月十日までに買うと、かごを無料で付けてもらえます。試乗したい人は、店員に声をかけてください。店は毎日午前十時から午後七時までです。","かごを無料でもらうには、いつまでに買いますか。","来月十日まで",["来月十日まで","今月十日まで","来月二十日まで","午後七時まで"],"The bicycle must be bought by the tenth of next month."],
+  ["n4","駅前の店で、新しい自転車を売り始めました。来月十日までに買うと、かごを無料で付けてもらえます。試乗したい人は、店員に声をかけてください。店は毎日午前十時から午後七時までです。","試乗したい人は、どうしますか。","店員に声をかける",["店員に声をかける","電話で予約する","来月まで待つ","かごを買う"],"People who want a test ride should talk to a store clerk."],
+  ["n4","駅前の店で、新しい自転車を売り始めました。来月十日までに買うと、かごを無料で付けてもらえます。試乗したい人は、店員に声をかけてください。店は毎日午前十時から午後七時までです。","店は何時まで開いていますか。","午後七時",["午後七時","午後六時","午後八時","午後十時"],"The store closes at seven in the evening."],
+  ["n4","私の町では、先月から図書館の使い方が変わりました。本を借りるときは、受付でカードを見せてください。返す日を過ぎると、次の本を借りられないことがあります。休館日は毎週月曜日です。","図書館の使い方は、いつから変わりましたか。","先月",["先月","今月","去年","来週"],"The rules changed starting last month."],
+  ["n4","私の町では、先月から図書館の使い方が変わりました。本を借りるときは、受付でカードを見せてください。返す日を過ぎると、次の本を借りられないことがあります。休館日は毎週月曜日です。","本を借りるとき、受付で何を見せますか。","カード",["カード","学生証と写真","借りたい本","住所を書いた紙"],"You must show your library card at the counter."],
+  ["n4","私の町では、先月から図書館の使い方が変わりました。本を借りるときは、受付でカードを見せてください。返す日を過ぎると、次の本を借りられないことがあります。休館日は毎週月曜日です。","図書館の休館日はいつですか。","毎週月曜日",["毎週月曜日","毎週土曜日","毎月一日","日曜日と月曜日"],"The library is closed every Monday."],
+  ["n4","昨日、駅まで走りましたが、電車に間に合いませんでした。次の電車は二十分後だったので、駅の近くで買い物をしました。買い物の後で駅に戻ると、雨が降り始めていました。","駅の近くで買い物をしたのはなぜですか。","次の電車まで二十分あったから",["次の電車まで二十分あったから","駅に傘を忘れたから","友達と会う約束があったから","店で雨がやむのを待つため"],"The writer had twenty minutes before the next train."],
+  ["n4","昨日、駅まで走りましたが、電車に間に合いませんでした。次の電車は二十分後だったので、駅の近くで買い物をしました。買い物の後で駅に戻ると、雨が降り始めていました。","買い物の後、どこへ戻りましたか。","駅",["駅","家","学校","店"],"After shopping, the writer returned to the station."],
+  ["n4","昨日、駅まで走りましたが、電車に間に合いませんでした。次の電車は二十分後だったので、駅の近くで買い物をしました。買い物の後で駅に戻ると、雨が降り始めていました。","駅に戻ったとき、何が始まっていましたか。","雨が降ること",["雨が降ること","次の電車が出ること","店が開くこと","友達が来ること"],"It had started raining when the writer returned to the station."]
+];
+function quizLevelMatches(itemLevel){return level==="all"||itemLevel===level||itemLevel==="both"}
+function makeQuizRound(){
+  var pool=[];
+  if(quizCategory==="grammar"){
+    pool=GRAMMAR_QUESTIONS.filter(function(q){return quizLevelMatches(q[0])}).map(function(q){return {prompt:q[1].replace("＿","（　）"),answer:q[2],options:shuffled(q[3]),explanation:q[4]}});
+  }else if(quizCategory==="reading"){
+    pool=READING_QUESTIONS.filter(function(q){return quizLevelMatches(q[0])}).map(function(q){return {passage:q[1],prompt:q[2],answer:q[3],options:shuffled(q[4]),explanation:q[5]}});
+  }else if(quizCategory==="kanji"){
+    var kanjiWords=COMBO.filter(function(c){return quizLevelMatches(c[6])});
+    pool=kanjiWords.map(function(item){
+      var readings=[],seen={};
+      kanjiWords.forEach(function(other){if(other[1]!==item[1]&&!seen[other[1]]){seen[other[1]]=true;readings.push(other[1])}});
+      if(readings.length<3)return null;
+      return {word:item[0],answer:item[1],options:shuffled([item[1]].concat(shuffled(readings).slice(0,3))),explanation:item[2]+" — "+item[5]};
+    }).filter(Boolean);
+  }else{
+    var allWords=COMBO.concat(VERBS,ADJ,ADVERBS).filter(function(c){return c.length>=7&&quizLevelMatches(c[6])});
+    var meanings=[],meaningSeen={};
+    allWords.forEach(function(c){if(c[2]&&!meaningSeen[c[2]]){meaningSeen[c[2]]=true;meanings.push(c[2])}});
+    pool=allWords.map(function(item){
+      var choices=meanings.filter(function(meaning){return meaning!==item[2]});
+      if(choices.length<3)return null;
+      return {word:item[0],reading:item[1],answer:item[2],options:shuffled([item[2]].concat(shuffled(choices).slice(0,3))),explanation:item[1]+" — "+item[2]};
+    }).filter(Boolean);
+  }
+  return shuffled(pool).slice(0,Math.min(QUIZ_ROUND_SIZE,pool.length));
+}
+function startQuiz(){
+  quizQuestions=makeQuizRound();
+  quizIndex=0;quizScore=0;quizAnswered=false;quizComplete=false;quizSelected="";
+  render();
+}
+function quizCategoryLabel(category){
+  return category==="vocabulary"?"Vocabulary":category.charAt(0).toUpperCase()+category.slice(1);
+}
+function quizInstruction(category){
+  return category==="grammar"?"Choose the best answer to complete the sentence."
+    :category==="vocabulary"?"Choose the correct meaning of this word."
+    :category==="kanji"?"Choose the correct reading of this kanji word."
+    :"Read the passage and answer the question.";
+}
 function verbGroup(c){
   var dictionary=c[3];
   if(dictionary==="来る"||dictionary.slice(-2)==="来る"||dictionary.slice(-2)==="する")return 3;
   if(dictionary==="ある")return 1;
-  var groupOneRu=["帰る","終わる","戻る","撮る","切る","送る","分かる","かかる","入る","止まる","留まる","曲がる","取る","座る","作る","売る","知る","乗る","降る","登る","泊まる","なる","要る","被る","触る","渡る"];
+  var groupOneRu=["帰る","終わる","戻る","撮る","切る","送る","分かる","かかる","掛かる","入る","止まる","留まる","曲がる","取る","座る","作る","売る","知る","乗る","降る","登る","泊まる","なる","要る","被る","触る","渡る","走る","閉まる","貼る","飾る","踊る","やる"];
   return dictionary.slice(-1)==="る"&&!groupOneRu.includes(dictionary)?2:1;
 }
 function vRest(c){
@@ -2062,6 +2279,7 @@ COMBO=COMBO.concat(VOCABS.filter(isCombinationEntry),COMBO_EXTRA.filter(isCombin
 var combinedSeen={};COMBO=COMBO.filter(function(c){if(combinedSeen[c[0]])return false;combinedSeen[c[0]]=true;return true});
 VOCABS=[];
 function customLevelOf(c,type){
+  if(c[6]==="both"||c[6]==="all")return "all";
   var n5Words=type==="verbs"?N5_VERB_WORDS:N5_ADJ_WORDS;
   return n5Words.indexOf(c[0])>=0||c[6]==="n5"?"n5":"n4";
 }
@@ -2071,13 +2289,14 @@ function customSelectionKey(type,c){return type+"|"+c[0]+"|"+c[1]}
 function customCandidates(){
   var q=customSearchTerm.trim().toLowerCase();
   return customSource(customTypeChoice).filter(function(c){
-    var matchLevel=customLevelChoice==="all"||customLevelOf(c,customTypeChoice)===customLevelChoice;
+    var matchLevel=customLevelChoice==="all"||c[6]==="both"||customLevelOf(c,customTypeChoice)===customLevelChoice;
     return matchLevel&&(!q||c.join(" ").toLowerCase().indexOf(q)>=0);
   });
 }
 function customWordLabel(type,c){
   var detail=type==="verbs"?"Dictionary: "+c[3]+" · Group "+verbGroup(c):c[3];
-  return '<label class="custom-word"><input type="checkbox" data-pick="'+encodeURIComponent(customSelectionKey(type,c))+'"'+(customSelected[customSelectionKey(type,c)]?" checked":"")+'><span class="custom-word-main"><span class="custom-word-jp" lang="ja">'+esc(c[0])+' <span class="custom-word-sub" lang="ja">'+esc(c[1])+'</span></span><br><span class="custom-word-sub">'+esc(c[2])+(detail?" · "+esc(detail):"")+'</span></span><span class="badge">'+customLevelOf(c,type).toUpperCase()+'</span></label>';
+  var levelLabel=customLevelOf(c,type)==="all"?"N5 + N4":customLevelOf(c,type).toUpperCase();
+  return '<label class="custom-word"><input type="checkbox" data-pick="'+encodeURIComponent(customSelectionKey(type,c))+'"'+(customSelected[customSelectionKey(type,c)]?" checked":"")+'><span class="custom-word-main"><span class="custom-word-jp" lang="ja">'+esc(c[0])+' <span class="custom-word-sub" lang="ja">'+esc(c[1])+'</span></span><br><span class="custom-word-sub">'+esc(c[2])+(detail?" · "+esc(detail):"")+'</span></span><span class="badge">'+levelLabel+'</span></label>';
 }
 function renderCustomManager(){
   $("count").textContent=customSets.length+" saved sets";
@@ -2183,14 +2402,14 @@ function build(){
     var sources={verbs:VERBS,adj:ADJ,combo:COMBO,adverb:ADVERBS};
     var n5Words=mode==="combo"?N5_COMBO_WORDS:(mode==="verbs"?N5_VERB_WORDS:(mode==="adj"?N5_ADJ_WORDS:[]));
     deck=sources[mode].map(function(c){if(c.length<7)c[6]=n5Words.indexOf(c[0])>=0?"n5":"n4";return c})
-      .filter(function(c){return level==="all"||c[6]===level});
+      .filter(function(c){return level==="all"||c[6]===level||c[6]==="both"});
     known=load(kkey(),[]);
   }
   queue=deck.filter(function(c){return known.indexOf(kf(c))<0});
 }
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
-function itemLevel(c){return mode==="kanji"?(custom.some(function(x){return x[0]===c[0]})?"Custom":(c[6]==="n5"?"N5":(c[6]==="n4"?"N4":(N5.indexOf(c[0])>=0?"N5":"N4")))):(c[6]==="n5"?"N5":"N4")}
+function itemLevel(c){return mode==="kanji"?(custom.some(function(x){return x[0]===c[0]})?"Custom":(c[6]==="n5"?"N5":(c[6]==="n4"?"N4":(N5.indexOf(c[0])>=0?"N5":"N4")))):(c[6]==="both"||c[6]==="all"?"N5 + N4":(c[6]==="n5"?"N5":"N4"))}
 function studyItem(c){
   var kanji=mode==="kanji"&&c.length<7;
   var word=esc(c[0]),reading=kanji?"":'<div class="study-reading" lang="ja">'+esc(c[1])+'</div>';
@@ -2202,6 +2421,7 @@ function studyItem(c){
 function render(){
   paintCustomState();
   if(customScreen){renderCustomManager();return}
+  if(studyView==="quiz"){renderQuiz();return}
   var total=deck.length,done=total-queue.length;
   var m=$("main");
   if(studyView==="learn"){
@@ -2231,6 +2451,44 @@ function render(){
   $("again").onclick=function(){next(false)};
   $("got").onclick=function(){next(true)};
 }
+function renderQuiz(){
+  $("search").hidden=true;
+  var total=quizQuestions.length;
+  $("bar").style.width=(total?(quizComplete?100:(quizIndex+(quizAnswered?1:0))/total*100):0)+"%";
+  if(!total){
+    $("count").textContent="No questions available";
+    $("main").innerHTML='<div class="empty">There are not enough questions for this section and level yet. Choose another level.</div>';
+    return;
+  }
+  if(quizComplete){
+    $("count").textContent=quizScore+" of "+total+" correct";
+    $("main").innerHTML='<section class="quiz-screen"><div class="quiz-card"><div class="quiz-question"><div class="kanji">完</div><h3>Quiz complete</h3><p class="quiz-instruction">'+esc(quizCategoryLabel(quizCategory))+' · '+quizScore+' of '+total+' correct.</p></div><button class="b main quiz-next" id="quizNew">Start another quiz</button></div></section>';
+    $("quizNew").onclick=startQuiz;
+    return;
+  }
+  var q=quizQuestions[quizIndex];
+  $("count").textContent="Question "+(quizIndex+1)+" of "+total+" · "+quizScore+" correct";
+  var body=q.passage
+    ?'<div class="quiz-passage" lang="ja">'+esc(q.passage)+'</div><p class="quiz-reading-question" lang="ja">'+esc(q.prompt)+'</p>'
+    :q.prompt
+      ?'<p class="quiz-prompt" lang="ja">'+esc(q.prompt)+'</p>'
+      :'<div class="quiz-word" lang="ja">'+esc(q.word)+'</div>'+(q.reading?'<div class="quiz-reading" lang="ja">'+esc(q.reading)+'</div>':"");
+  $("main").innerHTML='<section class="quiz-screen"><div class="quiz-progress"><span>'+level.toUpperCase()+' · '+esc(quizCategoryLabel(quizCategory))+'</span><span>'+quizScore+' correct</span></div><article class="quiz-card"><div class="quiz-question"><p class="quiz-instruction">'+esc(quizInstruction(quizCategory))+'</p>'+body+'</div><div class="quiz-options">'+q.options.map(function(option){var correct=option===q.answer;var state=quizAnswered?(correct?" correct":option===quizSelected?" incorrect":""):"";return '<button class="quiz-option'+state+'" data-quiz-option="'+esc(option)+'"'+(quizAnswered?" disabled":"")+' lang="ja">'+esc(option)+'</button>'}).join("")+'</div><p class="quiz-feedback" aria-live="polite">'+(quizAnswered?(quizSelected===q.answer?"Correct!":"Not quite."):"")+'</p>'+(quizAnswered?'<p class="quiz-answer">Answer: <span lang="ja">'+esc(q.answer)+'</span><br>'+esc(q.explanation||"")+'</p><button class="b main quiz-next" id="quizNext">'+(quizIndex===total-1?"See results":"Next question")+'</button>':'')+'</article></section>';
+  Array.prototype.forEach.call(document.querySelectorAll("[data-quiz-option]"),function(b){b.onclick=function(){answerQuiz(this.getAttribute("data-quiz-option"))}});
+  if(quizAnswered)$("quizNext").onclick=advanceQuiz;
+}
+var quizSelected="";
+function answerQuiz(reading){
+  if(quizAnswered||quizComplete)return;
+  quizSelected=reading;quizAnswered=true;
+  if(reading===quizQuestions[quizIndex].answer)quizScore++;
+  renderQuiz();
+}
+function advanceQuiz(){
+  if(quizIndex>=quizQuestions.length-1)quizComplete=true;
+  else{quizIndex++;quizAnswered=false;quizSelected=""}
+  renderQuiz();
+}
 function flip(){flipped=!flipped;var el=$("card");if(el)el.classList.toggle("flip",flipped)}
 function next(ok){
   var c=queue.shift();
@@ -2238,13 +2496,13 @@ function next(ok){
   else queue.push(c);
   flipped=false;render();
 }
-function restart(){known=known.filter(function(k){return !deck.some(function(c){return kf(c)===k})});save(kkey(),known);build();flipped=false;render()}
+function restart(){if(studyView==="quiz"){startQuiz();return}known=known.filter(function(k){return !deck.some(function(c){return kf(c)===k})});save(kkey(),known);build();flipped=false;render()}
 function paintCustomState(){
   document.body.classList.toggle("custom-mode",customScreen);
   document.body.classList.toggle("custom-session-mode",!!activeCustomSetId);
   $("customBtn").textContent=customScreen?"Back to study":"Custom sets";
   $("customBtn").setAttribute("aria-label",customScreen?"Return to regular study":"Open custom verb and adjective sets");
-  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen?"":"none";
+  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen&&studyView!=="quiz"?"":"none";
   $("shuf").style.display=customScreen?"none":"";
   $("reset").style.display=customScreen?"none":"";
 }
@@ -2259,6 +2517,7 @@ function openCustomSets(){
   paintCustomState();render();
 }
 function shuffle(){
+  if(studyView==="quiz"){startQuiz();return}
   var list=studyView==="learn"?deck:queue;
   for(var i=list.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=list[i];list[i]=list[j];list[j]=t}
   flipped=false;render();
@@ -2287,7 +2546,7 @@ document.addEventListener("keydown",function(e){
   if(e.key==="ArrowLeft"&&queue.length)next(false);
 });
 function paintSeg(){Array.prototype.forEach.call($("seg").children,function(b){var on=b.getAttribute("data-l")===level;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})}
-Array.prototype.forEach.call($("seg").children,function(b){b.onclick=function(){level=b.getAttribute("data-l");save("kf-level",level);$("search").value="";build();flipped=false;paintSeg();render()}});
+Array.prototype.forEach.call($("seg").children,function(b){b.onclick=function(){level=b.getAttribute("data-l");save("kf-level",level);$("search").value="";flipped=false;paintSeg();if(studyView==="quiz")startQuiz();else{build();render()}}});
 var TOPICS={
   kanji:["Single kanji","Readings, meanings, and example vocabulary for each character."],
   combo:["Combination Kanji","Words formed by combining kanji from the Single Kanji set, with readings and examples."],
@@ -2297,24 +2556,36 @@ var TOPICS={
 };
 function paintTabs(){
   Array.prototype.forEach.call($("tabs").children,function(b){var on=b.getAttribute("data-m")===mode;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
-  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen?"":"none";
+  document.body.classList.toggle("quiz-mode",studyView==="quiz");
+  $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen&&studyView!=="quiz"?"":"none";
+  $("customBtn").style.display=studyView==="quiz"?"none":"";
+  $("shuf").textContent=studyView==="quiz"?"Shuffle quiz":"Shuffle";
+  $("reset").textContent=studyView==="quiz"?"New quiz":"Start over";
   if(activeCustomSetId){
     var s=customSet(activeCustomSetId);
     $("topicTitle").textContent=s?s.name:"Custom study";
     $("topicDescription").textContent="Custom "+(mode==="verbs"?"verb":"adjective")+" review set. Progress is saved separately for this set.";
+  }else if(studyView==="quiz"){
+    $("topicTitle").textContent="JLPT Practice Quiz · "+quizCategoryLabel(quizCategory);
+    $("topicDescription").textContent="JLPT-style practice without listening. Choose Grammar, Vocabulary, Kanji, or Reading; each round has up to ten questions.";
   }else{
     $("topicTitle").textContent=TOPICS[mode][0];
     $("topicDescription").textContent=TOPICS[mode][1]+" Level lists are study guides; JLPT does not publish a definitive vocabulary or kanji list.";
   }
+  paintQuizCategories();
 }
-Array.prototype.forEach.call($("tabs").children,function(b){b.onclick=function(){mode=b.getAttribute("data-m");save("kf-mode",mode);$("search").value="";build();flipped=false;paintTabs();render()}});
-Array.prototype.forEach.call($("viewSwitch").children,function(b){b.onclick=function(){studyView=b.getAttribute("data-view");save("kf-view",studyView);flipped=false;paintView();paintTabs();render()}});
+Array.prototype.forEach.call($("tabs").children,function(b){b.onclick=function(){activeCustomSetId=null;customScreen=false;mode=b.getAttribute("data-m");save("kf-mode",mode);$("search").value="";build();flipped=false;paintCustomState();paintTabs();render()}});
+Array.prototype.forEach.call($("viewSwitch").children,function(b){b.onclick=function(){studyView=b.getAttribute("data-view");save("kf-view",studyView);flipped=false;if(studyView==="quiz"){customScreen=false;activeCustomSetId=null}paintView();paintTabs();if(studyView==="quiz")startQuiz();else{build();render()}}});
+function paintQuizCategories(){
+  Array.prototype.forEach.call($("quizCategories").children,function(b){var on=b.getAttribute("data-q")===quizCategory;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
+}
+Array.prototype.forEach.call($("quizCategories").children,function(b){b.onclick=function(){quizCategory=b.getAttribute("data-q");save("kf-quiz-category",quizCategory);paintTabs();if(studyView==="quiz")startQuiz()}});
 function paintView(){
   Array.prototype.forEach.call($("viewSwitch").children,function(b){var on=b.getAttribute("data-view")===studyView;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
   document.body.classList.toggle("learn-mode",studyView==="learn");
 }
 $("search").oninput=render;
-paintTabs();paintView();paintSeg();build();render();
+paintTabs();paintView();paintSeg();build();if(studyView==="quiz")startQuiz();else render();
 </script>
 </body>
 </html>
