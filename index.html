@@ -1204,26 +1204,34 @@ var mode=load("kf-mode","kanji");
 if(mode==="quiz"){mode="combo";save("kf-mode",mode)}
 var studyView=load("kf-view","review");
 if(studyView!=="review"&&studyView!=="learn"&&studyView!=="quiz")studyView="review";
-var customSets=load("kf-custom-sets",[]).filter(function(s){return s&&s.id&&(s.type==="verbs"||s.type==="adj")&&Array.isArray(s.words)});
+var customSetTypes=["kanji","combo","adverb","verbs","adj","mixed"];
+var customSets=load("kf-custom-sets",[]).filter(function(s){return s&&s.id&&customSetTypes.indexOf(s.type)>=0&&Array.isArray(s.words)});
 var customSetsMigrated=false;
 customSets.forEach(function(s){
-  if(s.level!=="n5"){s.level="n5";customSetsMigrated=true}
-  if(s.name==="N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
-  if(s.name==="N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
-  if(s.name==="N5 + N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
-  if(s.name==="N5 + N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
+  if(!s.types&&s.name==="N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
+  if(!s.types&&s.name==="N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
+  if(!s.types&&s.name==="N5 + N4 Verbs"){s.name="N5 Verbs";customSetsMigrated=true}
+  if(!s.types&&s.name==="N5 + N4 Adjectives"){s.name="N5 Adjectives";customSetsMigrated=true}
 });
 if(customSetsMigrated)save("kf-custom-sets",customSets);
 var customSelected={},customScreen=false,activeCustomSetId=null;
 var customReturnMode=mode,customReturnStudyView=studyView,customReturnLevel=load("kf-level","all");
-var customTypeChoice="verbs",customLevelChoice="n5",customSetName="",customSearchTerm="";
+var customTypeChoice="verbs",customLevelChoice="all",customSetName="",customSearchTerm="";
 var quizQuestions=[],quizIndex=0,quizScore=0,quizAnswered=false,quizComplete=false;
 var quizCategory=load("kf-quiz-category","kanji");
 if(["grammar","vocabulary","kanji","reading"].indexOf(quizCategory)<0)quizCategory="kanji";
 var QUIZ_ROUND_SIZE=10;
-function kf(c){return mode!=="kanji"?c[0]+"|"+c[1]:c[0]}
+function studyType(c){return c._customType||mode}
+function kf(c){
+  var type=studyType(c);
+  if(activeCustomSetId){
+    var set=customSet(activeCustomSetId);
+    if(set&&set.type==="mixed")return type+"|"+c[0]+"|"+c[1];
+  }
+  return type!=="kanji"?c[0]+"|"+c[1]:c[0];
+}
 function kkey(){return activeCustomSetId?"kf-known-set-"+activeCustomSetId:mode==="verbs"?"kf-known-v":mode==="adj"?"kf-known-a":mode==="combo"?"kf-known-c":mode==="adverb"?"kf-known-r":"kf-known"}
-function fs(c){return mode!=="kanji"?' style="font-size:min(7rem,calc((min(100vw,460px) - 90px)/'+c[0].length+'))"':""}
+function fs(c){return studyType(c)!=="kanji"?' style="font-size:min(7rem,calc((min(100vw,460px) - 90px)/'+c[0].length+'))"':""}
 function vHead(c){return '<div class="mini" lang="ja">'+esc(c[1])+'</div><div class="meaning">'+esc(c[2])+'</div>'}
 function shuffled(items){
   var out=items.slice();
@@ -1338,9 +1346,10 @@ function verbGroup(c){
   return dictionary.slice(-1)==="る"&&!groupOneRu.includes(dictionary)?2:1;
 }
 function vRest(c){
-  var details=mode==="verbs"
+  var type=studyType(c);
+  var details=type==="verbs"
     ?'<dl class="read"><dt>Dictionary form</dt><dd lang="ja">'+esc(c[3])+'</dd><dt>Verb group</dt><dd>Group '+verbGroup(c)+'</dd></dl>'
-    :'<dl class="read"><dt>'+(mode==="combo"?"Made of":"Type")+'</dt><dd lang="ja">'+esc(c[3])+'</dd></dl>';
+    :'<dl class="read"><dt>'+(type==="combo"?"Made of":"Type")+'</dt><dd lang="ja">'+esc(c[3])+'</dd></dl>';
   return details+'<div class="ex"><div class="exw" lang="ja" style="font-size:1.2rem">'+esc(c[4])+'</div><div class="exr"><span>'+esc(c[5])+'</span></div></div>'
 }
 var custom=load("kf-custom",[]);
@@ -2280,22 +2289,38 @@ var combinedSeen={};COMBO=COMBO.filter(function(c){if(combinedSeen[c[0]])return 
 VOCABS=[];
 function customLevelOf(c,type){
   if(c[6]==="both"||c[6]==="all")return "all";
-  var n5Words=type==="verbs"?N5_VERB_WORDS:N5_ADJ_WORDS;
+  if(type==="kanji"){
+    if(custom.some(function(item){return item[0]===c[0]}))return "custom";
+    if(c[6]==="n5"||c[6]==="n4")return c[6];
+    return N5.indexOf(c[0])>=0?"n5":"n4";
+  }
+  var n5Words=type==="verbs"?N5_VERB_WORDS:(type==="adj"?N5_ADJ_WORDS:(type==="combo"?N5_COMBO_WORDS:[]));
   return n5Words.indexOf(c[0])>=0||c[6]==="n5"?"n5":"n4";
 }
-function customSource(type){return type==="verbs"?VERBS:ADJ}
+function customSource(type){
+  if(type==="kanji"){
+    var source=[],seen={};
+    BASE.concat(custom).concat(SINGLE_NOUNS).forEach(function(c){
+      if(!seen[c[0]]){seen[c[0]]=true;source.push(c)}
+    });
+    return source;
+  }
+  return {verbs:VERBS,adj:ADJ,combo:COMBO,adverb:ADVERBS}[type]||[];
+}
 function customSet(id){return customSets.find(function(s){return s.id===id})}
 function customSelectionKey(type,c){return type+"|"+c[0]+"|"+c[1]}
 function customCandidates(){
   var q=customSearchTerm.trim().toLowerCase();
   return customSource(customTypeChoice).filter(function(c){
-    var matchLevel=customLevelChoice==="all"||c[6]==="both"||customLevelOf(c,customTypeChoice)===customLevelChoice;
+    var itemLevel=customLevelOf(c,customTypeChoice);
+    var matchLevel=customLevelChoice==="all"||itemLevel==="all"||itemLevel==="custom"||itemLevel===customLevelChoice;
     return matchLevel&&(!q||c.join(" ").toLowerCase().indexOf(q)>=0);
   });
 }
 function customWordLabel(type,c){
   var detail=type==="verbs"?"Dictionary: "+c[3]+" · Group "+verbGroup(c):c[3];
-  var levelLabel=customLevelOf(c,type)==="all"?"N5 + N4":customLevelOf(c,type).toUpperCase();
+  var itemLevel=customLevelOf(c,type);
+  var levelLabel=itemLevel==="all"?"N5 + N4":itemLevel.toUpperCase();
   return '<label class="custom-word"><input type="checkbox" data-pick="'+encodeURIComponent(customSelectionKey(type,c))+'"'+(customSelected[customSelectionKey(type,c)]?" checked":"")+'><span class="custom-word-main"><span class="custom-word-jp" lang="ja">'+esc(c[0])+' <span class="custom-word-sub" lang="ja">'+esc(c[1])+'</span></span><br><span class="custom-word-sub">'+esc(c[2])+(detail?" · "+esc(detail):"")+'</span></span><span class="badge">'+levelLabel+'</span></label>';
 }
 function renderCustomManager(){
@@ -2303,23 +2328,25 @@ function renderCustomManager(){
   var candidates=customCandidates();
   var selectedCount=Object.keys(customSelected).length;
   $("main").innerHTML='<section class="custom-page">'
-    +'<div class="custom-intro"><h2>Custom verb and adjective study</h2><p>Choose N5, N4, or both, then select exactly the words you want in each set. Every set contains only your selections, with no fixed size limit.</p></div>'
+    +'<div class="custom-intro"><h2>Custom study sets</h2><p>Choose words from any study tab, including mixed sets with kanji, combination words, adverbs, verbs, and adjectives. Each set contains exactly the words you select.</p></div>'
     +'<div class="custom-card"><h3>Choose words</h3><div class="custom-fields">'
-    +'<label class="custom-field">Study list<select id="customType"><option value="verbs"'+(customTypeChoice==="verbs"?" selected":"")+'>Verbs</option><option value="adj"'+(customTypeChoice==="adj"?" selected":"")+'>Adjectives</option></select></label>'
+    +'<label class="custom-field">Study list<select id="customType">'
+    +[['kanji','Single kanji'],['combo','Combination kanji'],['adverb','Adverbs'],['verbs','Verbs'],['adj','Adjectives']].map(function(option){return '<option value="'+option[0]+'"'+(customTypeChoice===option[0]?" selected":"")+'>'+option[1]+'</option>'}).join("")
+    +'</select></label>'
     +'<label class="custom-field">JLPT level<select id="customLevel"><option value="n5"'+(customLevelChoice==="n5"?" selected":"")+'>N5 only</option><option value="n4"'+(customLevelChoice==="n4"?" selected":"")+'>N4 only</option><option value="all"'+(customLevelChoice==="all"?" selected":"")+'>N5 + N4</option></select></label>'
     +'<label class="custom-field">Set name (optional)<input id="customSetName" type="text" maxlength="40" placeholder="e.g. N4 verbs"></label></div>'
     +'<input class="custom-filter" id="customSearch" type="search" value="'+esc(customSearchTerm)+'" placeholder="Search words, readings, or meanings" aria-label="Search words to add">'
     +'<div class="custom-actions"><button class="b" id="customSelectVisible">Select visible ('+candidates.length+')</button><button class="b" id="customClearSelection">Clear selection</button></div>'
     +'<p class="custom-count" id="customSelectedCount">'+selectedCount+' words selected</p>'
     +'<div class="custom-list">'+(candidates.length?candidates.map(function(c){return customWordLabel(customTypeChoice,c)}).join(""):'<p class="custom-section-note">No words match these filters.</p>')+'</div>'
-    +'<button class="b main" id="customCreate">Save selected words as set(s)</button><p class="custom-message" id="customMessage" aria-live="polite"></p></div>'
+    +'<button class="b main" id="customCreate">Save selected words as a set</button><p class="custom-message" id="customMessage" aria-live="polite"></p></div>'
     +'<div class="custom-card"><h3>Your sets</h3><p class="custom-section-note">Progress is saved separately for each set.</p><div class="custom-sets">'
     +(customSets.length?customSets.slice().reverse().map(function(s){
       var learned=load("kf-known-set-"+s.id,[]);
-      var done=s.words.filter(function(w){return learned.indexOf(w)>=0}).length;
-      var label=s.type==="verbs"?"Verbs":"Adjectives";
-      var levelLabel=s.level==="all"?"N5 + N4":s.level.toUpperCase();
-      return '<div class="custom-set"><div><div class="custom-set-title">'+esc(s.name)+'</div><div class="custom-set-info">'+levelLabel+' '+label+' · '+done+'/'+s.words.length+' learned</div></div><button class="b main" data-start-set="'+esc(s.id)+'">Start</button><button class="b delete-set" data-delete-set="'+esc(s.id)+'">Delete</button></div>';
+      var done=s.words.filter(function(w){return learned.indexOf(customProgressKey(s,w))>=0}).length;
+      var types=s.types||[s.type],labels=types.map(function(type){return customTypeLabel(type)}).join(" + ");
+      var levelLabel=s.level==="all"?"N5 + N4":(s.level||"all").toUpperCase();
+      return '<div class="custom-set"><div><div class="custom-set-title">'+esc(s.name)+'</div><div class="custom-set-info">'+levelLabel+' '+labels+' · '+done+'/'+s.words.length+' learned</div></div><button class="b main" data-start-set="'+esc(s.id)+'">Start</button><button class="b delete-set" data-delete-set="'+esc(s.id)+'">Delete</button></div>';
     }).join(""):'<p class="custom-section-note">No custom sets yet. Select words and create your first set.</p>')+'</div></div></section>';
   $("customType").onchange=function(){customTypeChoice=this.value;renderCustomManager()};
   $("customLevel").onchange=function(){customLevelChoice=this.value;renderCustomManager()};
@@ -2336,37 +2363,48 @@ function renderCustomManager(){
   Array.prototype.forEach.call(document.querySelectorAll("[data-delete-set]"),function(b){b.onclick=function(){deleteCustomSet(this.getAttribute("data-delete-set"))}});
 }
 function createCustomSets(){
-  var groups={},records=[];
+  var records=[];
   Object.keys(customSelected).forEach(function(key){
     var p=key.split("|"),type=p[0],source=customSource(type);
     var c=source.find(function(item){return item[0]===p[1]&&item[1]===p[2]});
     if(c)records.push({type:type,level:customLevelOf(c,type),item:c});
   });
   if(!records.length){$("customMessage").textContent="Select at least one word first.";return}
-  records.forEach(function(r){(groups[r.type]||(groups[r.type]=[])).push(r)});
-  var created=[];
-  var types=Object.keys(groups);
-  types.forEach(function(type){
-    var items=groups[type],levels=[];
-    items.forEach(function(r){if(levels.indexOf(r.level)<0)levels.push(r.level)});
-    var levelLabel=levels.length>1?"N5 + N4":levels[0].toUpperCase();
-    var typeLabel=type==="verbs"?"Verbs":"Adjectives";
-    var label=levelLabel+" "+typeLabel;
-    var name=customSetName.trim()?(types.length>1?customSetName.trim()+" - "+typeLabel:customSetName.trim()):label;
-    var id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-    customSets.push({id:id,name:name,type:type,level:levels.length>1?"all":levels[0],words:items.map(function(r){return r.item[0]+"|"+r.item[1]})});
-    created.push(name);
+  var types=[],levels=[];
+  records.forEach(function(r){
+    if(types.indexOf(r.type)<0)types.push(r.type);
+    if(levels.indexOf(r.level)<0)levels.push(r.level);
   });
+  var type=types.length===1?types[0]:"mixed";
+  var level=levels.length===1?levels[0]:"all";
+  var name=customSetName.trim()||((level==="all"?"N5 + N4":level.toUpperCase())+" "+types.map(customTypeLabel).join(" + "));
+  var id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  customSets.push({id:id,name:name,type:type,types:types,level:level,words:records.map(function(r){return r.type+"|"+r.item[0]+"|"+r.item[1]})});
   save("kf-custom-sets",customSets);
   customSelected={};customSetName="";
   renderCustomManager();
-  $("customMessage").textContent="Created "+created.length+" set"+(created.length===1?"":"s")+": "+created.join(", ");
+  $("customMessage").textContent="Created set: "+name;
+}
+function customTypeLabel(type){
+  return {kanji:"Single kanji",combo:"Combination kanji",adverb:"Adverbs",verbs:"Verbs",adj:"Adjectives"}[type]||type;
+}
+function customWordParts(s,word){
+  var parts=word.split("|"),type=s.type;
+  if(parts.length>=3&&customSource(parts[0]).length){
+    type=parts.shift();
+    return {type:type,word:parts[0],reading:parts[1]};
+  }
+  return {type:type,word:parts[0],reading:parts[1]};
+}
+function customProgressKey(s,word){
+  var parts=customWordParts(s,word);
+  return s.type==="mixed"?parts.type+"|"+parts.word+"|"+parts.reading:(parts.type==="kanji"?parts.word:parts.word+"|"+parts.reading);
 }
 function startCustomSet(id){
   var s=customSet(id);
   if(!s)return;
   customReturnMode=customReturnMode||mode;
-  activeCustomSetId=s.id;customScreen=false;mode=s.type;studyView="review";level="all";
+  activeCustomSetId=s.id;customScreen=false;mode=s.type==="mixed"?"mixed":s.type;studyView="review";level="all";
   $("search").value="";paintCustomState();paintView();paintTabs();build();render();
 }
 function deleteCustomSet(id){
@@ -2380,11 +2418,11 @@ function build(){
   if(activeCustomSetId){
     var currentSet=customSet(activeCustomSetId);
     if(!currentSet){activeCustomSetId=null;return build()}
-    mode=currentSet.type;
+    mode=currentSet.type==="mixed"?"mixed":currentSet.type;
     deck=currentSet.words.map(function(key){
-      var p=key.split("|"),item=customSource(currentSet.type).find(function(c){return c[0]===p[0]&&c[1]===p[1]});
+      var p=customWordParts(currentSet,key),item=customSource(p.type).find(function(c){return c[0]===p.word&&c[1]===p.reading});
       if(!item)return null;
-      var copy=item.slice();copy[6]=customLevelOf(item,currentSet.type);return copy;
+      var copy=item.slice();copy[6]=customLevelOf(item,p.type);copy._customType=p.type;return copy;
     }).filter(Boolean);
     known=load(kkey(),[]);
   }else if(mode==="kanji"){
@@ -2409,12 +2447,19 @@ function build(){
 }
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
-function itemLevel(c){return mode==="kanji"?(custom.some(function(x){return x[0]===c[0]})?"Custom":(c[6]==="n5"?"N5":(c[6]==="n4"?"N4":(N5.indexOf(c[0])>=0?"N5":"N4")))):(c[6]==="both"||c[6]==="all"?"N5 + N4":(c[6]==="n5"?"N5":"N4"))}
+function itemLevel(c){
+  var type=studyType(c);
+  if(type==="kanji"){
+    var itemLevel=customLevelOf(c,type);
+    return itemLevel==="custom"?"Custom":(itemLevel==="n5"?"N5":"N4");
+  }
+  return c[6]==="both"||c[6]==="all"?"N5 + N4":(c[6]==="n5"?"N5":"N4");
+}
 function studyItem(c){
-  var kanji=mode==="kanji"&&c.length<7;
+  var type=studyType(c),kanji=type==="kanji"&&c.length<7;
   var word=esc(c[0]),reading=kanji?"":'<div class="study-reading" lang="ja">'+esc(c[1])+'</div>';
   var meaning=kanji?c[1]:c[2];
-  var details=kanji?'<div class="study-detail">On’yomi: <span lang="ja">'+esc(c[2]||"—")+'</span><br>Kun’yomi: <span lang="ja">'+esc(c[3]||"—")+'</span></div>':'<div class="study-detail">'+(mode==="verbs"?"Dictionary form: <span lang=\"ja\">"+esc(c[3]||"")+"</span><br>Verb group: Group "+verbGroup(c):esc(c[3]||""))+'</div>';
+  var details=kanji?'<div class="study-detail">On’yomi: <span lang="ja">'+esc(c[2]||"—")+'</span><br>Kun’yomi: <span lang="ja">'+esc(c[3]||"—")+'</span></div>':'<div class="study-detail">'+(type==="verbs"?"Dictionary form: <span lang=\"ja\">"+esc(c[3]||"")+"</span><br>Verb group: Group "+verbGroup(c):esc(c[3]||""))+'</div>';
   var example=kanji?exHtml(c[0]):'<div class="study-example"><div class="exw" lang="ja">'+esc(c[4])+'</div><div class="exr"><span>'+esc(c[5])+'</span></div></div>';
   return '<article class="study-item"><div class="study-top"><div><div class="study-word" lang="ja">'+word+'</div>'+reading+'</div><span class="badge">'+itemLevel(c)+'</span></div><div class="study-meaning">'+esc(meaning)+'</div>'+details+example+'</article>';
 }
@@ -2443,8 +2488,8 @@ function render(){
   var c=queue[0];
   m.innerHTML='<div class="stage"><button class="card'+(flipped?' flip':'')+'" id="card" aria-label="Flashcard. Tap to flip.">'
    +'<div class="face"><div class="kanji" lang="ja"'+fs(c)+'>'+esc(c[0])+'</div><div class="hint">Tap to flip</div></div>'
-   +'<div class="face back">'+(mode!=="kanji"?vHead(c):'<div class="mini" lang="ja">'+esc(c[0])+'</div><div class="meaning">'+esc(c[1])+'</div>')
-   +(mode!=="kanji"?vRest(c):'<dl class="read"><dt>On’yomi</dt><dd lang="ja">'+esc(c[2]||"—")+'</dd><dt>Kun’yomi</dt><dd lang="ja">'+esc(c[3]||"—")+'</dd></dl>'+exHtml(c[0]))+'</div>'
+   +'<div class="face back">'+(studyType(c)!=="kanji"?vHead(c):'<div class="mini" lang="ja">'+esc(c[0])+'</div><div class="meaning">'+esc(c[1])+'</div>')
+   +(studyType(c)!=="kanji"?vRest(c):'<dl class="read"><dt>On’yomi</dt><dd lang="ja">'+esc(c[2]||"—")+'</dd><dt>Kun’yomi</dt><dd lang="ja">'+esc(c[3]||"—")+'</dd></dl>'+exHtml(c[0]))+'</div>'
    +'</button></div>'
    +'<div class="actions"><button class="b" id="again">Again</button><button class="b main" id="got">I know it</button></div>';
   $("card").onclick=flip;
@@ -2501,7 +2546,7 @@ function paintCustomState(){
   document.body.classList.toggle("custom-mode",customScreen);
   document.body.classList.toggle("custom-session-mode",!!activeCustomSetId);
   $("customBtn").textContent=customScreen?"Back to study":"Custom sets";
-  $("customBtn").setAttribute("aria-label",customScreen?"Return to regular study":"Open custom verb and adjective sets");
+  $("customBtn").setAttribute("aria-label",customScreen?"Return to regular study":"Open custom study sets");
   $("add").style.display=mode==="kanji"&&!activeCustomSetId&&!customScreen&&studyView!=="quiz"?"":"none";
   $("shuf").style.display=customScreen?"none":"";
   $("reset").style.display=customScreen?"none":"";
@@ -2564,7 +2609,7 @@ function paintTabs(){
   if(activeCustomSetId){
     var s=customSet(activeCustomSetId);
     $("topicTitle").textContent=s?s.name:"Custom study";
-    $("topicDescription").textContent="Custom "+(mode==="verbs"?"verb":"adjective")+" review set. Progress is saved separately for this set.";
+    $("topicDescription").textContent="Custom review set. Progress is saved separately for this set.";
   }else if(studyView==="quiz"){
     $("topicTitle").textContent="JLPT Practice Quiz · "+quizCategoryLabel(quizCategory);
     $("topicDescription").textContent="JLPT-style practice without listening. Choose Grammar, Vocabulary, Kanji, or Reading; each round has up to ten questions.";
